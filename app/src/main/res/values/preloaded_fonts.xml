@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/andika_new_basic</item>
+        <item>@font/arizonia</item>
+        <item>@font/athiti_extralight</item>
+        <item>@font/baloo</item>
+        <item>@font/cardo</item>
+        <item>@font/expletus_sans</item>
+        <item>@font/lato</item>
+        <item>@font/nunito_sans</item>
+        <item>@font/nunito_sans_extralight</item>
+        <item>@font/poppins_light</item>
+        <item>@font/poppins_thin</item>
+        <item>@font/ubuntu_light</item>
+        <item>@font/ubuntu_medium</item>
+    </array>
+</resources>

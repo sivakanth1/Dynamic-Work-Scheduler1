@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".CreateTask">
+
+
+    <ImageView
+        android:id="@+id/Back_IV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_baseline_close_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <ImageView
+        android:id="@+id/Done_IV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/royal_blue" />
+
+    <LinearLayout
+        android:id="@+id/Upper_pane_create_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Back_IV">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/CreateTask_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Create New task"
+            android:textColor="#262626"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_sans"
+            android:padding="5dp"
+            android:text="Title"
+            android:textColor="@color/hint"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/Title_ET"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_sans"
+                android:hint="eg: UI Design"
+                android:inputType="text"
+                android:maxLength="28"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_sans"
+            android:padding="5dp"
+            android:text="set priority"
+            android:textColor="@color/hint"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Add_priority_TV"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:backgroundTint="@color/royal_blue"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="+"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/Add_tags_TV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:drawableStart="@drawable/ic_add_label"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Add Tags"
+                android:textColor="@color/royal_blue"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Priority_List_LL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/Priority_1_TV"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:gravity="center"
+                android:text="#1"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/Priority_2_TV"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:gravity="center"
+                android:text="#2"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/Priority_3_TV"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:gravity="center"
+                android:text="#3"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/Priority_4_TV"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:gravity="center"
+                android:text="#4"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/Priority_5_TV"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/all_rounded_corners_very_small_btn"
+                android:gravity="center"
+                android:text="#5"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/nunito_sans"
+            android:text="Description"
+            android:textColor="@color/hint"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/Description_ET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_sans"
+            android:hint="eg: Make responsive user interface"
+            android:maxEms="15"
+            android:maxLength="80"
+            android:maxLines="3"
+            android:scrollHorizontally="true"
+            android:textSize="16sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/SelectCategory_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/all_rounded_corners_small_btn"
+            android:backgroundTint="@color/royal_blue"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Select Category of Task"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Upper_pane_create_task">
+
+
+        <TextView
+            android:id="@+id/select_date_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/nunito_sans"
+            android:text="select deadline"
+            android:textColor="@color/hint"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/Day_Selection_LL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/select_date_TV">
+
+            <LinearLayout
+                android:id="@+id/day1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="S"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="M"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="T"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="W"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="T"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="F"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/all_rounded_corners_small_btn"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/Week_date7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="17"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Week_day7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="S"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Day_Selection_LL">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center"
+                    android:text="Starts"
+                    android:textColor="@color/hint"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/Assign_start_time_BTN"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/all_rounded_corners"
+                    android:drawableStart="@drawable/ic_time_filled"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/royal_blue"
+                    android:padding="8dp"
+                    android:text="00:00"
+                    android:textColor="@color/royal_blue"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center"
+                    android:text="Ends"
+                    android:textColor="@color/hint"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/Assign_end_time_BTN"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/all_rounded_corners"
+                    android:drawableStart="@drawable/ic_time_filled"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="@color/royal_blue"
+                    android:padding="8dp"
+                    android:text="00:00"
+                    android:textColor="@color/royal_blue"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/select_duration_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_sans"
+            android:text="select duration"
+            android:textColor="@color/hint"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/Duration_Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/all_rounded_corners_small_btn"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- //////////////////////     old version          //////////////////////////-->
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:background="@color/white"-->
+    <!--    tools:context=".CreateTask">-->
+
+
+
+    <!--            <com.google.android.material.textfield.TextInputLayout-->
+    <!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"-->
+    <!--                android:layout_width="80dp"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                app:startIconDrawable="@drawable/ic_priority_icon"-->
+    <!--                app:startIconTint="@color/black">-->
+
+
+    <!--                <AutoCompleteTextView-->
+    <!--                    android:id="@+id/mPriorityTV"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:enabled="true"-->
+    <!--                    android:imeOptions="actionDone"-->
+    <!--                    android:maxLines="1"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textStyle="bold" />-->
+    <!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/Back_IV"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16sp"-->
+    <!--        android:layout_marginTop="20dp"-->
+    <!--        android:src="@drawable/ic_baseline_close_24"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:tint="@color/black" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/Upper_pane_create_task"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="10dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/Back_IV">-->
+
+    <!--        <RelativeLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/CreateTask_heading"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginStart="10dp"-->
+    <!--                android:layout_marginTop="18dp"-->
+    <!--                android:text="Create a new task"-->
+    <!--                android:textColor="#262626"-->
+    <!--                android:textSize="24sp"-->
+    <!--                android:textStyle="bold" />-->
+
+    <!--        </RelativeLayout>-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/current_date_TV"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:text="Today, Sep 2022"-->
+    <!--            android:textStyle="bold" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/title_ET"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            android:background="@drawable/create_task_style"-->
+    <!--            android:hint="Title"-->
+    <!--            android:maxLines="1"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textColorHint="@color/hint" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/date_ET"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            android:background="@drawable/create_task_style"-->
+    <!--            android:drawableEnd="@drawable/ic_baseline_calendar_month_24"-->
+    <!--            android:hint="Date"-->
+    <!--            android:maxLines="1"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textColorHint="@color/hint" />-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="16sp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:text="select category"-->
+    <!--            android:textSize="14sp" />-->
+
+    <!--        <HorizontalScrollView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginStart="16dp"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            android:scrollbars="none">-->
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginTop="10dp">-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="100dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center_vertical"-->
+    <!--                    android:background="@drawable/input_field_all_rounded_corners"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="6dp"-->
+    <!--                    android:text="Custom"-->
+    <!--                    android:textColor="#262626"-->
+    <!--                    android:textStyle="bold" />-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="100dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center_vertical"-->
+    <!--                    android:layout_marginStart="20dp"-->
+    <!--                    android:background="@drawable/input_field_all_rounded_corners"-->
+    <!--                    android:backgroundTint="@color/black"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="6dp"-->
+    <!--                    android:text="Meeting"-->
+    <!--                    android:textColor="@color/white"-->
+    <!--                    android:textStyle="bold" />-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="100dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center_vertical"-->
+    <!--                    android:layout_marginStart="20dp"-->
+    <!--                    android:background="@drawable/input_field_all_rounded_corners"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="6dp"-->
+    <!--                    android:text="UI Design"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textStyle="bold" />-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="100dp"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_gravity="center_vertical"-->
+    <!--                    android:layout_marginStart="20dp"-->
+    <!--                    android:layout_marginEnd="10dp"-->
+    <!--                    android:background="@drawable/input_field_all_rounded_corners"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="6dp"-->
+    <!--                    android:text="Sales"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textStyle="bold" />-->
+    <!--            </LinearLayout>-->
+
+    <!--        </HorizontalScrollView>-->
+
+
+    <!--        <RelativeLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="16dp">-->
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_alignParentStart="true"-->
+    <!--                android:layout_marginStart="16dp"-->
+    <!--                android:gravity="center"-->
+    <!--                android:orientation="vertical">-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="3dp"-->
+    <!--                    android:text="Start time"-->
+    <!--                    android:textSize="14sp" />-->
+
+    <!--                <TextView-->
+    <!--                    android:id="@+id/StartTime_TV"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:onClick="popStartTimeSelector"-->
+    <!--                    android:text="00:00"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textSize="24sp"-->
+    <!--                    android:textStyle="bold" />-->
+
+    <!--            </LinearLayout>-->
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_alignParentEnd="true"-->
+    <!--                android:layout_gravity="end"-->
+    <!--                android:layout_marginEnd="18dp"-->
+    <!--                android:gravity="center"-->
+    <!--                android:orientation="vertical">-->
+
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:padding="3dp"-->
+    <!--                    android:text="End time"-->
+    <!--                    android:textSize="14sp" />-->
+
+    <!--                <TextView-->
+    <!--                    android:id="@+id/EndTime_TV"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:onClick="popEndTimeSelector"-->
+    <!--                    android:text="00:00"-->
+    <!--                    android:textSize="24sp"-->
+    <!--                    android:textStyle="bold" />-->
+    <!--            </LinearLayout>-->
+    <!--        </RelativeLayout>-->
+
+    <!--        <View-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0.5dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginBottom="10dp"-->
+    <!--            android:background="@color/black"/>-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="3dp"-->
+    <!--            android:layout_marginStart="16sp"-->
+    <!--            android:text="Description"-->
+    <!--            android:textSize="14sp" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/Description_Tv"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="16dp"-->
+    <!--            android:hint="eg: this is the description"/>-->
+    <!--    </LinearLayout>-->
+
+
+    <!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="24dp"-->
+    <!--        android:layout_marginEnd="24dp"-->
+    <!--        android:layout_marginBottom="20dp"-->
+    <!--        android:backgroundTint="#181818"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="Add Task"-->
+    <!--        android:textColor="@color/white"-->
+    <!--        app:cornerRadius="16dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->

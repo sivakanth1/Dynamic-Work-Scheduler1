@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/all_rounded_corners_big"
+    android:backgroundTint="@color/white"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do you want to cancel the task?"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Cancel_dialog_YES_BTN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/all_rounded_corners_small_btn"
+        android:backgroundTint="@color/royal_blue"
+        android:text="Yes, cancel"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/Cancel_dialog_NO_BTN"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/all_rounded_corners_small_btn"
+        android:backgroundTint="#80C8C5C5"
+        android:text="Nope"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+
+</LinearLayout>

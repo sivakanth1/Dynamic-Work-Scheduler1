@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/Assign_title_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
+        android:text="Build Responsive Website"
+        android:textColor="@color/black"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/list_item_all_rounded_corners"
+        android:backgroundTint="#E43838"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Assign_title_TV">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_time_filled"
+            app:tint="#E43838" />
+
+        <TextView
+            android:id="@+id/Assign_time_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:text="10 : 00   -   12 : 00"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--OLD VERSION-->
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:orientation="vertical">-->
+
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/upper_card"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:background="@drawable/top_rounded_corners">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/Assign_title_TV"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:padding="5dp"-->
+    <!--            android:text="UI Design"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="1dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/Assign_title_TV">-->
+
+    <!--            <ImageView-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginStart="10dp"-->
+    <!--                android:layout_marginBottom="10dp"-->
+    <!--                android:padding="5dp"-->
+    <!--                android:scaleX="1.5"-->
+    <!--                android:scaleY="1.5"-->
+    <!--                android:src="@drawable/ic_baseline_access_time_24" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/Assign_time_TV"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginStart="10dp"-->
+    <!--                android:padding="5dp"-->
+    <!--                android:text="10 : 00   -   12 : 00"-->
+    <!--                android:textColor="@color/black"-->
+    <!--                android:textSize="18sp"-->
+    <!--                android:textStyle="bold" />-->
+    <!--        </LinearLayout>-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:layout_marginEnd="20dp"-->
+    <!--            android:background="@drawable/all_rounded_corners_big"-->
+    <!--            android:backgroundTint="#654ea3"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="1"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/lower_card"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:backgroundTint="#654ea3"-->
+    <!--        android:background="@drawable/bottom_rounded_corners">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/Assign_des_TV"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:ellipsize="end"-->
+    <!--            android:inputType="text"-->
+    <!--            android:maxLines="2"-->
+    <!--            android:padding="5dp"-->
+    <!--            android:text="create wireframes by the end of this week"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="17sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/day1"-->
+    <!--            android:layout_width="55dp"-->
+    <!--            android:layout_height="75dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            android:layout_marginBottom="20dp"-->
+    <!--            android:background="@drawable/all_rounded_corners"-->
+    <!--            android:backgroundTint="#246EE9"-->
+    <!--            android:gravity="center"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintStart_toEndOf="@id/Assign_des_TV"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/Week_day1"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="17"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textSize="18sp"-->
+    <!--                android:textStyle="bold" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/Week_date1"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_marginTop="5dp"-->
+    <!--                android:text="M"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textSize="13sp" />-->
+
+    <!--        </LinearLayout>-->
+
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <!--</LinearLayout>-->

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Dynamic Work Scheduler</string>
+    <string name="see_full_report"><u>see full report</u></string>
+    <string name="cancel"><u>cancel</u></string>
+</resources>
