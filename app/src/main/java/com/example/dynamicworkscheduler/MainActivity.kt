@@ -200,4 +200,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this,ReportScreen::class.java))
     }
 
+    fun openCreateTaskScreen(view: View) {
+        startActivity(Intent(this,CreateTask::class.java))
+    }
 }

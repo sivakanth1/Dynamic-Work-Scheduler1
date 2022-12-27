@@ -242,6 +242,7 @@
             android:drawableTint="@color/white"
             android:padding="8dp"
             android:text="Add Task"
+            android:onClick="openCreateTaskScreen"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
