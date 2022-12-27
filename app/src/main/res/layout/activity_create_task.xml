@@ -17,7 +17,9 @@
         android:src="@drawable/ic_baseline_close_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
+        android:onClick="backToDashboard"
+        app:tint="@color/black"
+        android:contentDescription="Cancel Create Task" />
 
     <ImageView
         android:id="@+id/Done_IV"
@@ -28,7 +30,9 @@
         android:src="@drawable/ic_done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/royal_blue" />
+        android:onClick="addTaskAndSchedule"
+        app:tint="@color/royal_blue"
+        android:contentDescription="Confirm Create Task" />
 
     <LinearLayout
         android:id="@+id/Upper_pane_create_task"
@@ -58,7 +62,7 @@
             android:padding="10dp"
             android:text="Create New task"
             android:textColor="#262626"
-            android:textSize="24sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
@@ -104,7 +108,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nunito_sans"
             android:padding="5dp"
-            android:text="set priority"
+            android:text="Set priority"
             android:textColor="@color/hint"
             android:textSize="14sp" />
 
@@ -130,17 +134,17 @@
 
             <TextView
                 android:id="@+id/Add_tags_TV"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
                 android:layout_weight="1"
                 android:background="@drawable/all_rounded_corners_small_btn"
-                android:drawableStart="@drawable/ic_add_label"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="Add Tags"
                 android:textColor="@color/royal_blue"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:drawableStartCompat="@drawable/ic_add_label" />
         </LinearLayout>
 
         <LinearLayout
@@ -250,6 +254,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="Select Category of Task"
+            android:textSize="20sp"
             android:textColor="@color/white" />
 
 
@@ -274,7 +279,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/nunito_sans"
-            android:text="select deadline"
+            android:text="Select Deadline Date"
             android:textColor="@color/hint"
             android:textSize="13sp" />
 
@@ -304,7 +309,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="25"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -333,7 +338,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="26"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -362,7 +367,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="27"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -391,7 +396,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="28"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -420,7 +425,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="29"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -430,7 +435,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="T"
+                    android:text="Th"
                     android:textColor="@color/black"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -449,7 +454,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="30"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -478,7 +483,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="17"
+                    android:text="31"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -488,13 +493,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="S"
+                    android:text="Sa"
                     android:textColor="@color/black"
                     android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/select_time_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

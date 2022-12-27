@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mSeeFullReport: TextView
     lateinit var mUp_next_external_TV: TextView
     lateinit var mIn_progress_Tv: TextView
+    val myApplication = MyApplication()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -74,37 +75,35 @@ class MainActivity : AppCompatActivity() {
         mInProgress_Layout.setOnClickListener(View.OnClickListener { view: View? ->
             Toast.makeText(this, "clicked layout", Toast.LENGTH_SHORT).show()
             task_activity_update_dialog = Dialog(this)
-            task_activity_update_dialog!!.setContentView(R.layout.task_activity_dialog)
-            task_activity_update_dialog!!.window!!
-                .setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            task_activity_update_dialog!!.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
-            task_activity_update_dialog!!.show()
+            task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
+            task_activity_update_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            task_activity_update_dialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
+            task_activity_update_dialog.show()
             mUpdate_dialog_YES_BTN =
-                task_activity_update_dialog!!.findViewById(R.id.Update_dialog_YES_BTN)
+                task_activity_update_dialog.findViewById(R.id.Update_dialog_YES_BTN)
             mUpdate_dialog_NO_BTN =
-                task_activity_update_dialog!!.findViewById(R.id.Update_dialog_NO_BTN)
+                task_activity_update_dialog.findViewById(R.id.Update_dialog_NO_BTN)
             mUpdate_dialog_YES_BTN.setOnClickListener(View.OnClickListener { view1: View? ->
                 Toast.makeText(this, "Update", Toast.LENGTH_SHORT).show()
-                task_activity_update_dialog!!.dismiss()
+                task_activity_update_dialog.dismiss()
             })
-            mUpdate_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_update_dialog!!.dismiss() })
+            mUpdate_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_update_dialog.dismiss() })
         })
         mIn_progress_Tv.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, MyApplication.testString, Toast.LENGTH_SHORT).show()
             task_activity_cancel_dialog = Dialog(this)
-            task_activity_cancel_dialog!!.setContentView(R.layout.task_activity_cancel_dialog)
-            task_activity_cancel_dialog!!.window!!
-                .setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            task_activity_cancel_dialog!!.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
-            task_activity_cancel_dialog!!.show()
+            task_activity_cancel_dialog.setContentView(R.layout.task_activity_cancel_dialog)
+            task_activity_cancel_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            task_activity_cancel_dialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
+            task_activity_cancel_dialog.show()
             mCancel_dialog_YES_BTN =
-                task_activity_cancel_dialog!!.findViewById(R.id.Cancel_dialog_YES_BTN)
+                task_activity_cancel_dialog.findViewById(R.id.Cancel_dialog_YES_BTN)
             mCancel_dialog_NO_BTN =
-                task_activity_cancel_dialog!!.findViewById(R.id.Cancel_dialog_NO_BTN)
-            mCancel_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_cancel_dialog!!.dismiss() })
+                task_activity_cancel_dialog.findViewById(R.id.Cancel_dialog_NO_BTN)
+            mCancel_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_cancel_dialog.dismiss() })
             mCancel_dialog_YES_BTN.setOnClickListener(View.OnClickListener { view1: View? ->
                 Toast.makeText(this, "YES Cancel", Toast.LENGTH_SHORT).show()
-                task_activity_cancel_dialog!!.dismiss()
+                task_activity_cancel_dialog.dismiss()
             })
         })
 
@@ -167,6 +166,7 @@ class MainActivity : AppCompatActivity() {
         pieChart.transparentCircleRadius = 0f
         pieChart.isRotationEnabled = false
         pieChart.centerText = "78%"
+//        pieChart.centerText = myApplication.testString
         pieChart.setCenterTextSize(21f)
         pieChart.setCenterTextTypeface(Typeface.DEFAULT_BOLD)
         pieChart.legend.isEnabled = false
@@ -178,11 +178,11 @@ class MainActivity : AppCompatActivity() {
     //        String[] s = new String[]{"Design", "Develop", "Blog", "Sales", "Backend", "FrontEnd", "Business"};
     //        category_list = Arrays.asList(s);
     //    }
-//    fun expand(view: View?) {
-//        val visibility =
-//            if (mExpandable_pane_LL.visibility == View.GONE) View.VISIBLE else View.GONE
-//        TransitionManager.beginDelayedTransition(mLower_pane, AutoTransition())
-//
+    fun expand(view: View?) {
+        val visibility =
+            if (mExpandable_pane_LL.visibility == View.GONE) View.VISIBLE else View.GONE
+        TransitionManager.beginDelayedTransition(mLower_pane, AutoTransition())
+
 //        // if visible
 //        if (visibility == 0) {
 ////            mExpand_upNext_IV.setRotation(180f);
@@ -193,8 +193,8 @@ class MainActivity : AppCompatActivity() {
 ////            mExpand_upNext_IV.setRotation(360f);
 ////            getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
 //        }
-//        mExpandable_pane_LL!!.visibility = visibility
-//    }
+        mExpandable_pane_LL.visibility = visibility
+    }
 
     fun openReportScreen(view: View) {
         startActivity(Intent(this,ReportScreen::class.java))
@@ -202,5 +202,9 @@ class MainActivity : AppCompatActivity() {
 
     fun openCreateTaskScreen(view: View) {
         startActivity(Intent(this,CreateTask::class.java))
+    }
+
+    fun openScheduleScreen(view: View) {
+        startActivity(Intent(this,Schedule::class.java))
     }
 }

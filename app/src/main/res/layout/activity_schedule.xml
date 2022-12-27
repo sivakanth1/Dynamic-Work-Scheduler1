@@ -65,10 +65,10 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:background="@android:color/transparent"
+            android:onClick="backToDashboard"
             android:src="@drawable/ic_forward_icon"
             app:tint="@color/black"
-            android:onClick="backToDashboard"
-            tools:ignore="onClick"/>
+            tools:ignore="onClick,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
         <HorizontalScrollView
             android:id="@+id/WeekScrollView"

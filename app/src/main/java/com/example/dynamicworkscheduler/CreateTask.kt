@@ -1,5 +1,6 @@
 package com.example.dynamicworkscheduler
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.transition.Visibility
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -100,6 +102,7 @@ class CreateTask : AppCompatActivity() {
     lateinit var mDay_date7: TextView
     lateinit var mAssign_end_time_BTN: Button
     lateinit var mAssign_start_time_BTN: Button
+    @SuppressLint("UseCompatLoadingForDrawables", "CutPasteId")
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +152,8 @@ class CreateTask : AppCompatActivity() {
         mDay_date6 = findViewById(R.id.Week_date6)
         mDay_date7 = findViewById(R.id.Week_date7)
 
-        /* SOME BASIC INITIALISATIONS */calendar = Calendar.getInstance()
+        /* SOME BASIC INITIALISATIONS */
+        calendar = Calendar.getInstance()
 
 
         // initialize globals
@@ -222,10 +226,9 @@ class CreateTask : AppCompatActivity() {
 
 
         /* INIT() CATEGORY DIALOG */mShowTaskCategoryListDialog = Dialog(this@CreateTask)
-        mShowTaskCategoryListDialog!!.setContentView(R.layout.task_category_selection_dialog)
-        mShowTaskCategoryListDialog!!.window!!
-            .setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        mShowTaskCategoryListDialog!!.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
+        mShowTaskCategoryListDialog.setContentView(R.layout.task_category_selection_dialog)
+        mShowTaskCategoryListDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        mShowTaskCategoryListDialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
 
 
         /* TASK PRIORITY SELECTION */mAdd_priority_TV.setOnClickListener(View.OnClickListener { view: View? ->
@@ -289,6 +292,9 @@ class CreateTask : AppCompatActivity() {
                 cat3_title.setTextColor(resources.getColor(R.color.soft_black))
                 cat3_des.setTextColor(resources.getColor(R.color.soft_black))
                 category = "Category-1"
+                findViewById<RelativeLayout>(R.id.select_time_rl).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.select_duration_TV).visibility = View.GONE
+                findViewById<Spinner>(R.id.Duration_Spinner).visibility = View.GONE
             })
             cat2_LL.setOnClickListener(View.OnClickListener { v1: View? ->
 
@@ -306,6 +312,9 @@ class CreateTask : AppCompatActivity() {
                 cat3_title.setTextColor(resources.getColor(R.color.soft_black))
                 cat3_des.setTextColor(resources.getColor(R.color.soft_black))
                 category = "Category-2"
+                findViewById<RelativeLayout>(R.id.select_time_rl).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.select_duration_TV).visibility = View.GONE
+                findViewById<Spinner>(R.id.Duration_Spinner).visibility = View.GONE
             })
             cat3_LL.setOnClickListener(View.OnClickListener { v1: View? ->
 
@@ -323,11 +332,14 @@ class CreateTask : AppCompatActivity() {
                 cat2_title.setTextColor(resources.getColor(R.color.soft_black))
                 cat2_des.setTextColor(resources.getColor(R.color.soft_black))
                 category = "Category-3"
+                findViewById<RelativeLayout>(R.id.select_time_rl).visibility = View.GONE
+                findViewById<TextView>(R.id.select_duration_TV).visibility = View.VISIBLE
+                findViewById<Spinner>(R.id.Duration_Spinner).visibility = View.VISIBLE
             })
-            val mOk_BTN = mShowTaskCategoryListDialog!!.findViewById<Button>(R.id.Ok_BTN)
+            val mOk_BTN = mShowTaskCategoryListDialog.findViewById<Button>(R.id.Ok_BTN)
             mOk_BTN.setOnClickListener { view1: View? ->
                 mSelectCategory_TV.setText(category)
-                mShowTaskCategoryListDialog!!.dismiss()
+                mShowTaskCategoryListDialog.dismiss()
             }
         })
 
@@ -336,8 +348,8 @@ class CreateTask : AppCompatActivity() {
         /* TASK INIT() DEADLINE DATES */
 //        initWeekLayout();
 
-        /* Add Listeners and change the colors accordingly*/mDay1.setOnClickListener(View.OnClickListener { v: View? ->
-
+        /* Add Listeners and change the colors accordingly*/
+        mDay1.setOnClickListener(View.OnClickListener { v: View? ->
             // change background of selected layout to tinted background and change all other layouts to non-tinted background
             mDay1.setBackground(resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn))
             mDay_day1.setTextColor(resources.getColor(R.color.white))
@@ -518,8 +530,6 @@ class CreateTask : AppCompatActivity() {
             mDay_date1.setTextColor(resources.getColor(R.color.black))
             selected_date_index = 7
         })
-        Toast.makeText(this, selected_date_index.toString(), Toast.LENGTH_SHORT).show()
-
 
         /* TASK TIME SELECTION */
 
@@ -561,7 +571,6 @@ class CreateTask : AppCompatActivity() {
             timePickerDialog.setTitle("Select time")
             timePickerDialog.show()
         })
-
 
 //        Log.d("TEST", "on create create task");
 
@@ -664,33 +673,37 @@ class CreateTask : AppCompatActivity() {
         val formatDayOfWeek = SimpleDateFormat("EE")
         val str = LocalDate.now().toString()
         val temp = str.split("-").toTypedArray()
-        calendar!![temp[0].toInt(), temp[1].toInt() - 1] = temp[2].toInt()
-        Toast.makeText(this, calendar!!.firstDayOfWeek.toString(), Toast.LENGTH_SHORT).show()
+        calendar[temp[0].toInt(), temp[1].toInt() - 1] = temp[2].toInt()
+        Toast.makeText(this, calendar.firstDayOfWeek.toString(), Toast.LENGTH_SHORT).show()
         //        Toast.makeText(this, str+" "+String.valueOf(calendar.get(calendar.DAY_OF_WEEK)), Toast.LENGTH_SHORT).show();
         for (i in 0..6) {
-            days_of_week[i] = formatDate.format(calendar!!.time)
+            days_of_week[i] = formatDate.format(calendar.time)
             trimmed_dates[i] = days_of_week[i]?.substring(8)
             //                trimmed_days[i] = formatDayOfWeek.format(calendar.getTime()).substring(0,1);
-            calendar!!.add(Calendar.DAY_OF_MONTH, 1)
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
-        mDay_date1!!.text = trimmed_dates[0]
-        mDay_date2!!.text = trimmed_dates[1]
-        mDay_date3!!.text = trimmed_dates[2]
-        mDay_date4!!.text = trimmed_dates[3]
-        mDay_date5!!.text = trimmed_dates[4]
-        mDay_date6!!.text = trimmed_dates[5]
-        mDay_date7!!.text = trimmed_dates[6]
+        mDay_date1.text = trimmed_dates[0]
+        mDay_date2.text = trimmed_dates[1]
+        mDay_date3.text = trimmed_dates[2]
+        mDay_date4.text = trimmed_dates[3]
+        mDay_date5.text = trimmed_dates[4]
+        mDay_date6.text = trimmed_dates[5]
+        mDay_date7.text = trimmed_dates[6]
         Log.d("TEST_WEEK_DAYS", Arrays.toString(days_of_week))
         Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_dates))
         Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_days))
     }
 
-//    fun backToDashboard(view: View?) {
-//        startActivity(Intent(this@CreateTask,MainActivity.class))
-//        finish()
-//    } //    private void updateDate() {
-//    //        String myFormat = "dd/MM/yy"; //put your date format in which you need to display
-//    //        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
-//    //        etDate.setText(sdf.format(myCalendar.getTime()));
-//    //    }
+    fun backToDashboard(view: View) {
+        startActivity(Intent(this,MainActivity::class.java))
+        finish()
+    }
+
+    fun addTaskAndSchedule(view: View) {
+        val title=findViewById<EditText>(R.id.Title_ET).text.toString()
+        MyApplication.testString=title
+//        val description=findViewById<EditText>(R.id.Description_ET).text.toString()
+        Toast.makeText(this,MyApplication.testString,Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this,MainActivity::class.java))
+    }
 }
