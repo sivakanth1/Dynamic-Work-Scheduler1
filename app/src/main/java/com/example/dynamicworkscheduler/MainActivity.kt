@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 ////            finish();
 //        });
         mInProgress_Layout.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this, "clicked layout", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,MyApplication.testString, Toast.LENGTH_SHORT).show()
             task_activity_update_dialog = Dialog(this)
             task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
             task_activity_update_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
