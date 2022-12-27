@@ -178,23 +178,23 @@ class MainActivity : AppCompatActivity() {
     //        String[] s = new String[]{"Design", "Develop", "Blog", "Sales", "Backend", "FrontEnd", "Business"};
     //        category_list = Arrays.asList(s);
     //    }
-    fun expand(view: View?) {
-        val visibility =
-            if (mExpandable_pane_LL.visibility == View.GONE) View.VISIBLE else View.GONE
-        TransitionManager.beginDelayedTransition(mLower_pane, AutoTransition())
-
-        // if visible
-        if (visibility == 0) {
-//            mExpand_upNext_IV.setRotation(180f);
-//            getWindow().setStatusBarColor(Color.parseColor("#e1b941"));
-        }
-        // if gone
-        if (visibility == 8) {
-//            mExpand_upNext_IV.setRotation(360f);
-//            getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
-        }
-        mExpandable_pane_LL!!.visibility = visibility
-    }
+//    fun expand(view: View?) {
+//        val visibility =
+//            if (mExpandable_pane_LL.visibility == View.GONE) View.VISIBLE else View.GONE
+//        TransitionManager.beginDelayedTransition(mLower_pane, AutoTransition())
+//
+//        // if visible
+//        if (visibility == 0) {
+////            mExpand_upNext_IV.setRotation(180f);
+////            getWindow().setStatusBarColor(Color.parseColor("#e1b941"));
+//        }
+//        // if gone
+//        if (visibility == 8) {
+////            mExpand_upNext_IV.setRotation(360f);
+////            getWindow().setStatusBarColor(Color.parseColor("#ffffff"));
+//        }
+//        mExpandable_pane_LL!!.visibility = visibility
+//    }
 
     fun openReportScreen(view: View) {
         startActivity(Intent(this,ReportScreen::class.java))
