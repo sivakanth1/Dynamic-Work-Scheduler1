@@ -12,7 +12,8 @@ class Task(
     var description:String? = null,
     var duration:Int? = null,
     var startTime: String? = null,
-    var endTime: String? = null
+    var endTime: String? = null,
+    var status:String? = null,
 ) {
 //    var data:Int = 0
 //    init{

@@ -11,14 +11,19 @@ import com.example.dynamicworkscheduler.R
 import android.view.ViewGroup
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.transition.Visibility
 import android.util.Log
 import android.view.View
 import android.widget.*
-//import com.example.dynamicworkscheduler.MainActivity
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -539,7 +544,7 @@ class CreateTask : AppCompatActivity() {
                     startHours = selected_start_hour
                     startMinute = selected_startMinute
                     start_selected_time =
-                        String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                        String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
                     mAssign_start_time_BTN.setText(start_selected_time)
                     Toast.makeText(this@CreateTask, start_selected_time, Toast.LENGTH_SHORT).show()
                 }
@@ -555,12 +560,12 @@ class CreateTask : AppCompatActivity() {
                     endHours = selected_end_hour
                     endMinute = selectedEndMinute
                     end_selected_time =
-                        String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
+                        String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
                     Toast.makeText(this@CreateTask, end_selected_time, Toast.LENGTH_SHORT).show()
                     mAssign_end_time_BTN.setText(
                         String.format(
                             Locale.getDefault(),
-                            "%02d : %02d",
+                            "%02d:%02d",
                             endHours,
                             endMinute
                         )
@@ -699,11 +704,32 @@ class CreateTask : AppCompatActivity() {
         finish()
     }
 
+    @SuppressLint("SimpleDateFormat", "CommitPrefEdits")
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addTaskAndSchedule(view: View) {
+        val time_formatter = SimpleDateFormat("HH:mm")
         val title=findViewById<EditText>(R.id.Title_ET).text.toString()
-        MyApplication.testString=title
-//        val description=findViewById<EditText>(R.id.Description_ET).text.toString()
-        Toast.makeText(this,MyApplication.testString,Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this,MainActivity::class.java))
+        val description=findViewById<EditText>(R.id.Description_ET).text.toString()
+        val currentDate = LocalDate.now()
+        val currentTime = time_formatter.format(Calendar.getInstance().time)
+        Toast.makeText(this,"$currentDate",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, currentTime,Toast.LENGTH_SHORT).show()
+        //startActivity(Intent(this,MainActivity::class.java))
+//
+       MyApplication.deadlineInputsAdding(taskId = MyApplication.createTaskId(createdTime = currentTime, createdDate = currentDate.toString()),
+           title=title, priority = 2, category = 1, startDate = MyApplication.date_time_formatter.parse("2022-12-26 $start_selected_time"),
+           deadlineDate =MyApplication.date_time_formatter.parse("2022-12-26 $end_selected_time"), startTime = start_selected_time, endTime = end_selected_time,
+           description = description, duration = 0)
+
+        saveData()
+    }
+
+    fun saveData(){
+        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val myDataList = gson.toJson(MyApplication.tasks_objects_list_week[1])
+        editor.putString("taskIdListWeek",myDataList)
+        editor.apply()
     }
 }

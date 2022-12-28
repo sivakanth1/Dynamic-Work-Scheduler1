@@ -1,8 +1,11 @@
 package com.example.dynamicworkscheduler
 
 
+import com.google.gson.reflect.TypeToken
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.mikephil.charting.charts.PieChart
@@ -21,6 +24,8 @@ import android.widget.*
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -59,6 +64,34 @@ class MainActivity : AppCompatActivity() {
         //        mExpand_upNext_IV = findViewById(R.id.expand_upNext_IV);
         setUpPieChart()
         initPieChart()
+        MyApplication.createTasksOfWeekList()
+        MyApplication.createUserWorkingList("09:00","12:00")
+
+//        //retrivingData
+         lateinit var myList:MutableList<String>
+//        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+//        val editor = sharedPreferences.edit()
+        val gson = Gson()
+//        val myDataList = gson.toJson(MyApplication.tasks_id_list_week[1]);
+////        println(myDataList)
+////        Log.d("test",myDataList)
+//        editor.putString("myApplicationClass",myDataList)
+//        editor.apply()
+////
+        val serializedObject =getPreferences(Context.MODE_PRIVATE)?:return
+        val data = serializedObject.getString("myApplicationClass",null)
+        if(data!=null){
+            val type = object:TypeToken<MutableList<String>>(){}.type
+            myList = gson.fromJson(data,type)
+            println(myList)
+        }
+
+        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "15:00", createdDate = "26-12-2022"),title="testObjectDeadline1", priority = 3, category = 3, startDate = MyApplication.date_time_formatter.parse("2022-12-26 15:00"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-29 10:45"), startTime = "", endTime = "", description = "", duration = 120)
+        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "15:51", createdDate = "26-12-2022"),title="testObjectDeadline2", priority = 2, category = 3, startDate = MyApplication.date_time_formatter.parse("2022-12-26 15:50"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-30 10:45"), startTime = "", endTime = "", description = "", duration = 180)
+        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "16:00", createdDate = "26-12-2022"),title="testObjectDeadline3", priority = 2, category = 2, startDate = MyApplication.date_time_formatter.parse("2022-12-26 10:00"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-30 10:45"), startTime = "10:00", endTime = "12:00", description = "", duration = 0)
+//
+//
+//
 //        findViewById<View>(R.id.today_task_TV).setOnClickListener { view: View? ->
 //            startActivity(
 //                Intent(this, ScheduleOverview::class.java)
@@ -73,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 ////            finish();
 //        });
         mInProgress_Layout.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this,MyApplication.testString, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$myList", Toast.LENGTH_SHORT).show()
             task_activity_update_dialog = Dialog(this)
             task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
             task_activity_update_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -90,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             mUpdate_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_update_dialog.dismiss() })
         })
         mIn_progress_Tv.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this, MyApplication.testString, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${MyApplication.tasks_objects_list_week[1][1].title}", Toast.LENGTH_SHORT).show()
             task_activity_cancel_dialog = Dialog(this)
             task_activity_cancel_dialog.setContentView(R.layout.task_activity_cancel_dialog)
             task_activity_cancel_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)

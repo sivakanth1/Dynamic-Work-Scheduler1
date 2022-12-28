@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381595952990",
+    "project_id": "dynamicworkscheduler",
+    "storage_bucket": "dynamicworkscheduler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381595952990:android:3798d44500ad3b39a9d1cf",
+        "android_client_info": {
+          "package_name": "com.example.dynamicworkscheduler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381595952990-017j04vje0f3nfc8eaa58ncrr1c47e5n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9_7tIQhuqOBukr3YX4SrGKFLCye6fFzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381595952990-017j04vje0f3nfc8eaa58ncrr1c47e5n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
