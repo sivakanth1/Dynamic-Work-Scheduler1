@@ -11,19 +11,27 @@ import com.example.dynamicworkscheduler.R
 import android.view.ViewGroup
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
+import android.text.TextUtils
+import android.transition.AutoTransition
+import android.transition.Slide
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.transition.Visibility
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import kotlinx.coroutines.delay
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+import com.example.dynamicworkscheduler.data.TaskData
+import com.example.dynamicworkscheduler.data.TaskViewModel
+import com.example.dynamicworkscheduler.databinding.ActivityCreateTaskBinding
+import com.example.dynamicworkscheduler.databinding.ActivityMainBinding
+
+//import com.example.dynamicworkscheduler.MainActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Suppress("DEPRECATION")
@@ -107,12 +115,16 @@ class CreateTask : AppCompatActivity() {
     lateinit var mDay_date7: TextView
     lateinit var mAssign_end_time_BTN: Button
     lateinit var mAssign_start_time_BTN: Button
+    private lateinit var binding:ActivityCreateTaskBinding
+    private lateinit var mTaskViewModel: TaskViewModel
     @SuppressLint("UseCompatLoadingForDrawables", "CutPasteId")
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_task)
+        binding = ActivityCreateTaskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        mTaskViewModel= ViewModelProvider(this)[TaskViewModel::class.java]
 
         // hooks
 //        mSelectDateBTN = findViewById(R.id.SelectDateBTN);
@@ -122,40 +134,50 @@ class CreateTask : AppCompatActivity() {
 //        mDescription_ET = findViewById(R.id.Description_ET);
 //        mDone_FAB = findViewById(R.id.Done_FAB);
 //        mCategoryLV = findViewById(R.id.category_LV);
+
         mDuration_Spinner = findViewById(R.id.Duration_Spinner)
         duration_array_adapter = ArrayAdapter(this, R.layout.priority_dropdown_item, duration_time)
         mDuration_Spinner.setAdapter(duration_array_adapter)
-        mAssign_start_time_BTN = findViewById(R.id.Assign_start_time_BTN)
-        mAssign_end_time_BTN = findViewById(R.id.Assign_end_time_BTN)
-        mSelectCategory_TV = findViewById(R.id.SelectCategory_TV)
-        mAdd_priority_TV = findViewById(R.id.Add_priority_TV)
-        mPriority_List_LL = findViewById(R.id.Priority_List_LL)
-        pri_1 = findViewById(R.id.Priority_1_TV)
-        pri_2 = findViewById(R.id.Priority_2_TV)
-        pri_3 = findViewById(R.id.Priority_3_TV)
-        pri_4 = findViewById(R.id.Priority_4_TV)
-        pri_5 = findViewById(R.id.Priority_5_TV)
-        mDay1 = findViewById(R.id.day1)
-        mDay2 = findViewById(R.id.day2)
-        mDay3 = findViewById(R.id.day3)
-        mDay4 = findViewById(R.id.day4)
-        mDay5 = findViewById(R.id.day5)
-        mDay6 = findViewById(R.id.day6)
-        mDay7 = findViewById(R.id.day7)
-        mDay_day1 = findViewById(R.id.Week_day1)
-        mDay_day2 = findViewById(R.id.Week_day2)
-        mDay_day3 = findViewById(R.id.Week_day3)
-        mDay_day4 = findViewById(R.id.Week_day4)
-        mDay_day5 = findViewById(R.id.Week_day5)
-        mDay_day6 = findViewById(R.id.Week_day6)
-        mDay_day7 = findViewById(R.id.Week_day7)
-        mDay_date1 = findViewById(R.id.Week_date1)
-        mDay_date2 = findViewById(R.id.Week_date2)
-        mDay_date3 = findViewById(R.id.Week_date3)
-        mDay_date4 = findViewById(R.id.Week_date4)
-        mDay_date5 = findViewById(R.id.Week_date5)
-        mDay_date6 = findViewById(R.id.Week_date6)
-        mDay_date7 = findViewById(R.id.Week_date7)
+        mAssign_start_time_BTN = binding.AssignStartTimeBTN
+       //1. mAssign_start_time_BTN = findViewById(R.id.Assign_start_time_BTN)
+
+        mAssign_end_time_BTN = binding.AssignEndTimeBTN
+        mSelectCategory_TV = binding.SelectCategoryTV
+       //3. mSelectCategory_TV = findViewById(R.id.SelectCategory_TV)
+        mAdd_priority_TV = binding.AddPriorityTV
+        //4.mAdd_priority_TV = findViewById(R.id.Add_priority_TV)
+        mPriority_List_LL = binding.PriorityListLL
+
+        //5.mPriority_List_LL = findViewById(R.id.Priority_List_LL)
+        pri_1=binding.Priority1TV
+        //6.pri_1=binding.Priority1TV
+        pri_2 = binding.Priority2TV
+       //7. pri_2 = findViewById(R.id.Priority_2_TV)
+        pri_3 = binding.Priority3TV
+        //8.pri_3 = findViewById(R.id.Priority_3_TV)
+        pri_4 = binding.Priority4TV
+        pri_5 = binding.Priority5TV
+        mDay1 = binding.day1
+        mDay2 = binding.day2
+        mDay3 = binding.day3
+        mDay4 = binding.day4
+        mDay5 = binding.day5
+        mDay6 = binding.day6
+        mDay7 = binding.day7
+        mDay_day1 = binding.WeekDay1
+        mDay_day2 = binding.WeekDay2
+        mDay_day3 = binding.WeekDay3
+        mDay_day4 = binding.WeekDay4
+        mDay_day5 = binding.WeekDay5
+        mDay_day6 = binding.WeekDay6
+        mDay_day7 = binding.WeekDay7
+        mDay_date1 = binding.WeekDate1
+        mDay_date2 = binding.WeekDate2
+        mDay_date3 = binding.WeekDate3
+        mDay_date4 = binding.WeekDate4
+        mDay_date5 = binding.WeekDate5
+        mDay_date6 = binding.WeekDate6
+        mDay_date7 = binding.WeekDate7
 
         /* SOME BASIC INITIALISATIONS */
         calendar = Calendar.getInstance()
@@ -235,12 +257,12 @@ class CreateTask : AppCompatActivity() {
         mShowTaskCategoryListDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         mShowTaskCategoryListDialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
 
-
         /* TASK PRIORITY SELECTION */mAdd_priority_TV.setOnClickListener(View.OnClickListener { view: View? ->
             mPriority_List_LL.setVisibility(View.VISIBLE)
             pri_1.setOnClickListener(View.OnClickListener { v: View? ->
                 priority = pri_1.getText() as String
                 mAdd_priority_TV.setText(priority)
+                mAdd_priority_TV.animate().translationY(0f)
                 mPriority_List_LL.setVisibility(View.GONE)
             })
             pri_2.setOnClickListener(View.OnClickListener { v: View? ->
@@ -297,9 +319,12 @@ class CreateTask : AppCompatActivity() {
                 cat3_title.setTextColor(resources.getColor(R.color.soft_black))
                 cat3_des.setTextColor(resources.getColor(R.color.soft_black))
                 category = "Category-1"
-                findViewById<RelativeLayout>(R.id.select_time_rl).visibility = View.VISIBLE
-                findViewById<TextView>(R.id.select_duration_TV).visibility = View.GONE
-                findViewById<Spinner>(R.id.Duration_Spinner).visibility = View.GONE
+                binding.selectTimeRl.visibility = View.VISIBLE
+               //1. findViewById<RelativeLayout>(R.id.select_time_rl).visibility = View.VISIBLE
+                binding.selectDurationTV.visibility = View.GONE
+               //2. findViewById<TextView>(R.id.select_duration_TV).visibility = View.GONE
+                binding.DurationSpinner.visibility = View.GONE
+               //3. findViewById<Spinner>(R.id.Duration_Spinner).visibility = View.GONE
             })
             cat2_LL.setOnClickListener(View.OnClickListener { v1: View? ->
 
@@ -544,7 +569,7 @@ class CreateTask : AppCompatActivity() {
                     startHours = selected_start_hour
                     startMinute = selected_startMinute
                     start_selected_time =
-                        String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                        String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                     mAssign_start_time_BTN.setText(start_selected_time)
                     Toast.makeText(this@CreateTask, start_selected_time, Toast.LENGTH_SHORT).show()
                 }
@@ -560,12 +585,12 @@ class CreateTask : AppCompatActivity() {
                     endHours = selected_end_hour
                     endMinute = selectedEndMinute
                     end_selected_time =
-                        String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
+                        String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
                     Toast.makeText(this@CreateTask, end_selected_time, Toast.LENGTH_SHORT).show()
                     mAssign_end_time_BTN.setText(
                         String.format(
                             Locale.getDefault(),
-                            "%02d:%02d",
+                            "%02d : %02d",
                             endHours,
                             endMinute
                         )
@@ -679,7 +704,7 @@ class CreateTask : AppCompatActivity() {
         val str = LocalDate.now().toString()
         val temp = str.split("-").toTypedArray()
         calendar[temp[0].toInt(), temp[1].toInt() - 1] = temp[2].toInt()
-        Toast.makeText(this, calendar.firstDayOfWeek.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this,LocalDate.now()., Toast.LENGTH_SHORT).show()
         //        Toast.makeText(this, str+" "+String.valueOf(calendar.get(calendar.DAY_OF_WEEK)), Toast.LENGTH_SHORT).show();
         for (i in 0..6) {
             days_of_week[i] = formatDate.format(calendar.time)
@@ -687,49 +712,65 @@ class CreateTask : AppCompatActivity() {
             //                trimmed_days[i] = formatDayOfWeek.format(calendar.getTime()).substring(0,1);
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
-        mDay_date1.text = trimmed_dates[0]
-        mDay_date2.text = trimmed_dates[1]
-        mDay_date3.text = trimmed_dates[2]
-        mDay_date4.text = trimmed_dates[3]
-        mDay_date5.text = trimmed_dates[4]
-        mDay_date6.text = trimmed_dates[5]
-        mDay_date7.text = trimmed_dates[6]
+        Toast.makeText(this,"$trimmed_dates",Toast.LENGTH_SHORT).show()
+//        mDay_date1.text = trimmed_dates[0]
+//        mDay_date2.text = trimmed_dates[1]
+//        mDay_date3.text = trimmed_dates[2]
+//        mDay_date4.text = trimmed_dates[3]
+//        mDay_date5.text = trimmed_dates[4]
+//        mDay_date6.text = trimmed_dates[5]
+//        mDay_date7.text = trimmed_dates[6]
         Log.d("TEST_WEEK_DAYS", Arrays.toString(days_of_week))
         Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_dates))
         Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_days))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun backToDashboard(view: View) {
         startActivity(Intent(this,MainActivity::class.java))
         finish()
+     //   initWeekLayout()
     }
 
-    @SuppressLint("SimpleDateFormat", "CommitPrefEdits")
     @RequiresApi(Build.VERSION_CODES.O)
     fun addTaskAndSchedule(view: View) {
-        val time_formatter = SimpleDateFormat("HH:mm")
-        val title=findViewById<EditText>(R.id.Title_ET).text.toString()
-        val description=findViewById<EditText>(R.id.Description_ET).text.toString()
-        val currentDate = LocalDate.now()
-        val currentTime = time_formatter.format(Calendar.getInstance().time)
-        Toast.makeText(this,"$currentDate",Toast.LENGTH_SHORT).show()
-        Toast.makeText(this, currentTime,Toast.LENGTH_SHORT).show()
-        //startActivity(Intent(this,MainActivity::class.java))
-//
-       MyApplication.deadlineInputsAdding(taskId = MyApplication.createTaskId(createdTime = currentTime, createdDate = currentDate.toString()),
-           title=title, priority = 2, category = 1, startDate = MyApplication.date_time_formatter.parse("2022-12-26 $start_selected_time"),
-           deadlineDate =MyApplication.date_time_formatter.parse("2022-12-26 $end_selected_time"), startTime = start_selected_time, endTime = end_selected_time,
-           description = description, duration = 0)
-
-        saveData()
+         val title=binding.TitleET
+         val description=binding.DescriptionET
+         if(title.text.isEmpty()||title.text.startsWith(" ")) {
+             title.error="Enter title for Task"
+         }
+        if(description.text.isEmpty()||description.text.startsWith(" ")) {
+            description.error="Enter Description for Task"
+        }
+        else {
+            MyApplication.testString = title.toString()
+           // Toast.makeText(this,MyApplication.testString,Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,MainActivity::class.java))
+            MyApplication.testData.add(Task(taskID = null,title=title.text.toString(),priority=2,category=2,
+                startDate = MyApplication.date_time_formatter.parse("29-10-2022 10:42"),
+                deadlineDate = MyApplication.date_time_formatter.parse("30-10-2022 10:42"),
+                startTime = start_selected_time, endTime = end_selected_time, description = description.text.toString(), duration = 0, status = "pending"
+            ))
+            insertDataToDatabase()
+         }
     }
 
-    fun saveData(){
-        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        val myDataList = gson.toJson(MyApplication.tasks_objects_list_week[1])
-        editor.putString("taskIdListWeek",myDataList)
-        editor.apply()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun insertDataToDatabase(){
+        val time_formatter = SimpleDateFormat("HH:mm")
+        val title=binding.TitleET.text.toString()
+        val description=binding.DescriptionET.text.toString()
+        val currentDate = LocalDate.now().toString()
+        val currentTime = time_formatter.format(Calendar.getInstance().time)
+
+        val task=TaskData(
+            taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
+            title = title,priority=priority, category=category, startDate = "2022-12-29",
+            deadlineDate = "2022-12-30", startTime = start_selected_time, endTime = end_selected_time,
+            description = description, status = "pending", duration = 0
+        )
+        mTaskViewModel.addTask(task)
+        Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
     }
 }
+

@@ -14,6 +14,8 @@ import android.os.Build
 import android.view.View
 import android.widget.ListView
 import androidx.annotation.RequiresApi
+import com.example.dynamicworkscheduler.databinding.ActivityCreateTaskBinding
+import com.example.dynamicworkscheduler.databinding.ActivityReportScreenBinding
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -25,12 +27,16 @@ class ReportScreen : AppCompatActivity() {
     lateinit var act_task_list: ArrayList<TaskActivity?>
     private lateinit var chart_colors: IntArray
     private lateinit var pieChart: PieChart
+    private lateinit var binding:ActivityReportScreenBinding
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_report_screen)
-        pieChart = findViewById(R.id.pie_chart)
-        mTaskActivity_LV = findViewById(R.id.TaskActivity_LV)
+        binding = ActivityReportScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        pieChart = binding.pieChart
+        //1.pieChart = findViewById(R.id.pie_chart)
+        mTaskActivity_LV = binding.TaskActivityLV
+       //2. mTaskActivity_LV = findViewById(R.id.TaskActivity_LV)
         setUpPieChart()
         initPieChart()
         initTaskActivityList()

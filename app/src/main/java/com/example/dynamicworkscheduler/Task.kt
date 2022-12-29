@@ -14,7 +14,7 @@ class Task(
     var startTime: String? = null,
     var endTime: String? = null,
     var status:String? = null,
-) {
+):java.io.Serializable {
 //    var data:Int = 0
 //    init{
 //        print(data)

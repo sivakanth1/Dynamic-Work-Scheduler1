@@ -17,7 +17,7 @@ import java.util.ArrayList
 
 class TaskActivityAdapter(context: Context, objects: ArrayList<TaskActivity?>) :
     ArrayAdapter<TaskActivity?>(context, R.layout.user_task_activity_list_item, objects) {
-    var reportscreen: ReportScreen? = null
+    lateinit var reportscreen: ReportScreen
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
         val taskActivity = getItem(position)
@@ -26,6 +26,7 @@ class TaskActivityAdapter(context: Context, objects: ArrayList<TaskActivity?>) :
                 .inflate(R.layout.user_task_activity_list_item, parent, false)
         }
         val item_start_time = convertView!!.findViewById<TextView>(R.id.Item_StartTime)
+        //1.val item_start_time = convertView!!.findViewById<TextView>(R.id.Item_StartTime)
         val item_inside_start_time = convertView.findViewById<TextView>(R.id.Item_inside_StartTime)
         val item_inside_end_time = convertView.findViewById<TextView>(R.id.Item_inside_EndTime)
         val title_TV = convertView.findViewById<TextView>(R.id.Item_Title)

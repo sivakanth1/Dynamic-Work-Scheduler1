@@ -1,6 +1,7 @@
 package com.example.dynamicworkscheduler
 
 
+import android.app.Activity
 import com.google.gson.reflect.TypeToken
 import android.app.Dialog
 import android.content.Context
@@ -17,10 +18,20 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieData
 import android.graphics.Typeface
+import android.text.Layout
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.view.LayoutInflater
 import android.view.View
+import android.view.View.inflate
 import android.widget.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import com.example.dynamicworkscheduler.data.TaskData
+import com.example.dynamicworkscheduler.data.TaskViewModel
+import com.example.dynamicworkscheduler.databinding.ActivityMainBinding
+
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -50,17 +61,53 @@ class MainActivity : AppCompatActivity() {
     lateinit var mSeeFullReport: TextView
     lateinit var mUp_next_external_TV: TextView
     lateinit var mIn_progress_Tv: TextView
+    private lateinit var mTaskViewModel: TaskViewModel
+
     val myApplication = MyApplication()
+    var list = emptyList<TaskData>()
+
+    private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        mIn_progress_Tv = findViewById(R.id.in_progress_Tv)
-        mInProgress_Layout = findViewById(R.id.InProgress_Layout)
+
+        //Database
+//        val db =Room.databaseBuilder(
+//            applicationContext,
+//            AppDatabase::class.java,"TaskData"
+//        ).build()
+//
+//        val dataDao=db.dataDao()
+//        val taskList:List<TaskData>
+        //Database
+
+        //Database
+
+        mTaskViewModel=ViewModelProvider(this).get(TaskViewModel::class.java)
+        mTaskViewModel.readAllData.observe(this, Observer {task->
+            setData(task)
+        })
+
+//        if (list != null) {
+//            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
+//        }else{
+//            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
+//        }
+        //Database
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+
+        mIn_progress_Tv = binding.inProgressTv
+        //1.mIn_progress_Tv = findViewById(R.id.in_progress_Tv)
+        mInProgress_Layout = binding.InProgressLayout
+       //2. mInProgress_Layout = findViewById(R.id.InProgress_Layout)
         //        mUp_next_external_TV = findViewById(R.id.up_next_external_TV);
-        mExpandable_pane = findViewById(R.id.lower_pane)
-        pieChart = findViewById(R.id.pie_chart)
-        mExpandable_pane_LL = findViewById(R.id.Expandable_layout)
-        mLower_pane = findViewById(R.id.lower_pane)
+        mExpandable_pane = binding.lowerPane
+        //3.mExpandable_pane = findViewById(R.id.lower_pane)
+        pieChart = binding.pieChart
+        //4.pieChart = findViewById(R.id.pie_chart)
+        mExpandable_pane_LL = binding.ExpandableLayout
+        mLower_pane = binding.lowerPane
         //        mExpand_upNext_IV = findViewById(R.id.expand_upNext_IV);
         setUpPieChart()
         initPieChart()
@@ -78,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 //        editor.putString("myApplicationClass",myDataList)
 //        editor.apply()
 ////
-        val serializedObject =getPreferences(Context.MODE_PRIVATE)?:return
+        val serializedObject =getPreferences(MODE_PRIVATE)?:return
         val data = serializedObject.getString("myApplicationClass",null)
         if(data!=null){
             val type = object:TypeToken<MutableList<String>>(){}.type
@@ -159,6 +206,66 @@ class MainActivity : AppCompatActivity() {
 //        boolean isDataAvailable = SyncHelper.isDataAvailable;
 //        if(isDataAvailable)
 //            mTaskDate.setText(SyncHelper.getTask().toString());
+    }
+
+    override fun onStart() {
+        super.onStart()
+//       getlist()
+//       setlist()
+       Toast.makeText(this,"onStart",Toast.LENGTH_SHORT).show()
+//       if(list!=null){
+//            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
+//        }//Toast.makeText(this,"${list.size}",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        getlist()
+//        setlist()
+        Toast.makeText(this,"onResume",Toast.LENGTH_SHORT).show()
+//        if(list!=null){
+//            Toast.makeText(this,"${MyApplication.testData}",Toast.LENGTH_SHORT).show()
+//        }
+        //
+    }
+
+//    fun setlist()
+//    {
+//        val sp=this.getSharedPreferences("sp",Context.MODE_PRIVATE)
+//        val editor= sp.edit()
+//        val gson=Gson()
+//        val json=gson.toJson(MyApplication.testData)
+//        editor.putString("data",json).apply()
+//        Toast.makeText(this, "json toast $json",Toast.LENGTH_SHORT).show()
+//
+//    }
+//    fun getlist()
+//    {
+//        val sp=this.getSharedPreferences("sp",Context.MODE_PRIVATE)
+//      val so=sp.getString("data",null)
+//        Toast.makeText(this, "object toast $so",Toast.LENGTH_SHORT).show()
+//
+//        if(so!=null)
+//        {
+//            val gson=Gson()
+//            val type = object : TypeToken<MutableList<Task>>(){}.type
+//            list=gson.fromJson(so,type)
+//            println("list ----------------->${list.size}")
+//        }
+//    }
+
+    override fun onPause() {
+        super.onPause()
+        Toast.makeText(this,"onPause",Toast.LENGTH_SHORT).show()
+    }
+    override fun onStop() {
+        super.onStop()
+        Toast.makeText(this,"onStop",Toast.LENGTH_SHORT).show()
+    }
+
+    fun setData(task:MutableList<TaskData>){
+        this.list=task
+        Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
     }
 
     private fun initPieChart() {

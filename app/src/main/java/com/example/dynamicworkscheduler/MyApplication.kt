@@ -12,6 +12,7 @@ import java.util.prefs.Preferences
 class MyApplication: Application() {
     companion object {
         var testString:String="Test Title"
+        var testData= mutableListOf<Task>()
         @SerializedName("tasks_objects_list_week")val tasks_objects_list_week=mutableListOf<MutableList<Task>>()
         @SerializedName("tasks_objects_list_week_deadlines_c2")val tasks_objects_list_week_deadlines_c2=mutableListOf<MutableList<Task>>()
         @SerializedName("tasks_objects_list_week_deadlines_c3")val tasks_objects_list_week_deadlines_c3=mutableListOf<MutableList<Task>>()
