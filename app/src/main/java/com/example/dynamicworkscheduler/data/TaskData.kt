@@ -9,7 +9,7 @@ import java.util.*
 data class TaskData(
     @ColumnInfo(name="taskId") @PrimaryKey val taskId:String,
     @ColumnInfo(name="title") val title:String,
-    @ColumnInfo(name="priority") val priority:String,
+    @ColumnInfo(name="priority") val priority:Int,
     @ColumnInfo(name="category") val category:String,
     @ColumnInfo(name="description") val description:String,
     @ColumnInfo(name="startTime") val startTime:String,
@@ -18,4 +18,5 @@ data class TaskData(
     @ColumnInfo(name="startDate") val startDate: String,
     @ColumnInfo(name="deadlineDate") val deadlineDate: String,
     @ColumnInfo(name="duration") val duration:Int,
+    @ColumnInfo(name="weekOfYear") val weekNumber:Int,
 )

@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.example.dynamicworkscheduler.data.AppDatabase
 import com.example.dynamicworkscheduler.data.TaskData
 import com.example.dynamicworkscheduler.data.TaskViewModel
 import com.example.dynamicworkscheduler.databinding.ActivityCreateTaskBinding
@@ -117,6 +118,7 @@ class CreateTask : AppCompatActivity() {
     lateinit var mAssign_start_time_BTN: Button
     private lateinit var binding:ActivityCreateTaskBinding
     private lateinit var mTaskViewModel: TaskViewModel
+    var list = emptyList<TaskData>()
     @SuppressLint("UseCompatLoadingForDrawables", "CutPasteId")
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,6 +184,7 @@ class CreateTask : AppCompatActivity() {
         /* SOME BASIC INITIALISATIONS */
         calendar = Calendar.getInstance()
 
+        initWeekLayout()
 
         // initialize globals
 //        selected_date = new StringBuilder("");
@@ -694,41 +697,58 @@ class CreateTask : AppCompatActivity() {
 //        return "";
     }
 
+    override fun onStart() {
+        super.onStart()
+        Toast.makeText(this,"onStart create",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(this,"onResume create",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Toast.makeText(this,"onPause create",Toast.LENGTH_SHORT).show()
+    //    finish()
+    }
+    override fun onStop() {
+        super.onStop()
+        Toast.makeText(this,"onStop create",Toast.LENGTH_SHORT).show()
+    //    finish()
+    }
+
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun initWeekLayout() {
-        val trimmed_dates = arrayOfNulls<String>(7)
-        val trimmed_days = arrayOfNulls<String>(7)
-        val days_of_week = arrayOfNulls<String>(7)
-        val formatDate = SimpleDateFormat("dd/MM/yyyy")
-        val formatDayOfWeek = SimpleDateFormat("EE")
-        val str = LocalDate.now().toString()
-        val temp = str.split("-").toTypedArray()
-        calendar[temp[0].toInt(), temp[1].toInt() - 1] = temp[2].toInt()
-        //Toast.makeText(this,LocalDate.now()., Toast.LENGTH_SHORT).show()
-        //        Toast.makeText(this, str+" "+String.valueOf(calendar.get(calendar.DAY_OF_WEEK)), Toast.LENGTH_SHORT).show();
-        for (i in 0..6) {
-            days_of_week[i] = formatDate.format(calendar.time)
-            trimmed_dates[i] = days_of_week[i]?.substring(8)
-            //                trimmed_days[i] = formatDayOfWeek.format(calendar.getTime()).substring(0,1);
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-        Toast.makeText(this,"$trimmed_dates",Toast.LENGTH_SHORT).show()
-//        mDay_date1.text = trimmed_dates[0]
-//        mDay_date2.text = trimmed_dates[1]
-//        mDay_date3.text = trimmed_dates[2]
-//        mDay_date4.text = trimmed_dates[3]
-//        mDay_date5.text = trimmed_dates[4]
-//        mDay_date6.text = trimmed_dates[5]
-//        mDay_date7.text = trimmed_dates[6]
-        Log.d("TEST_WEEK_DAYS", Arrays.toString(days_of_week))
-        Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_dates))
-        Log.d("TEST_WEEK_DAYS", Arrays.toString(trimmed_days))
+        val calender = GregorianCalendar()
+        calender.clear()
+       // calender.set(Calendar.YEAR,Calendar.getInstance().get(Calendar.YEAR))
+        calender.set(Calendar.YEAR,2023)
+       // calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
+        calender.set(Calendar.WEEK_OF_YEAR,6)
+        val startDate = calender.time
+        val date = LocalDate.now().dayOfWeek
+        mDay_date1.text = LocalDate.now().dayOfWeek.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        mDay_date2.text = calender.time.date.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        mDay_date3.text = calender.time.date.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        mDay_date4.text = calender.time.date.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        mDay_date5.text = calender.time.date.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        mDay_date6.text = calender.time.date.toString()
+        calender.set(Calendar.DAY_OF_MONTH,Calendar.WEEK_OF_MONTH)
+        val endDate = calender.time
+        mDay_date7.text = endDate.date.toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun backToDashboard(view: View) {
         startActivity(Intent(this,MainActivity::class.java))
-        finish()
+    //    finish()
      //   initWeekLayout()
     }
 
@@ -736,23 +756,30 @@ class CreateTask : AppCompatActivity() {
     fun addTaskAndSchedule(view: View) {
          val title=binding.TitleET
          val description=binding.DescriptionET
-         if(title.text.isEmpty()||title.text.startsWith(" ")) {
-             title.error="Enter title for Task"
-         }
-        if(description.text.isEmpty()||description.text.startsWith(" ")) {
-            description.error="Enter Description for Task"
-        }
-        else {
-            MyApplication.testString = title.toString()
-           // Toast.makeText(this,MyApplication.testString,Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this,MainActivity::class.java))
-            MyApplication.testData.add(Task(taskID = null,title=title.text.toString(),priority=2,category=2,
-                startDate = MyApplication.date_time_formatter.parse("29-10-2022 10:42"),
-                deadlineDate = MyApplication.date_time_formatter.parse("30-10-2022 10:42"),
-                startTime = start_selected_time, endTime = end_selected_time, description = description.text.toString(), duration = 0, status = "pending"
-            ))
-            insertDataToDatabase()
-         }
+//         if(title.text.isEmpty()||title.text.startsWith(" ")) {
+//             title.error="Enter title for Task"
+//         }
+//        if(description.text.isEmpty()||description.text.startsWith(" ")) {
+//            description.error="Enter Description for Task"
+//        }
+//        else {
+//         //   MyApplication.testString = title.toString()
+//          //  Toast.makeText(this,"${Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1}",Toast.LENGTH_SHORT).show()
+//           // Toast.makeText(this,"${}",Toast.LENGTH_SHORT).show()
+//           // startActivity(Intent(this,MainActivity::class.java))
+////            MyApplication.completeData.add(Task(taskID = null,title=title.text.toString(),priority=2,category=2,
+////                startDate = MyApplication.date_time_formatter.parse("29-10-2022 10:42"),
+////                deadlineDate = MyApplication.date_time_formatter.parse("30-10-2022 10:42"),
+////                startTime = start_selected_time, endTime = end_selected_time, description = description.text.toString(), duration = 0, status = "pending"
+////            ))
+//            insertDataToDatabase()
+//            finish()
+//         }
+        getCurrentWeekDates()
+    }
+
+    fun getCurrentWeekDates(){
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -762,12 +789,20 @@ class CreateTask : AppCompatActivity() {
         val description=binding.DescriptionET.text.toString()
         val currentDate = LocalDate.now().toString()
         val currentTime = time_formatter.format(Calendar.getInstance().time)
+        val priority=when(priority){
+            "#1"->1
+            "#2"->2
+            "#3"->3
+            "#4"->4
+            else -> {5}
+        }
 
         val task=TaskData(
             taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
             title = title,priority=priority, category=category, startDate = "2022-12-29",
             deadlineDate = "2022-12-30", startTime = start_selected_time, endTime = end_selected_time,
-            description = description, status = "pending", duration = 0
+            description = description, status = "pending", duration = 0,
+            weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
         )
         mTaskViewModel.addTask(task)
         Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()

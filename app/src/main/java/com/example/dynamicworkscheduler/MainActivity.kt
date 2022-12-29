@@ -1,12 +1,10 @@
 package com.example.dynamicworkscheduler
 
 
-import android.app.Activity
+
 import com.google.gson.reflect.TypeToken
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.mikephil.charting.charts.PieChart
@@ -18,25 +16,21 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieData
 import android.graphics.Typeface
-import android.text.Layout
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.dynamicworkscheduler.data.AppDatabase
 import com.example.dynamicworkscheduler.data.TaskData
 import com.example.dynamicworkscheduler.data.TaskViewModel
 import com.example.dynamicworkscheduler.databinding.ActivityMainBinding
-
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -61,31 +55,45 @@ class MainActivity : AppCompatActivity() {
     lateinit var mSeeFullReport: TextView
     lateinit var mUp_next_external_TV: TextView
     lateinit var mIn_progress_Tv: TextView
+    lateinit var mAssignTitleTv: TextView
+    lateinit var mAssignDescriptionTv: TextView
+    lateinit var mAssignDeadLineTv: TextView
     private lateinit var mTaskViewModel: TaskViewModel
 
     val myApplication = MyApplication()
-    var list = emptyList<TaskData>()
+    var list = mutableListOf<TaskData>()
 
     private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Database
-//        val db =Room.databaseBuilder(
-//            applicationContext,
-//            AppDatabase::class.java,"TaskData"
-//        ).build()
-//
-//        val dataDao=db.dataDao()
-//        val taskList:List<TaskData>
-        //Database
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Database
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,"taskdb"
+        ).build()
 
-        mTaskViewModel=ViewModelProvider(this).get(TaskViewModel::class.java)
-        mTaskViewModel.readAllData.observe(this, Observer {task->
+        val dataDao=db.dataDao()
+        dataDao.getAllData().observe(this,Observer{task->
             setData(task)
         })
+        //Database
+
+        //Initialization
+        mAssignTitleTv=binding.AssignTitleTV
+        mAssignDeadLineTv = binding.AssignDeadlineTV
+        mAssignDescriptionTv = binding.AssignDescriptionTV
+        //Initialization
+
+        //Database
+
+//        mTaskViewModel=ViewModelProvider(this).get(TaskViewModel::class.java)
+//        mTaskViewModel.readAllData.observe(this, Observer {task->
+//            setData(task)
+//        })
 
 //        if (list != null) {
 //            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
@@ -93,9 +101,6 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
 //        }
         //Database
-        binding = ActivityMainBinding.inflate(layoutInflater)
-
-        setContentView(binding.root)
 
         mIn_progress_Tv = binding.inProgressTv
         //1.mIn_progress_Tv = findViewById(R.id.in_progress_Tv)
@@ -114,31 +119,7 @@ class MainActivity : AppCompatActivity() {
         MyApplication.createTasksOfWeekList()
         MyApplication.createUserWorkingList("09:00","12:00")
 
-//        //retrivingData
-         lateinit var myList:MutableList<String>
-//        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-//        val editor = sharedPreferences.edit()
-        val gson = Gson()
-//        val myDataList = gson.toJson(MyApplication.tasks_id_list_week[1]);
-////        println(myDataList)
-////        Log.d("test",myDataList)
-//        editor.putString("myApplicationClass",myDataList)
-//        editor.apply()
-////
-        val serializedObject =getPreferences(MODE_PRIVATE)?:return
-        val data = serializedObject.getString("myApplicationClass",null)
-        if(data!=null){
-            val type = object:TypeToken<MutableList<String>>(){}.type
-            myList = gson.fromJson(data,type)
-            println(myList)
-        }
 
-        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "15:00", createdDate = "26-12-2022"),title="testObjectDeadline1", priority = 3, category = 3, startDate = MyApplication.date_time_formatter.parse("2022-12-26 15:00"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-29 10:45"), startTime = "", endTime = "", description = "", duration = 120)
-        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "15:51", createdDate = "26-12-2022"),title="testObjectDeadline2", priority = 2, category = 3, startDate = MyApplication.date_time_formatter.parse("2022-12-26 15:50"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-30 10:45"), startTime = "", endTime = "", description = "", duration = 180)
-        MyApplication.deadlineInputsAdding(MyApplication.createTaskId(createdTime = "16:00", createdDate = "26-12-2022"),title="testObjectDeadline3", priority = 2, category = 2, startDate = MyApplication.date_time_formatter.parse("2022-12-26 10:00"), deadlineDate = MyApplication.date_time_formatter.parse("2022-12-30 10:45"), startTime = "10:00", endTime = "12:00", description = "", duration = 0)
-//
-//
-//
 //        findViewById<View>(R.id.today_task_TV).setOnClickListener { view: View? ->
 //            startActivity(
 //                Intent(this, ScheduleOverview::class.java)
@@ -153,7 +134,8 @@ class MainActivity : AppCompatActivity() {
 ////            finish();
 //        });
         mInProgress_Layout.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this, "$myList", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "${list.size}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"List of Myapplication ${MyApplication.completeData.size}",Toast.LENGTH_SHORT).show()
             task_activity_update_dialog = Dialog(this)
             task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
             task_activity_update_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -170,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             mUpdate_dialog_NO_BTN.setOnClickListener(View.OnClickListener { view1: View? -> task_activity_update_dialog.dismiss() })
         })
         mIn_progress_Tv.setOnClickListener(View.OnClickListener { view: View? ->
-            Toast.makeText(this, "${MyApplication.tasks_objects_list_week[1][1].title}", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "${MyApplication.tasks_objects_list_week[1][1].title}", Toast.LENGTH_SHORT).show()
             task_activity_cancel_dialog = Dialog(this)
             task_activity_cancel_dialog.setContentView(R.layout.task_activity_cancel_dialog)
             task_activity_cancel_dialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -210,49 +192,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-//       getlist()
-//       setlist()
        Toast.makeText(this,"onStart",Toast.LENGTH_SHORT).show()
-//       if(list!=null){
-//            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
-//        }//Toast.makeText(this,"${list.size}",Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
         super.onResume()
-//        getlist()
-//        setlist()
         Toast.makeText(this,"onResume",Toast.LENGTH_SHORT).show()
-//        if(list!=null){
-//            Toast.makeText(this,"${MyApplication.testData}",Toast.LENGTH_SHORT).show()
-//        }
-        //
     }
-
-//    fun setlist()
-//    {
-//        val sp=this.getSharedPreferences("sp",Context.MODE_PRIVATE)
-//        val editor= sp.edit()
-//        val gson=Gson()
-//        val json=gson.toJson(MyApplication.testData)
-//        editor.putString("data",json).apply()
-//        Toast.makeText(this, "json toast $json",Toast.LENGTH_SHORT).show()
-//
-//    }
-//    fun getlist()
-//    {
-//        val sp=this.getSharedPreferences("sp",Context.MODE_PRIVATE)
-//      val so=sp.getString("data",null)
-//        Toast.makeText(this, "object toast $so",Toast.LENGTH_SHORT).show()
-//
-//        if(so!=null)
-//        {
-//            val gson=Gson()
-//            val type = object : TypeToken<MutableList<Task>>(){}.type
-//            list=gson.fromJson(so,type)
-//            println("list ----------------->${list.size}")
-//        }
-//    }
 
     override fun onPause() {
         super.onPause()
@@ -263,9 +209,13 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this,"onStop",Toast.LENGTH_SHORT).show()
     }
 
-    fun setData(task:MutableList<TaskData>){
+    private fun setData(task:MutableList<TaskData>){
         this.list=task
-        Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
+        MyApplication.completeData = list
+        Toast.makeText(this,"List of Main Activity ${list.size}",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"List of Myapplication ${MyApplication.completeData.size}",Toast.LENGTH_SHORT).show()
+        MyApplication.splitAccordingToWeek()
+//        setInProgressWidget()
     }
 
     private fun initPieChart() {
@@ -342,9 +292,17 @@ class MainActivity : AppCompatActivity() {
 
     fun openCreateTaskScreen(view: View) {
         startActivity(Intent(this,CreateTask::class.java))
+        finish()
     }
 
     fun openScheduleScreen(view: View) {
         startActivity(Intent(this,Schedule::class.java))
     }
+
+    fun setInProgressWidget(){
+        mAssignTitleTv.text=list[0].title
+        mAssignDeadLineTv.text=list[0].deadlineDate
+        mAssignDescriptionTv.text=list[0].description
+    }
+
 }

@@ -2,25 +2,23 @@ package com.example.dynamicworkscheduler
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import com.example.dynamicworkscheduler.data.TaskData
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.prefs.Preferences
 
 class MyApplication: Application() {
     companion object {
         var testString:String="Test Title"
-        var testData= mutableListOf<Task>()
+        var completeData= mutableListOf<TaskData>()
         @SerializedName("tasks_objects_list_week")val tasks_objects_list_week=mutableListOf<MutableList<Task>>()
-        @SerializedName("tasks_objects_list_week_deadlines_c2")val tasks_objects_list_week_deadlines_c2=mutableListOf<MutableList<Task>>()
-        @SerializedName("tasks_objects_list_week_deadlines_c3")val tasks_objects_list_week_deadlines_c3=mutableListOf<MutableList<Task>>()
-        @SerializedName("tasks_objects_list_week_schedules")val tasks_objects_list_week_schedules=mutableListOf<MutableList<Task>>()
+        @SerializedName("tasks_objects_list_week_deadlines_c2")val tasks_objects_list_week_c2=mutableListOf<MutableList<Task>>()
+        @SerializedName("tasks_objects_list_week_deadlines_c3")val tasks_objects_list_week_c3=mutableListOf<MutableList<Task>>()
+        @SerializedName("tasks_objects_list_week_schedules")val tasks_objects_list_week_c1=mutableListOf<MutableList<Task>>()
         @SerializedName("tasks_objects_list_week_reschedule")val tasks_objects_list_week_reschedule=mutableListOf<MutableList<Task>>()
         @SerializedName("tasks_id_list_week")val tasks_id_list_week=mutableListOf<MutableList<String>>()
         @SuppressLint("SimpleDateFormat")
-        val date_time_formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        val date_time_formatter = SimpleDateFormat("yyyy-MM-dd")
         lateinit var chunckedStartTime:List<String>
         lateinit var chunckedEndTime:List<String>
 
@@ -39,9 +37,9 @@ class MyApplication: Application() {
                 val rowObjectsReschedules = mutableListOf<Task>()
                 val rowIds = mutableListOf<String>()
                 tasks_objects_list_week.add(rowObjects)
-                tasks_objects_list_week_deadlines_c2.add(rowObjectsDeadlinesC2)
-                tasks_objects_list_week_deadlines_c3.add(rowObjectsDeadlinesC3)
-                tasks_objects_list_week_schedules.add(rowObjectsSchedules)
+                tasks_objects_list_week_c2.add(rowObjectsDeadlinesC2)
+                tasks_objects_list_week_c3.add(rowObjectsDeadlinesC3)
+                tasks_objects_list_week_c1.add(rowObjectsSchedules)
                 tasks_objects_list_week_reschedule.add(rowObjectsReschedules)
                 tasks_id_list_week.add(rowIds)
             }
@@ -71,6 +69,134 @@ class MyApplication: Application() {
                 tasks_objects_list_week[6].add(Task(null,null,null,null,null,null))
                 c += 1
             }
+        }
+
+        fun splitAccordingToWeek(){
+            val currentWeekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
+            completeData.forEach{
+                if(it.weekNumber == currentWeekNumber){
+                    when(Companion.date_time_formatter.parse(it.deadlineDate)!!.day){
+                        0->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[0].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[0].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[0].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        1->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[1].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[1].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[1].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        2->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[2].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[2].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[2].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        3->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[3].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[3].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[3].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        4->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[4].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[4].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[4].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        5->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[5].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[5].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[5].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                        6->{
+                            when(it.category){
+                                "Category-1"-> tasks_objects_list_week_c1[6].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-2"-> tasks_objects_list_week_c2[6].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                                "Category-3"-> tasks_objects_list_week_c3[6].add(Task(taskID =it.taskId, title = it.title,
+                                    priority = it.priority, category = it.category, startDate = Companion.date_time_formatter.parse(it.startDate),
+                                    deadlineDate = Companion.date_time_formatter.parse(it.deadlineDate),startTime=it.startTime, endTime = it.endTime,
+                                    description = it.description, duration = it.duration, weekNumber = it.weekNumber))
+                            }
+                        }
+                    }
+                }
+            }
+            for(i in 0..6){
+                tasks_objects_list_week_c3[i].sortBy {
+                    it.priority
+                }
+            }
+            addingTasksToList()
         }
 
         //assigning breaks to the user pattern list by the taking user break timings
@@ -247,86 +373,86 @@ class MyApplication: Application() {
             }
         }
 
-        fun deadlineInputsAdding(taskId: String, title: String, priority: Int, category: Int, startDate: Date, deadlineDate:Date, startTime: String, endTime: String,description: String,duration:Int){
-            when (deadlineDate.day) {
-                0 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                1 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                2 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                3 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                4 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                5 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-                6 -> {
-                    if(category==2)
-                        tasks_objects_list_week_deadlines_c2[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                    else
-                        tasks_objects_list_week_deadlines_c3[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                }
-            }
-            for(i in 0..6){
-                tasks_objects_list_week_deadlines_c2[i].sortBy {
-                    it.priority
-                }
-            }
-            addingTasksToList()
-        }
+//        fun deadlineInputsAdding(taskId: String, title: String, priority: Int, category: Int, startDate: Date, deadlineDate:Date, startTime: String, endTime: String,description: String,duration:Int){
+//            when (deadlineDate.day) {
+//                0 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                1 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                2 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                3 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                4 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                5 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//                6 -> {
+//                    if(category==2)
+//                        tasks_objects_list_week_c2[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                    else
+//                        tasks_objects_list_week_c3[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                }
+//            }
+//            for(i in 0..6){
+//                tasks_objects_list_week_c2[i].sortBy {
+//                    it.priority
+//                }
+//            }
+//            addingTasksToList()
+//        }
 
-        fun submissionInputsAdding(taskId: String, title: String, priority: Int, category: Int, startDate: Date, deadlineDate:Date, startTime: String, endTime: String,description: String,duration:Int){
-            when (deadlineDate.day) {
-                0 -> tasks_objects_list_week_schedules[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                1 -> tasks_objects_list_week_schedules[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                2 -> tasks_objects_list_week_schedules[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                3 -> tasks_objects_list_week_schedules[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                4 -> tasks_objects_list_week_schedules[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                5 -> tasks_objects_list_week_schedules[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-                6 -> tasks_objects_list_week_schedules[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
-            }
-            addingTasksToList()
-        }
+//        fun submissionInputsAdding(taskId: String, title: String, priority: Int, category: Int, startDate: Date, deadlineDate:Date, startTime: String, endTime: String,description: String,duration:Int){
+//            when (deadlineDate.day) {
+//                0 -> tasks_objects_list_week_c1[0].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                1 -> tasks_objects_list_week_c1[1].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                2 -> tasks_objects_list_week_c1[2].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                3 -> tasks_objects_list_week_c1[3].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                4 -> tasks_objects_list_week_c1[4].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                5 -> tasks_objects_list_week_c1[5].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//                6 -> tasks_objects_list_week_c1[6].add(Task(taskID =taskId, title = title, priority = priority, category = category, startDate = startDate, deadlineDate = deadlineDate,startTime=startTime, endTime = endTime, description = description, duration = duration))
+//            }
+//            addingTasksToList()
+//        }
 
          fun addingTasksToList(){
             for(i in 0..6){
-                if(tasks_objects_list_week_schedules[i].isNotEmpty()) {
-                    tasks_objects_list_week_schedules[i].forEach {
+                if(tasks_objects_list_week_c1[i].isNotEmpty()) {
+                    tasks_objects_list_week_c1[i].forEach {
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
-                else if(tasks_objects_list_week_deadlines_c2[i].isNotEmpty()){
-                    tasks_objects_list_week_deadlines_c2[i].forEach {
+                else if(tasks_objects_list_week_c2[i].isNotEmpty()){
+                    tasks_objects_list_week_c2[i].forEach {
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
-                else if(tasks_objects_list_week_deadlines_c3[i].isNotEmpty()){
-                    tasks_objects_list_week_deadlines_c3[i].forEach {
+                else if(tasks_objects_list_week_c3[i].isNotEmpty()){
+                    tasks_objects_list_week_c3[i].forEach {
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
@@ -355,22 +481,22 @@ class MyApplication: Application() {
                     (chunckedTaskEndTime[0].toInt() - chunckedTaskStartTime[0].toInt()) * 60 + (chunckedTaskEndTime[1].toInt() - chunckedTaskStartTime[1].toInt()) + tStartTime
             }
             when(task.category){
-                1->{
+                "Category-1"->{
                     for(t in tStartTime until tEndTime){
-                        if(tasks_objects_list_week[task.startDate!!.day][t].category==2 || tasks_id_list_week[task.startDate!!.day][t]=="n"){
+                        if(tasks_objects_list_week[task.startDate!!.day][t].category=="Category-2" || tasks_id_list_week[task.startDate!!.day][t]=="n"){
                             whenCode(j=task.startDate!!.day,t=t,taskId=taskId,task=task)
                         }
-                        else if(tasks_objects_list_week[task.startDate!!.day][t].category == 3){
+                        else if(tasks_objects_list_week[task.startDate!!.day][t].category == "Category-3"){
                             tasks_objects_list_week[task.startDate!!.day][t].duration = tasks_objects_list_week[task.startDate!!.day][t].duration?.plus(1)
                             whenCode(j=task.startDate!!.day,t=t,taskId=taskId,task=task)
                         }
                     }
                     rearrangingRemaining()
                 }
-                2->{
+                "Category-2"->{
                     for(j in task.startDate!!.day until task.deadlineDate!!.day+1) {
                         for (t in tStartTime until tEndTime) {
-                            if (tasks_objects_list_week[j][t].category == 3) {
+                            if (tasks_objects_list_week[j][t].category == "Category-2") {
                                 tasks_objects_list_week[j][t].duration = tasks_objects_list_week[j][t].duration?.plus(1)
                                 tasks_objects_list_week_reschedule[j].add(tasks_objects_list_week[j][t])
                                 whenCode(j = j, t = t, taskId = taskId, task = task)
@@ -382,7 +508,7 @@ class MyApplication: Application() {
                     }
                     rearrangingRemaining()
                 }
-                3->{
+                "Category-3"->{
                     category3DeadlineAddingToWeekList(taskId=taskId,task=task)
                 }
             }
