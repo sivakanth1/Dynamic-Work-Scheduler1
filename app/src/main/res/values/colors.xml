@@ -21,6 +21,8 @@
     <color name="finished_task_color">#47B39C</color>
     <color name="pending_task_color">#FFC154</color>
     <color name="soft_black">#252525</color>
-
-
+    <color name="alert">#FFFF686B</color>
+    <color name="soft_blue">#80A2D2FF</color>
+    <color name="soft_lavender">#80CDB4DB</color>
+    <color name="soft_mustard">#80F6BC66</color>
 </resources>
