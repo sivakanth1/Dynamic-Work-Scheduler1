@@ -33,25 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_to_dashboard_IV" />
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/Date_Tv"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:text="17, Dec 2022"-->
-    <!--        android:drawableStart="@drawable/ic_baseline_calendar_month_24"-->
-    <!--        android:drawableTint="#252525"-->
-    <!--        android:padding="8dp"-->
-    <!--        android:background="@drawable/all_rounded_corners_very_small_btn"-->
-    <!--        android:layout_marginTop="10dp"-->
-    <!--        android:drawablePadding="5dp"-->
-    <!--        android:textColor="#252525"-->
-    <!--        android:textSize="18sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/Analysis_TV" />-->
-
-
     <LinearLayout
         android:id="@+id/analyse_pane"
         android:layout_width="0dp"

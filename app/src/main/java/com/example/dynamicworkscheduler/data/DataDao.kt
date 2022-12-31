@@ -13,4 +13,10 @@ interface DataDao{
 
     @Query("SELECT * FROM taskdb")
     fun getAllData(): LiveData<MutableList<TaskData>>
+
+    @Query("SELECT * FROM taskdb where weekOfYear==:weekNumber")
+    fun getPresentWeekData(weekNumber: Int):LiveData<MutableList<TaskData>>
+
+    @Update
+    fun updateTask(data: TaskData)
 }

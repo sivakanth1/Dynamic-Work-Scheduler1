@@ -16,6 +16,8 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieData
 import android.graphics.Typeface
+import android.os.Handler
+import android.os.Looper
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.View
@@ -24,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.dynamicworkscheduler.data.AppDatabase
+import com.example.dynamicworkscheduler.data.DataDao
 import com.example.dynamicworkscheduler.data.TaskData
 import com.example.dynamicworkscheduler.data.TaskViewModel
 import com.example.dynamicworkscheduler.databinding.ActivityMainBinding
@@ -32,6 +35,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.gson.Gson
 import java.util.ArrayList
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     lateinit var mCancel_dialog_YES_BTN: Button
@@ -59,9 +63,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var mAssignDescriptionTv: TextView
     lateinit var mAssignDeadLineTv: TextView
     private lateinit var mTaskViewModel: TaskViewModel
+    lateinit var db:AppDatabase
+    lateinit var dataDao: DataDao
 
     val myApplication = MyApplication()
     var list = mutableListOf<TaskData>()
+    var weekList = mutableListOf<TaskData>()
 
     private lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,15 +78,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Database
-        val db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,"taskdb"
         ).build()
 
-        val dataDao=db.dataDao()
-        dataDao.getAllData().observe(this,Observer{task->
-            setData(task)
-        })
+        dataDao=db.dataDao()
+//        dataDao.getAllData().observe(this,Observer{task->
+//            setData(task)
+//        })
+
+        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this,
+            Observer {
+                    task-> setData(task)
+            })
+
         //Database
 
         //Initialization
@@ -117,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         setUpPieChart()
         initPieChart()
         MyApplication.createTasksOfWeekList()
-        MyApplication.createUserWorkingList("09:00","12:00")
+        MyApplication.createUserWorkingList("09:00","18:00")
 
 
 //        findViewById<View>(R.id.today_task_TV).setOnClickListener { view: View? ->
@@ -146,6 +159,7 @@ class MainActivity : AppCompatActivity() {
             mUpdate_dialog_NO_BTN =
                 task_activity_update_dialog.findViewById(R.id.Update_dialog_NO_BTN)
             mUpdate_dialog_YES_BTN.setOnClickListener(View.OnClickListener { view1: View? ->
+               // val updateData = TaskData()
                 Toast.makeText(this, "Update", Toast.LENGTH_SHORT).show()
                 task_activity_update_dialog.dismiss()
             })
@@ -190,32 +204,15 @@ class MainActivity : AppCompatActivity() {
 //            mTaskDate.setText(SyncHelper.getTask().toString());
     }
 
-    override fun onStart() {
-        super.onStart()
-       Toast.makeText(this,"onStart",Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Toast.makeText(this,"onResume",Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Toast.makeText(this,"onPause",Toast.LENGTH_SHORT).show()
-    }
-    override fun onStop() {
-        super.onStop()
-        Toast.makeText(this,"onStop",Toast.LENGTH_SHORT).show()
-    }
-
     private fun setData(task:MutableList<TaskData>){
-        this.list=task
-        MyApplication.completeData = list
-        Toast.makeText(this,"List of Main Activity ${list.size}",Toast.LENGTH_SHORT).show()
-        Toast.makeText(this,"List of Myapplication ${MyApplication.completeData.size}",Toast.LENGTH_SHORT).show()
+        //this.list=task
+        this.weekList=task
+    //    MyApplication.completeData.clear()
+        MyApplication.completeData = weekList
+//        Toast.makeText(this,"List of Main Activity ${weekList.size}",Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this,"List of Myapplication ${MyApplication.completeData.size}",Toast.LENGTH_SHORT).show()
         MyApplication.splitAccordingToWeek()
-//        setInProgressWidget()
+        setInProgressWidget()
     }
 
     private fun initPieChart() {
@@ -286,6 +283,19 @@ class MainActivity : AppCompatActivity() {
         mExpandable_pane_LL.visibility = visibility
     }
 
+    private var doubleBackToExitPressedOnce = false
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
+
     fun openReportScreen(view: View) {
         startActivity(Intent(this,ReportScreen::class.java))
     }
@@ -300,9 +310,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setInProgressWidget(){
-        mAssignTitleTv.text=list[0].title
-        mAssignDeadLineTv.text=list[0].deadlineDate
-        mAssignDescriptionTv.text=list[0].description
+        if(weekList.size>0) {
+            mAssignTitleTv.text = weekList[0].title
+            mAssignDeadLineTv.text = weekList[0].deadlineDate
+            mAssignDescriptionTv.text = weekList[0].description
+        }
+
+
     }
 
 }
