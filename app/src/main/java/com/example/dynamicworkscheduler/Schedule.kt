@@ -10,16 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.dynamicworkscheduler.databinding.ActivityScheduleBinding
 
 class Schedule : AppCompatActivity() {
-    private lateinit var mDay1: LinearLayout
-    private lateinit var mDay2: LinearLayout
-    private lateinit var mDay3: LinearLayout
-    private lateinit var mDay4: LinearLayout
-    private lateinit var mDay5: LinearLayout
-    private lateinit var mDay6: LinearLayout
-    private lateinit var mDay7: LinearLayout
+//    private lateinit var mDay1: LinearLayout
+//    private lateinit var mDay2: LinearLayout
+//    private lateinit var mDay3: LinearLayout
+//    private lateinit var mDay4: LinearLayout
+//    private lateinit var mDay5: LinearLayout
+//    private lateinit var mDay6: LinearLayout
+//    private lateinit var mDay7: LinearLayout
     private lateinit var binding: ActivityScheduleBinding
     var mAdd_task_BTN: Button? = null
-    var Active_Item = 2
+    var Active_Item = 0
     var task_item_list: ArrayList<TaskFormat>? = null
     var mTaskActivity_LV: ListView? = null
     lateinit var weekListData:MutableList<MutableList<Task>>

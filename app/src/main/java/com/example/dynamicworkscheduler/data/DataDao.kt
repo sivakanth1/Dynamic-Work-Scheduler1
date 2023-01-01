@@ -18,5 +18,5 @@ interface DataDao{
     fun getPresentWeekData(weekNumber: Int):LiveData<MutableList<TaskData>>
 
     @Update
-    fun updateTask(data: TaskData)
+    suspend fun updateTask(data: TaskData)
 }

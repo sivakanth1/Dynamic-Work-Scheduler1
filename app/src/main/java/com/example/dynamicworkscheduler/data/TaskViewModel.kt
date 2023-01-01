@@ -22,4 +22,11 @@ class TaskViewModel (application: Application):AndroidViewModel(application){
             repository.addTask(task)
         }
     }
+
+    fun updateTask(task: TaskData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateTask(task)
+        }
+    }
+
 }
