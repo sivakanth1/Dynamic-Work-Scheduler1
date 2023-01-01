@@ -1,5 +1,6 @@
 package com.example.dynamicworkscheduler
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.PieChart
 import android.os.Bundle
@@ -17,7 +18,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import java.time.LocalDate
-import java.util.ArrayList
+import java.util.*
 
 class ReportScreen : AppCompatActivity() {
     lateinit var mTaskActivity_LV: ListView
@@ -29,6 +30,7 @@ class ReportScreen : AppCompatActivity() {
     var finishedTaskCount=0
     var suspendedTaskCount=0
     var pendingTaskCount=0
+    lateinit var preferences: SharedPreferences
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +38,16 @@ class ReportScreen : AppCompatActivity() {
         setContentView(binding.root)
         pieChart = binding.pieChart
         mTaskActivity_LV = binding.TaskActivityLV
+        preferences = getSharedPreferences("iValue", MODE_PRIVATE)
         initTaskActivityList()
         setUpPieChart()
         initPieChart()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onStart() {
+        super.onStart()
+        initTaskActivityList()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -79,42 +88,40 @@ class ReportScreen : AppCompatActivity() {
                         }
                         "finished" -> {
                             states[i].add(R.drawable.ic_finished)
-                            dynamicBg[i].add(R.drawable.ic_finished)
+                            dynamicBg[i].add(R.drawable.finished_task_bg)
                         }
                         "suspended" -> {
                             states[i].add(R.drawable.ic_suspended)
-                            dynamicBg[i].add(R.drawable.ic_suspended)
+                            dynamicBg[i].add(R.drawable.suspended_task_bg)
                         }
                     }
                 }
         }
         act_task_list = ArrayList()
-        for (i in titles[LocalDate.now().dayOfWeek.value].indices) {
+        for (i in titles[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].indices) {
             act_task_list.add(
                 TaskActivity(
-                    startTimes[LocalDate.now().dayOfWeek.value][i],
-                    titles[LocalDate.now().dayOfWeek.value][i],
-                    startTimes[LocalDate.now().dayOfWeek.value][i],
-                    endTimes[LocalDate.now().dayOfWeek.value][i],
-                    states[LocalDate.now().dayOfWeek.value][i],
-                    dynamicBg[LocalDate.now().dayOfWeek.value][i]
+                    startTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
+                    titles[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
+                    startTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
+                    endTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
+                    states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
+                    dynamicBg[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i]
                 )
             )
         }
-        finishedTaskCount=states[LocalDate.now().dayOfWeek.value].count {
+        finishedTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
             it == R.drawable.ic_finished
         }
-        suspendedTaskCount=states[LocalDate.now().dayOfWeek.value].count {
+        suspendedTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
             it == R.drawable.ic_suspended
         }
-        pendingTaskCount=states[LocalDate.now().dayOfWeek.value].count {
+        pendingTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
             it == R.drawable.ic_pending
         }
         val taskActivityAdapter = TaskActivityAdapter(this, act_task_list)
         mTaskActivity_LV.adapter = taskActivityAdapter
         mTaskActivity_LV.isClickable = true
-
-      //  Toast.makeText(this,"${weekListData[LocalDate.now().dayOfWeek.value]}",Toast.LENGTH_SHORT).show()
     }
 
     private fun initPieChart() {
@@ -130,7 +137,6 @@ class ReportScreen : AppCompatActivity() {
         pieDataSet.setColors(*chart_colors)
         pieDataSet.setDrawIcons(false)
         val pieData = PieData(pieDataSet)
-        //        Toast.makeText(this, String.format("%.0f" ,(pieEntries.get(1).getValue())), Toast.LENGTH_SHORT).show();
         pieData.setValueTypeface(Typeface.DEFAULT_BOLD)
         pieChart.setUsePercentValues(false)
         pieData.setValueTextSize(14f)
@@ -156,16 +162,17 @@ class ReportScreen : AppCompatActivity() {
         pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
         pieChart.transparentCircleRadius = 0f
         pieChart.isRotationEnabled = false
-        pieChart.centerText = "${weekListData[LocalDate.now().dayOfWeek.value].size}\nTasks"
-       // pieChart.centerText = "$8\nTasks"
+        pieChart.centerText = "${weekListData[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].size}\nTasks"
         pieChart.setCenterTextSize(16f)
         pieChart.setCenterTextColor(R.color.black)
         pieChart.setCenterTextTypeface(Typeface.DEFAULT_BOLD)
         pieChart.legend.isEnabled = false
         pieChart.invalidate()
+        println("I value in else condtion of last condition is ${preferences.getString("i",null)}")
     }
 
     fun backToDashboard(view: View?) {
         onBackPressed()
     }
+
 }

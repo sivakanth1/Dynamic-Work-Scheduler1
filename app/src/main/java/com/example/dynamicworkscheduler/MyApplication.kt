@@ -460,7 +460,7 @@ class MyApplication: Application() {
 //            addingTasksToList()
 //        }
 
-         fun addingTasksToList(){
+         private fun addingTasksToList(){
             for(i in 0..6){
                 if(tasks_objects_list_week_c1[i].isNotEmpty()) {
                     tasks_objects_list_week_c1[i].forEach {

@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.util.Log
 import android.view.View
 import android.widget.*
+//import androidx.compose.ui.graphics.ColorFilter
 import androidx.lifecycle.ViewModelProvider
 import com.example.dynamicworkscheduler.data.TaskData
 import com.example.dynamicworkscheduler.data.TaskViewModel
@@ -25,6 +29,7 @@ import java.util.*
 class CreateTask : AppCompatActivity() {
     private lateinit var mDurationSpinner: Spinner
     private var selectedDateIndex = -1
+    private var selectedDate = "00"
     private var category = "Select Category of Task"
     private var priority = "+"
     private lateinit var cat1Ll: LinearLayout
@@ -80,6 +85,7 @@ class CreateTask : AppCompatActivity() {
     private lateinit var mAssign_start_time_BTN: Button
     private lateinit var binding:ActivityCreateTaskBinding
     private lateinit var mTaskViewModel: TaskViewModel
+    private lateinit var calendar: Calendar
     @SuppressLint("UseCompatLoadingForDrawables", "CutPasteId")
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +130,8 @@ class CreateTask : AppCompatActivity() {
         mDay_date5 = binding.WeekDate5
         mDay_date6 = binding.WeekDate6
         mDay_date7 = binding.WeekDate7
+        val sdf=SimpleDateFormat("MM")
+        calendar = Calendar.getInstance()
 
         initWeekLayout()
 
@@ -256,6 +264,7 @@ class CreateTask : AppCompatActivity() {
         /* TASK INIT() DEADLINE DATES */
 //        initWeekLayout();
 
+
         /* Add Listeners and change the colors accordingly*/
         mDay1.setOnClickListener {
             // change background of selected layout to tinted background and change all other layouts to non-tinted background
@@ -263,25 +272,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day1.setTextColor(resources.getColor(R.color.white))
             mDay_date1.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 1
+            selectedDateIndex = 0
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date1.text}"
         }
         mDay2.setOnClickListener {
 
@@ -290,25 +282,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day2.setTextColor(resources.getColor(R.color.white))
             mDay_date2.setTextColor(resources.getColor(R.color.white))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 2
+            selectedDateIndex = 1
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date2.text}"
         }
         mDay3.setOnClickListener {
 
@@ -317,25 +292,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day3.setTextColor(resources.getColor(R.color.white))
             mDay_date3.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 3
+            selectedDateIndex = 2
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date3.text}"
         }
         mDay4.setOnClickListener {
 
@@ -344,25 +302,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day4.setTextColor(resources.getColor(R.color.white))
             mDay_date4.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 4
+            selectedDateIndex = 3
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date4.text}"
         }
         mDay5.setOnClickListener {
 
@@ -371,25 +312,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day5.setTextColor(resources.getColor(R.color.white))
             mDay_date5.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 5
+            selectedDateIndex = 4
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date5.text}"
         }
         mDay6.setOnClickListener {
 
@@ -398,25 +322,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day6.setTextColor(resources.getColor(R.color.white))
             mDay_date6.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.black))
-            mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 6
+            selectedDateIndex = 5
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date6.text}"
         }
         mDay7.setOnClickListener {
 
@@ -425,25 +332,8 @@ class CreateTask : AppCompatActivity() {
                 resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.white))
             mDay_date7.setTextColor(resources.getColor(R.color.white))
-            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.black))
-            mDay_date2.setTextColor(resources.getColor(R.color.black))
-            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.black))
-            mDay_date3.setTextColor(resources.getColor(R.color.black))
-            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.black))
-            mDay_date4.setTextColor(resources.getColor(R.color.black))
-            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.black))
-            mDay_date5.setTextColor(resources.getColor(R.color.black))
-            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.black))
-            mDay_date6.setTextColor(resources.getColor(R.color.black))
-            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.black))
-            mDay_date1.setTextColor(resources.getColor(R.color.black))
-            selectedDateIndex = 7
+            selectedDateIndex = 6
+            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date7.text}"
         }
 
         /* TASK TIME SELECTION */
@@ -491,28 +381,72 @@ class CreateTask : AppCompatActivity() {
         finish()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun initWeekLayout() {
+        val color=Color.parseColor("#20264246")
         val sdf=SimpleDateFormat("dd",Locale.UK)
         val calender:Calendar=Calendar.getInstance()
         calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
         val fistDayOfWeek:Int = calender.firstDayOfWeek
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek)
         val startDate:String= sdf.format(calender.time)
+        if(calender.time.date>startDate.toInt()&&(calender.time.date-startDate.toInt()>30||calender.time.date-startDate.toInt()>-30))
+        {
+            mDay1.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay1.isEnabled=false
+        }
+
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek+1)
         val date1:String= sdf.format(calender.time)
+        if(calender.time.date>date1.toInt()&&(calender.time.date-date1.toInt()>30||(calender.time.date-date1.toInt())>-30))
+        {
+            mDay2.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay2.isEnabled=false
+        }
+
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek+2)
         val date2:String= sdf.format(calender.time)
+        if(calender.time.date>date2.toInt()&&(calender.time.date-date2.toInt()>30||(calender.time.date-date2.toInt())>-30))
+        {
+            mDay3.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay3.isEnabled=false
+        }
+
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 3)
         val date3:String= sdf.format(calender.time)
+        if(calender.time.date>date3.toInt()&&(calender.time.date-date3.toInt()>30||(calender.time.date-date3.toInt())>-30))
+        {
+            mDay4.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay4.isEnabled=false
+        }
+
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 4)
         val date4:String= sdf.format(calender.time)
+        if(calender.time.date>date4.toInt()&&(calender.time.date-date4.toInt()>30||(calender.time.date-date4.toInt())>-30))
+        {
+            mDay5.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay5.isEnabled=false
+        }
+
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 5)
         val date5:String= sdf.format(calender.time)
+        if(calender.time.date>date5.toInt()&&(calender.time.date-date5.toInt()>30||(calender.time.date-date5.toInt())>-30))
+        {
+            mDay6.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay6.isEnabled=false
+        }
+
         //EndDate
         calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 6)
         val endDate1:String=sdf.format(calender.time)
+        if(calender.time.date>endDate1.toInt()&&(calender.time.date-endDate1.toInt()>30&&(calender.time.date-endDate1.toInt())>=-30))
+        {
+            Log.d("end date:",calender.time.toString())
+            mDay7.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
+            mDay7.isEnabled=false
+        }
+
 
         mDay_date1.text = startDate
         mDay_date2.text = date1
@@ -523,19 +457,27 @@ class CreateTask : AppCompatActivity() {
         mDay_date7.text = endDate1
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun backToDashboard(view: View) {
         startActivity(Intent(this,MainActivity::class.java))
-       // finish()
+        finish()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this,MainActivity::class.java))
+        finish()
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addTaskAndSchedule(view: View) {
-         val title=binding.TitleET
-         val description=binding.DescriptionET
-         if(title.text.isEmpty()||title.text.startsWith(" ")) {
-             title.error="Enter title for Task"
-         }
+        val title=binding.TitleET
+        val description=binding.DescriptionET
+        if(title.text.isEmpty()||title.text.startsWith(" ")) {
+            title.error="Enter title for Task"
+        }
         if(description.text.isEmpty()||description.text.startsWith(" ")) {
             description.error="Enter Description for Task"
         }
@@ -543,7 +485,7 @@ class CreateTask : AppCompatActivity() {
             startActivity(Intent(this,MainActivity::class.java))
             insertDataToDatabase()
             finish()
-         }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -565,22 +507,35 @@ class CreateTask : AppCompatActivity() {
         when(category){
             "Category-1"->task=TaskData(
                 taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
-                title = title,priority=priority, category=category, startDate = "2022-12-30",
-                deadlineDate = "2022-12-30", startTime = start_selected_time, endTime = end_selected_time,
+                title = title,priority=priority, category=category, startDate = selectedDate,
+                deadlineDate = selectedDate, startTime = start_selected_time, endTime = end_selected_time,
                 description = description, status = "pending", duration = 0,
                 weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
             )
             else->task=TaskData(
                 taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
                 title = title,priority=priority, category=category, startDate = currentDate,
-                deadlineDate = "2022-12-30", startTime = start_selected_time, endTime = end_selected_time,
+                deadlineDate = selectedDate, startTime = start_selected_time, endTime = end_selected_time,
                 description = description, status = "pending", duration = 0,
                 weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
             )
         }
+
         mTaskViewModel.addTask(task)
         Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
     }
+//    fun dateValidation()
+//    {
+
+//        val calender1:Calendar=Calendar.getInstance()
+//
+//        val fistDayOfWeek:Int = calender.firstDayOfWeek
+//        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek)
+//
+//
+//
+//
+//    }
 
     private fun timeValidation(startHours:Int, startMinute:Int, endHours:Int, endMinute:Int)
     {
@@ -607,3 +562,5 @@ class CreateTask : AppCompatActivity() {
         }
     }
 }
+
+
