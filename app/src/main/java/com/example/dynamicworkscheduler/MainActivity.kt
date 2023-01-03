@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.mikephil.charting.charts.PieChart
@@ -23,13 +22,10 @@ import android.os.Handler
 import android.os.Looper
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.transition.Visibility
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.example.dynamicworkscheduler.data.AppDatabase
@@ -44,8 +40,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalTime
 import java.util.ArrayList
 import java.util.Calendar
 
@@ -99,6 +93,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var preferences: SharedPreferences
     var i=0
+    private lateinit var mHandler: Handler
+    private lateinit var mRunnable: Runnable
 
     private lateinit var binding:ActivityMainBinding
     @RequiresApi(Build.VERSION_CODES.O)
@@ -109,21 +105,26 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        auth = Firebase.auth
-//        if(auth.currentUser==null){
-//            //Toast.makeText(this, auth.currentUser!!.uid,Toast.LENGTH_SHORT).show()
-//            startActivity(Intent(this,CreateProfile::class.java))
-//        }
-//        else{
-//            val greetingsTv = binding.GreetingsUserTV
-//            greetingsTv.text = "Hi ${auth.currentUser!!.displayName}"
-//            Toast.makeText(this, auth.currentUser!!.displayName,Toast.LENGTH_SHORT).show()
-//        }
+        auth = Firebase.auth
+        if(auth.currentUser==null){
+            //Toast.makeText(this, auth.currentUser!!.uid,Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,CreateProfile::class.java))
+        }
+        else{
+            val greetingsTv = binding.GreetingsUserTV
+            greetingsTv.text = "Hi ${auth.currentUser!!.displayName}"
+        }
 
         //Shared Preferences
 
         preferences = getSharedPreferences("iValue", MODE_PRIVATE)
-        //preferences.edit().putString("i","$i").apply()
+
+
+//        preferences.edit().putString("day","${Calendar.getInstance().time.day}").apply()
+//
+//        if(preferences.getString("day",null)!="${Calendar.getInstance().time.day-1}"){
+//            preferences.edit().putString("i","0").apply()
+//        }
 
         //Shared Preferences
 
@@ -138,12 +139,24 @@ class MainActivity : AppCompatActivity() {
 //            setData(task)
 //        })
 
-        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this
-        ) { task ->
-            setData(task)
-        }
+//        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this
+//        ) { task ->
+//            setData(task)
+//        }
 
         //Database
+
+        //Handler
+
+        this.mHandler = Handler()
+        mRunnable = Runnable {
+            kotlin.run {
+                this.mHandler.postDelayed(mRunnable,5000)
+            }
+        }
+        this.mHandler.postDelayed(mRunnable,5000)
+
+        //Handler
 
         //Initialization
         mAssignTitleTv=binding.AssignTitleTV
@@ -183,7 +196,7 @@ class MainActivity : AppCompatActivity() {
         //        mExpand_upNext_IV = findViewById(R.id.expand_upNext_IV);
 
         MyApplication.createTasksOfWeekList()
-        MyApplication.createUserWorkingList("09:00","23:00")
+        MyApplication.createUserWorkingList("09:00","17:00")
 
         mInProgress_Layout.setOnClickListener {
             task_activity_update_dialog = Dialog(this)
@@ -207,6 +220,7 @@ class MainActivity : AppCompatActivity() {
                     endTime = endTimes[i], startDate = startDates[i], deadlineDate = deadLineDates[i],
                     duration = durations[i], weekNumber = weekNumbers[i], status = "finished"
                 ))
+                getDataFromDataBase()
                 task_activity_update_dialog.dismiss()
             }
             mUpdate_dialog_NO_BTN.setOnClickListener { task_activity_update_dialog.dismiss() }
@@ -232,13 +246,17 @@ class MainActivity : AppCompatActivity() {
                     endTime = endTimes[i], startDate = startDates[i], deadlineDate = deadLineDates[i],
                     duration = durations[i], weekNumber = weekNumbers[i], status = "suspended"
                 ))
+                getDataFromDataBase()
                 task_activity_cancel_dialog.dismiss()
             }
         }
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData(task:MutableList<TaskData>){
+      //  this.weekListData.clear()
         this.weekListFromDB=task
         MyApplication.completeData = weekListFromDB
         MyApplication.splitAccordingToWeek()
@@ -263,6 +281,12 @@ class MainActivity : AppCompatActivity() {
             override fun onValueSelected(e: Entry, h: Highlight) {}
             override fun onNothingSelected() {}
         })
+//        startActivity(Intent(this,MainActivity::class.java))
+        mRunnable = Runnable {
+            kotlin.run {
+                this.mHandler.postDelayed(mRunnable,5000)
+            }
+        }
     }
 
     private fun setUpPieChart() {
@@ -319,20 +343,26 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")
     fun setInProgressWidget(){
         i = preferences.getString("i",null)?.toInt() ?: 0
+        if(preferences.getString("day",null)== { Calendar.getInstance().time.day - 1 }.toString()){
+            i=0
+        }
         val timeFormatter = SimpleDateFormat("HH:mm")
         val currentTimeArray = timeFormatter.format(Calendar.getInstance().time).filter { it.isDigit() }.chunked(2)
         val currentTimeInt = (currentTimeArray[0].toInt()*60)+currentTimeArray[1].toInt()
         mAssignTitleTv.text = "No Present In Progress Tasks"
-        mAssignTitleTv.gravity = Gravity.CENTER_HORIZONTAL
+        mAssignTitleTv.gravity = Gravity.CENTER
         mAssignDescriptionTv.text = ""
         mAssignDeadLineTv.visibility = View.GONE
+        mAssignUpNextTitleTv.text = "No Upcoming Tasks"
+        mAssignUpNextDescriptionTv.text = ""
+        mAssignUpNextPriorityTv.text = "#0"
         if(titles.size>0){
             val startTimeArrayOfI = startTimes[i].filter { it.isDigit() }.chunked(2)
             val endTimeArrayOfI = endTimes[i].filter { it.isDigit() }.chunked(2)
             val startTimeOfIValue = (startTimeArrayOfI[0].toInt()*60)+startTimeArrayOfI[1].toInt()
             val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
+            mAssignDeadLineTv.visibility = View.VISIBLE
             if(currentTimeInt<startTimeOfIValue){
-                mAssignDeadLineTv.visibility = View.VISIBLE
                 if(i-1>=0){
                     mAssignTitleTv.text = titles[i-1]
                     mAssignDeadLineTv.text = endTimes[i-1]
@@ -364,6 +394,7 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     i+=1
                     preferences.edit().putString("i","$i").apply()
+                    preferences.edit().putString("day","${Calendar.getInstance().time.day}")
                 }
             }
         }
@@ -373,9 +404,23 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTodayTasks(){
         weekListData = MyApplication.getDayTasksObject()
+        titles.clear()
+        descriptions.clear()
+        startTimes.clear()
+        startDates.clear()
+        endTimes.clear()
+        priorities.clear()
+        category.clear()
+        status.clear()
+        durations.clear()
+        weekNumbers.clear()
+        deadLineDates.clear()
+        taskIds.clear()
+        finishedTaskCount = 0
+        suspendedTaskCount = 0
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
-        if(weekListData[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].isNotEmpty()) {
-            weekListData[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].forEach {
+        if(weekListData[Calendar.getInstance().time.day].isNotEmpty()) {
+            weekListData[Calendar.getInstance().time.day].forEach {
                 titles.add(it.title.toString())
                 descriptions.add(it.description.toString())
                 startTimes.add(it.startTime.toString())
@@ -398,12 +443,36 @@ class MainActivity : AppCompatActivity() {
         setInProgressWidget()
         setUpPieChart()
         initPieChart()
+      //  getTasks()
+        if(titles.size==0){
+            mIn_progress_Tv.visibility = View.GONE
+            mInProgress_Layout.visibility = View.GONE
+        }
     }
 
+    fun getTasks(){
+        weekListData = MyApplication.getDayTasksObject()
+        println("Week Tasks-------->$weekListData")
+        println("Todays tasks ------->${Calendar.getInstance().time.day}")
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
+        getDataFromDataBase()
         setInProgressWidget()
         initPieChart()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDataFromDataBase(){
+        this.weekListFromDB.clear()
+        MyApplication.completeData.clear()
+        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this
+        ) { task ->
+            setData(task)
+        }
     }
 
 }

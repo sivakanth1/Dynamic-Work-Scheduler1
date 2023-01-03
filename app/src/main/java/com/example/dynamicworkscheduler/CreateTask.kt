@@ -11,7 +11,6 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -25,8 +24,7 @@ import java.time.LocalDate
 import java.util.*
 
 @Suppress("DEPRECATION")
-
-class CreateTask : AppCompatActivity() {
+class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     private lateinit var mDurationSpinner: Spinner
     private var selectedDateIndex = -1
     private var selectedDate = "00"
@@ -50,6 +48,7 @@ class CreateTask : AppCompatActivity() {
     private lateinit var mSelectCategoryTv: TextView
     private lateinit var mAddPriorityTv: TextView
     private lateinit var mShowTaskCategoryListDialog: Dialog
+    private lateinit var mShowSameTaskError:Dialog
     private var startHours = 0
     private var startMinute = 0
     private var endHours = 0
@@ -86,11 +85,14 @@ class CreateTask : AppCompatActivity() {
     private lateinit var binding:ActivityCreateTaskBinding
     private lateinit var mTaskViewModel: TaskViewModel
     private lateinit var calendar: Calendar
+    var duration = 0
+    var weekListDates = mutableListOf<String>()
+    var weekListBoolean = mutableListOf<Boolean>()
     @SuppressLint("UseCompatLoadingForDrawables", "CutPasteId")
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCreateTaskBinding.inflate(layoutInflater)
+        binding=ActivityCreateTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         mTaskViewModel= ViewModelProvider(this)[TaskViewModel::class.java]
@@ -138,9 +140,13 @@ class CreateTask : AppCompatActivity() {
 
         /* INIT() CATEGORY DIALOG */
         mShowTaskCategoryListDialog = Dialog(this@CreateTask)
+        mShowSameTaskError = Dialog(this@CreateTask)
         mShowTaskCategoryListDialog.setContentView(R.layout.task_category_selection_dialog)
+        mShowSameTaskError.setContentView(R.layout.same_task_error)
         mShowTaskCategoryListDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        mShowSameTaskError.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         mShowTaskCategoryListDialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
+        mShowSameTaskError.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
 
         /* TASK PRIORITY SELECTION */
         mAddPriorityTv.setOnClickListener {
@@ -258,6 +264,7 @@ class CreateTask : AppCompatActivity() {
                 mShowTaskCategoryListDialog.dismiss()
             }
         }
+        mDurationSpinner.onItemSelectedListener =this
 
         /* TASK DEADLINE SELECTION */
 
@@ -266,75 +273,75 @@ class CreateTask : AppCompatActivity() {
 
 
         /* Add Listeners and change the colors accordingly*/
-        mDay1.setOnClickListener {
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay1.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day1.setTextColor(resources.getColor(R.color.white))
-            mDay_date1.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 0
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date1.text}"
-        }
-        mDay2.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay2.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day2.setTextColor(resources.getColor(R.color.white))
-            mDay_date2.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 1
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date2.text}"
-        }
-        mDay3.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay3.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day3.setTextColor(resources.getColor(R.color.white))
-            mDay_date3.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 2
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date3.text}"
-        }
-        mDay4.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay4.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day4.setTextColor(resources.getColor(R.color.white))
-            mDay_date4.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 3
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date4.text}"
-        }
-        mDay5.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay5.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day5.setTextColor(resources.getColor(R.color.white))
-            mDay_date5.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 4
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date5.text}"
-        }
-        mDay6.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay6.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day6.setTextColor(resources.getColor(R.color.white))
-            mDay_date6.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 5
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date6.text}"
-        }
-        mDay7.setOnClickListener {
-
-            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-            mDay7.background =
-                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-            mDay_day7.setTextColor(resources.getColor(R.color.white))
-            mDay_date7.setTextColor(resources.getColor(R.color.white))
-            selectedDateIndex = 6
-            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date7.text}"
-        }
+//        mDay1.setOnClickListener {
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay1.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day1.setTextColor(resources.getColor(R.color.white))
+//            mDay_date1.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 0
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date1.text}"
+//        }
+//        mDay2.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay2.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day2.setTextColor(resources.getColor(R.color.white))
+//            mDay_date2.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 1
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date2.text}"
+//        }
+//        mDay3.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay3.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day3.setTextColor(resources.getColor(R.color.white))
+//            mDay_date3.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 2
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date3.text}"
+//        }
+//        mDay4.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay4.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day4.setTextColor(resources.getColor(R.color.white))
+//            mDay_date4.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 3
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date4.text}"
+//        }
+//        mDay5.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay5.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day5.setTextColor(resources.getColor(R.color.white))
+//            mDay_date5.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 4
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date5.text}"
+//        }
+//        mDay6.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay6.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day6.setTextColor(resources.getColor(R.color.white))
+//            mDay_date6.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 5
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date6.text}"
+//        }
+//        mDay7.setOnClickListener {
+//
+//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
+//            mDay7.background =
+//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+//            mDay_day7.setTextColor(resources.getColor(R.color.white))
+//            mDay_date7.setTextColor(resources.getColor(R.color.white))
+//            selectedDateIndex = 6
+//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date7.text}"
+//        }
 
         /* TASK TIME SELECTION */
         /* TASK START TIME SELECTION */
@@ -344,12 +351,7 @@ class CreateTask : AppCompatActivity() {
                 OnTimeSetListener { _: TimePicker?, selected_start_hour: Int, selected_startMinute: Int ->
                     startHours = selected_start_hour
                     startMinute = selected_startMinute
-                    start_selected_time =
-                        String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
-                    selectedStartTime =
-                        String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
-                    mAssign_start_time_BTN.setText(selectedStartTime)
-                    Toast.makeText(this@CreateTask, start_selected_time, Toast.LENGTH_SHORT).show()
+                    startTaskTimeValidation(startHours,startMinute,selectedDate)
                 }
             val timePickerDialog =
                 TimePickerDialog(this, onTimeSetListener, startHours, startMinute, true)
@@ -381,82 +383,764 @@ class CreateTask : AppCompatActivity() {
         finish()
     }
 
-    @SuppressLint("SetTextI18n", "SimpleDateFormat")
+
+    @SuppressLint("SetTextI18n", "SimpleDateFormat", "UseCompatLoadingForDrawables")
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun initWeekLayout() {
-        val color=Color.parseColor("#20264246")
-        val sdf=SimpleDateFormat("dd",Locale.UK)
-        val calender:Calendar=Calendar.getInstance()
-        calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
-        val fistDayOfWeek:Int = calender.firstDayOfWeek
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek)
-        val startDate:String= sdf.format(calender.time)
-        if(calender.time.date>startDate.toInt()&&(calender.time.date-startDate.toInt()>30||calender.time.date-startDate.toInt()>-30))
+    private fun initWeekLayout()
+    {
+        val color = Color.parseColor("#20264246")
+        val sdf = SimpleDateFormat("dd", Locale.getDefault())
+        val calender: Calendar = Calendar.getInstance()
+        //calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
+        val fistDayOfWeek: Int = calender.firstDayOfWeek
+        calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek)
+        var startDate: String = sdf.format(calender.time.date)
+        Log.d("date=", calender.time.date.toString())
+        Log.d("week=", calender.firstDayOfWeek.toString())
+        Log.d("date=", startDate)
+        calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek + 1)
+
+
+        var idx = 1
+        weekListDates.add(startDate)
+        repeat(6)
         {
-            mDay1.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay1.isEnabled=false
+            calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek + idx)
+            startDate = sdf.format(calender.time)
+            idx += 1
+            weekListDates.add(startDate)
         }
 
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek+1)
-        val date1:String= sdf.format(calender.time)
-        if(calender.time.date>date1.toInt()&&(calender.time.date-date1.toInt()>30||(calender.time.date-date1.toInt())>-30))
+//        Toast.makeText(this, "$startDate", Toast.LENGTH_SHORT).show()
+
+        idx = 0
+        repeat(7)
         {
-            mDay2.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay2.isEnabled=false
+            Log.d("WeekDatesString", weekListDates.get(idx))
+            idx += 1
         }
 
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek+2)
-        val date2:String= sdf.format(calender.time)
-        if(calender.time.date>date2.toInt()&&(calender.time.date-date2.toInt()>30||(calender.time.date-date2.toInt())>-30))
-        {
-            mDay3.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay3.isEnabled=false
+        var isPrevDay = true
+        var today = Calendar.getInstance()
+        var todayString: String = sdf.format(today.time)
+//        Toast.makeText(this, "$todayString", Toast.LENGTH_SHORT).show()
+
+
+        Log.d("WeekDatesToday", "$todayString")
+        for (i in weekListDates) {
+            if (todayString == i) {
+                isPrevDay = false;
+            }
+
+            weekListBoolean.add(isPrevDay)
         }
 
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 3)
-        val date3:String= sdf.format(calender.time)
-        if(calender.time.date>date3.toInt()&&(calender.time.date-date3.toInt()>30||(calender.time.date-date3.toInt())>-30))
-        {
-            mDay4.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay4.isEnabled=false
+        for (i in weekListBoolean) Log.d("WeekDatesBoolean", i.toString())
+
+        mDay_date1.setText(weekListDates[0])
+        mDay_date2.setText(weekListDates[1])
+        mDay_date3.setText(weekListDates[2])
+        mDay_date4.setText(weekListDates[3])
+        mDay_date5.setText(weekListDates[4])
+        mDay_date6.setText(weekListDates[5])
+        mDay_date7.setText(weekListDates[6])
+
+
+        mDay1.background =
+            if (weekListBoolean[0]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay2.background =
+            if (weekListBoolean[1]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay3.background =
+            if (weekListBoolean[2]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay4.background =
+            if (weekListBoolean[3]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay5.background =
+            if (weekListBoolean[4]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay6.background =
+            if (weekListBoolean[5]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+        mDay7.background =
+            if (weekListBoolean[6]) resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn) else resources.getDrawable(
+                R.drawable.all_rounded_corners_small_btn
+            )
+
+        mDay1.setOnClickListener {
+
+            if (weekListBoolean[0])
+                mDay1.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay1.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day1.setTextColor(resources.getColor(R.color.white))
+                mDay_date1.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show()
+            }
+            if(!weekListBoolean[0]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date1.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
         }
 
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 4)
-        val date4:String= sdf.format(calender.time)
-        if(calender.time.date>date4.toInt()&&(calender.time.date-date4.toInt()>30||(calender.time.date-date4.toInt())>-30))
-        {
-            mDay5.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay5.isEnabled=false
+        mDay2.setOnClickListener {
+
+            if (weekListBoolean[1])
+                mDay2.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay2.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day2.setTextColor(resources.getColor(R.color.white))
+                mDay_date2.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+
+            }
+            if(!weekListBoolean[1]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date2.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
         }
 
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 5)
-        val date5:String= sdf.format(calender.time)
-        if(calender.time.date>date5.toInt()&&(calender.time.date-date5.toInt()>30||(calender.time.date-date5.toInt())>-30))
-        {
-            mDay6.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay6.isEnabled=false
+        mDay3.setOnClickListener {
+
+            if (weekListBoolean[2])
+                mDay3.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay3.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day3.setTextColor(resources.getColor(R.color.white))
+                mDay_date3.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+
+
+            }
+            if(!weekListBoolean[2]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date3.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
         }
 
-        //EndDate
-        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek + 6)
-        val endDate1:String=sdf.format(calender.time)
-        if(calender.time.date>endDate1.toInt()&&(calender.time.date-endDate1.toInt()>30&&(calender.time.date-endDate1.toInt())>=-30))
-        {
-            Log.d("end date:",calender.time.toString())
-            mDay7.background.setColorFilter(color,PorterDuff.Mode.MULTIPLY);
-            mDay7.isEnabled=false
+        mDay4.setOnClickListener {
+
+            if (weekListBoolean[3])
+                mDay4.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay4.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day4.setTextColor(resources.getColor(R.color.white))
+                mDay_date4.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+
+
+            }
+            if(!weekListBoolean[3]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date4.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show()
         }
 
+        mDay5.setOnClickListener {
 
-        mDay_date1.text = startDate
-        mDay_date2.text = date1
-        mDay_date3.text = date2
-        mDay_date4.text = date3
-        mDay_date5.text = date4
-        mDay_date6.text = date5
-        mDay_date7.text = endDate1
+            if (weekListBoolean[4])
+                mDay5.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay5.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day5.setTextColor(resources.getColor(R.color.white))
+                mDay_date5.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+            }
+            if(!weekListBoolean[4]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date5.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
+        }
+
+        mDay6.setOnClickListener {
+
+            if (weekListBoolean[5])
+                mDay6.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay6.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day6.setTextColor(resources.getColor(R.color.white))
+                mDay_date6.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[6]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                }
+
+            }
+//
+        //               Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show()
+            if(!weekListBoolean[5]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date6.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
+        }
+
+        mDay7.setOnClickListener {
+
+            if (weekListBoolean[6])
+                mDay7.background =
+                    resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+            else {
+                mDay7.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day7.setTextColor(resources.getColor(R.color.white))
+                mDay_date7.setTextColor(resources.getColor(R.color.white))
+
+                if (weekListBoolean[0]) {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay1.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day1.setTextColor(resources.getColor(R.color.black))
+                    mDay_date1.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[1]) {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay2.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day2.setTextColor(resources.getColor(R.color.black))
+                    mDay_date2.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[2]) {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay3.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day3.setTextColor(resources.getColor(R.color.black))
+                    mDay_date3.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[3]) {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay4.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day4.setTextColor(resources.getColor(R.color.black))
+                    mDay_date4.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[4]) {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay5.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day5.setTextColor(resources.getColor(R.color.black))
+                    mDay_date5.setTextColor(resources.getColor(R.color.black))
+                }
+
+                if (weekListBoolean[5]) {
+                    mDay7.background =
+                        resources.getDrawable(R.drawable.default_all_rounded_corners_small_btn)
+                    mDay_date7.setTextColor(resources.getColor(R.color.black))
+                    mDay_day7.setTextColor(resources.getColor(R.color.black))
+                } else {
+                    mDay6.background =
+                        resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+                    mDay_day6.setTextColor(resources.getColor(R.color.black))
+                    mDay_date6.setTextColor(resources.getColor(R.color.black))
+                }
+            }
+            if(!weekListBoolean[6]) {
+                selectedDate =
+                    "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date7.text}"
+            }else{
+                Toast.makeText(this,"Invalid Date",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show(
+            }
+        }
+
     }
 
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Toast.makeText(this,parent?.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
+        when(parent?.getItemAtPosition(position).toString()){
+            "< 30 mins" -> duration = 30
+            "< 1hr" -> duration = 60
+            "1hrs - 2 hrs" -> duration = 120
+            "2hrs - 3hrs" -> duration = 180
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun backToDashboard(view: View) {
@@ -464,11 +1148,11 @@ class CreateTask : AppCompatActivity() {
         finish()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        startActivity(Intent(this,MainActivity::class.java))
-        finish()
-    }
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        startActivity(Intent(this,MainActivity::class.java))
+//        finish()
+//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -481,20 +1165,31 @@ class CreateTask : AppCompatActivity() {
         if(description.text.isEmpty()||description.text.startsWith(" ")) {
             description.error="Enter Description for Task"
         }
+
         else {
-            startActivity(Intent(this,MainActivity::class.java))
+            mShowSameTaskError.show()
+            mShowSameTaskError.window?.findViewById<ImageView>(R.id.close_dialog)
+                ?.setOnClickListener{
+                    mShowSameTaskError.dismiss()
+                }
+            mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)?.setOnClickListener{
+                mShowSameTaskError.dismiss()
+            }
+//            startActivity(Intent(this,MainActivity::class.java))
             insertDataToDatabase()
-            finish()
+//            finish()
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "SetTextI18n", "UseCompatLoadingForDrawable")
     @RequiresApi(Build.VERSION_CODES.O)
-    fun insertDataToDatabase(){
+    fun insertDataToDatabase()
+    {
         val timeFormatter = SimpleDateFormat("HH:mm")
         val title=binding.TitleET.text.toString()
         val description=binding.DescriptionET.text.toString()
         val currentDate = LocalDate.now().toString()
+        val date_time_formatter = SimpleDateFormat("yyyy-MM-dd")
         val currentTime = timeFormatter.format(Calendar.getInstance().time)
         val priority=when(priority){
             "#1"->1
@@ -505,62 +1200,160 @@ class CreateTask : AppCompatActivity() {
         }
         lateinit var task:TaskData
         when(category){
-            "Category-1"->task=TaskData(
-                taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
-                title = title,priority=priority, category=category, startDate = selectedDate,
-                deadlineDate = selectedDate, startTime = start_selected_time, endTime = end_selected_time,
-                description = description, status = "pending", duration = 0,
-                weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
-            )
-            else->task=TaskData(
-                taskId = MyApplication.createTaskId(createdTime =currentTime, createdDate = currentDate),
-                title = title,priority=priority, category=category, startDate = currentDate,
-                deadlineDate = selectedDate, startTime = start_selected_time, endTime = end_selected_time,
-                description = description, status = "pending", duration = 0,
-                weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1
-            )
+            "Category-1"-> {
+                val collidedTask=MyApplication.checkCollide(startDate = date_time_formatter.parse(selectedDate),
+                    deadlineDate = date_time_formatter.parse(selectedDate),
+                    startTime = start_selected_time,end_selected_time,category=category
+                )
+                if(collidedTask.taskID!=null){
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_priority_TV)!!.text = "#${collidedTask.priority}"
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_title_TV)!!.text = collidedTask.title
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_deadline_TV)!!.text = date_time_formatter.format(collidedTask.deadlineDate)
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_start_time_TV)!!.text = collidedTask.startTime
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_end_time_TV)!!.text = collidedTask.endTime
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_category_TV)!!.text = collidedTask.category
+
+                }else {
+                    mShowSameTaskError.dismiss()
+                    task = TaskData(
+                        taskId = MyApplication.createTaskId(
+                            createdTime = currentTime,
+                            createdDate = currentDate
+                        ),
+                        title = title,
+                        priority = priority,
+                        category = category,
+                        startDate = selectedDate,
+                        deadlineDate = selectedDate,
+                        startTime = start_selected_time,
+                        endTime = end_selected_time,
+                        description = description,
+                        status = "pending",
+                        duration = 0,
+                        weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1
+                    )
+                    mTaskViewModel.addTask(task)
+                    startActivity(Intent(this,MainActivity::class.java))
+                    finish()
+                    Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
+                }
+            }
+            else-> {
+                start_selected_time = "00:00"
+                end_selected_time = "00:00"
+                val collidedTask=MyApplication.checkCollide(startDate = date_time_formatter.parse(selectedDate),
+                    deadlineDate = date_time_formatter.parse(selectedDate),
+                    startTime = start_selected_time,end_selected_time,category=category
+                )
+                if(collidedTask.taskID!=null){
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_priority_TV)!!.text = "#${collidedTask.priority}"
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_title_TV)!!.text = collidedTask.title
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_deadline_TV)!!.text = date_time_formatter.format(collidedTask.deadlineDate)
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_start_time_TV)!!.text = collidedTask.startTime
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_end_time_TV)!!.text = collidedTask.endTime
+                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_category_TV)!!.text = collidedTask.category
+
+                }else {
+                    mShowSameTaskError.dismiss()
+                    task = TaskData(
+                        taskId = MyApplication.createTaskId(
+                            createdTime = currentTime,
+                            createdDate = currentDate
+                        ),
+                        title = title,
+                        priority = priority,
+                        category = category,
+                        startDate = currentDate,
+                        deadlineDate = selectedDate,
+                        startTime = start_selected_time,
+                        endTime = end_selected_time,
+                        description = description,
+                        status = "pending",
+                        duration = duration,
+                        weekNumber = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1
+                    )
+                    mTaskViewModel.addTask(task)
+                    startActivity(Intent(this,MainActivity::class.java))
+                    finish()
+                    Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
+                }
+            }
         }
-
-        mTaskViewModel.addTask(task)
-        Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
     }
-//    fun dateValidation()
-//    {
 
-//        val calender1:Calendar=Calendar.getInstance()
-//
-//        val fistDayOfWeek:Int = calender.firstDayOfWeek
-//        calender.set(Calendar.DAY_OF_WEEK,fistDayOfWeek)
-//
-//
-//
-//
-//    }
-
-    private fun timeValidation(startHours:Int, startMinute:Int, endHours:Int, endMinute:Int)
-    {
+    private fun timeValidation(startHours:Int, startMinute:Int, endHours:Int, endMinute:Int) {
         val duration:Int=startMinute-endMinute
-        if(startHours<endHours && duration < 45) {
-            mAssign_start_time_BTN.text = start_selected_time
-            mAssign_end_time_BTN.text =
-                String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
-            end_selected_time=String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
-        } else if(startHours==endHours && (endMinute>(15+startMinute)||(endMinute-startMinute)>15)) {
-            mAssign_start_time_BTN.text = start_selected_time
-            mAssign_end_time_BTN.text =
-                String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
-            end_selected_time=String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
+        if(endHours<=23 && startHours<=23){
+            if (startHours < endHours && duration < 45) {
+                mAssign_start_time_BTN.text = start_selected_time
+                mAssign_end_time_BTN.text =
+                    String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
+                end_selected_time =
+                    String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
+            } else if (startHours == endHours && (endMinute > (15 + startMinute) || (endMinute - startMinute) > 15)) {
+                mAssign_start_time_BTN.text = start_selected_time
+                mAssign_end_time_BTN.text =
+                    String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
+                end_selected_time =
+                    String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
+            } else {
+                if (startHours > endHours) {
+                    Toast.makeText(this, "Invalid End-time", Toast.LENGTH_SHORT).show()
+                    mAssign_end_time_BTN.text =
+                        String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                }
+                if (endMinute < (startMinute + 15) || (endMinute - startMinute) < 15) {
+                    Toast.makeText(
+                        this,
+                        "Duration must be more than 15 minutes",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    mAssign_end_time_BTN.text =
+                        String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                }
+            }
         } else {
-            if(startHours>endHours) {
-                Toast.makeText(this,"Invalid End-time",Toast.LENGTH_SHORT).show()
-                mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
-            }
-            if(endMinute<(startMinute+15)||(endMinute-startMinute)<15) {
-                Toast.makeText(this,"Duration must be more than 15 minutes",Toast.LENGTH_SHORT).show()
-                mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
-            }
+            Toast.makeText(this, "End time or start time should not be greater than your working hours", Toast.LENGTH_SHORT).show()
+            mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+            mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+
         }
     }
+
+    private fun startTaskTimeValidation(startHours: Int,startMinute: Int,deadlineDate:String) {	  val formatter=SimpleDateFormat("yyyy-MM-dd")
+        val endDate=formatter.parse(deadlineDate)
+        val calendar=Calendar.getInstance()
+        val currentTimeHour=calendar.time.hours
+        val currentTimeMinute=calendar.time.minutes
+        if(calendar.time.date==endDate.date) {
+            if(startHours in 9..17) {
+
+                if(startHours==currentTimeHour&&startMinute >= (currentTimeMinute+5))
+                {
+                    val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                    mAssign_start_time_BTN.text = startSelectedTime
+                    start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                }
+                else if(startHours>currentTimeHour){
+                    val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                    mAssign_start_time_BTN.text = startSelectedTime
+                    start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                }
+                else{
+                    Toast.makeText(this,"start time should be 5 min more than current time",Toast.LENGTH_SHORT).show()
+                    mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                }
+            }
+            else {
+                Toast.makeText(this,"start time should be Greater than current time/ start time should be lesser than your working time",Toast.LENGTH_SHORT).show()
+                mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+            }
+
+        }
+
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 }
 
 
