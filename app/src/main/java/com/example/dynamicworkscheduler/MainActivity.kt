@@ -336,8 +336,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openScheduleScreen(view: View) {
-       // startActivity(Intent(this,Schedule::class.java))
-        Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this,Schedule::class.java))
+       // Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")

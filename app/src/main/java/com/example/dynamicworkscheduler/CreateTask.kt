@@ -149,6 +149,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         mShowSameTaskError.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
 
         /* TASK PRIORITY SELECTION */
+
         mAddPriorityTv.setOnClickListener {
             mPriorityListLl.visibility = View.VISIBLE
             pri1.setOnClickListener {
@@ -1132,6 +1133,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     }
 
 
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Toast.makeText(this,parent?.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
         when(parent?.getItemAtPosition(position).toString()){
@@ -1159,11 +1161,32 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     fun addTaskAndSchedule(view: View) {
         val title=binding.TitleET
         val description=binding.DescriptionET
+        var priorityval=binding.AddPriorityTV
+        val selctcategory=binding.SelectCategoryTV
+        val starttimebtnval=binding.AssignStartTimeBTN
+        val endtimebtnval=binding.AssignEndTimeBTN
         if(title.text.isEmpty()||title.text.startsWith(" ")) {
             title.error="Enter title for Task"
         }
+        if(priorityval.text=="+")
+        {
+            Toast.makeText(this,"select priority for the task",Toast.LENGTH_SHORT).show()
+        }
         if(description.text.isEmpty()||description.text.startsWith(" ")) {
             description.error="Enter Description for Task"
+        }
+
+        if(selctcategory.text=="Select Category of Task")
+        {
+            Toast.makeText(this,"select task category",Toast.LENGTH_SHORT).show()
+        }
+        if(starttimebtnval.text=="00:00")
+        {
+            Toast.makeText(this,"select start time",Toast.LENGTH_SHORT).show()
+        }
+        if(endtimebtnval.text=="00:00")
+        {
+            Toast.makeText(this,"select end time",Toast.LENGTH_SHORT).show()
         }
 
         else {
@@ -1179,6 +1202,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             insertDataToDatabase()
 //            finish()
         }
+
     }
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n", "UseCompatLoadingForDrawable")
@@ -1283,14 +1307,14 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
     private fun timeValidation(startHours:Int, startMinute:Int, endHours:Int, endMinute:Int) {
         val duration:Int=startMinute-endMinute
-        if(endHours<=23 && startHours<=23){
+        if((endHours<=23&& endHours!=0) && (startHours<=23 && startHours!=0)){
             if (startHours < endHours && duration < 45) {
                 mAssign_start_time_BTN.text = start_selected_time
                 mAssign_end_time_BTN.text =
                     String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
                 end_selected_time =
                     String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
-            } else if (startHours == endHours && (endMinute > (15 + startMinute) || (endMinute - startMinute) > 15)) {
+            } else if (startHours == endHours && (endMinute >=(15 + startMinute))) {
                 mAssign_start_time_BTN.text = start_selected_time
                 mAssign_end_time_BTN.text =
                     String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
@@ -1302,7 +1326,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     mAssign_end_time_BTN.text =
                         String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
                 }
-                if (endMinute < (startMinute + 15) || (endMinute - startMinute) < 15) {
+                if (endMinute < (startMinute + 15)) {
                     Toast.makeText(
                         this,
                         "Duration must be more than 15 minutes",
@@ -1326,7 +1350,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         val currentTimeHour=calendar.time.hours
         val currentTimeMinute=calendar.time.minutes
         if(calendar.time.date==endDate.date) {
-            if(startHours in 9..17) {
+            if(startHours in 9..23) {
 
                 if(startHours==currentTimeHour&&startMinute >= (currentTimeMinute+5))
                 {
@@ -1334,19 +1358,22 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     mAssign_start_time_BTN.text = startSelectedTime
                     start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
                 }
-                else if(startHours>currentTimeHour){
+                else if(startHours>currentTimeHour && (currentTimeMinute-startMinute)<=55){
                     val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                     mAssign_start_time_BTN.text = startSelectedTime
                     start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
                 }
+              //  else if(if )
                 else{
                     Toast.makeText(this,"start time should be 5 min more than current time",Toast.LENGTH_SHORT).show()
                     mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                    mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
                 }
             }
             else {
-                Toast.makeText(this,"start time should be Greater than current time/ start time should be lesser than your working time",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"start time should be Greater than working start time/ start time should be lesser than your working end time",Toast.LENGTH_SHORT).show()
                 mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
             }
 
         }
