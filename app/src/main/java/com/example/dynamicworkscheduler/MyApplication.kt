@@ -278,7 +278,7 @@ class MyApplication: Application() {
                 for (j in task.startDate!!.day until task.deadlineDate!!.day) {
                     if(task.duration!!>0){
                         val indexes = indexCalculatorForCategory3(tasks_id_list_week[j])
-                        var i = ((0..(indexes.size)).random() * 2)
+                        var i = 0
                         //   println(i)
                         while (i < indexes.size && task.duration!! >0) {
                             if (indexes[i] == 0) {
@@ -509,10 +509,11 @@ class MyApplication: Application() {
                         }
                         else if(tasks_objects_list_week[task.startDate!!.day][t].category == "Category-3"){
                             tasks_objects_list_week[task.startDate!!.day][t].duration = tasks_objects_list_week[task.startDate!!.day][t].duration?.plus(1)
+                           // tasks_objects_list_week_reschedule[j].add(tasks_objects_list_week[j][t])
                             whenCode(j=task.startDate!!.day,t=t,taskId=taskId,task=task)
                         }
                     }
-                    rearrangingRemaining()
+//                  rearrangingRemaining()
                 }
                 "Category-2"->{
                     for(j in task.startDate!!.day until task.deadlineDate!!.day+1) {
@@ -527,7 +528,7 @@ class MyApplication: Application() {
                         }
                         tasks_objects_list_week_reschedule[j]=tasks_objects_list_week_reschedule[j].toSet().toMutableList()
                     }
-                    rearrangingRemaining()
+//                    rearrangingRemaining()
                 }
                 "Category-3"->{
                     category3DeadlineAddingToWeekList(taskId=taskId,task=task)
@@ -556,24 +557,80 @@ class MyApplication: Application() {
             return taskDataWeek
         }
 
-        fun getDayTasksObject():MutableList<MutableList<Task>>{
-     //   fun getDayTasksObject(){
-            for(i in 0..6){
+        fun getDayTasksObject():MutableList<MutableList<Task>> {
+            //   fun getDayTasksObject(){
+            for (i in 0..6) {
                 taskDataObjectsWeek[i].clear()
-                if(tasks_objects_list_week[i].isNotEmpty()) {
+                if (tasks_objects_list_week[i].isNotEmpty()) {
                     tasks_objects_list_week[i].forEach {
-                        if(taskDataObjectsWeek[i].isEmpty()&&it.taskID!=null&&it.taskID!="br"){
+                        if (taskDataObjectsWeek[i].isEmpty() && it.taskID != null && it.taskID != "br") {
+                            taskDataObjectsWeek[i].add(it)
+                        } else {
+                            if (it.taskID != null && it.taskID != "br" && it.taskID != taskDataObjectsWeek[i].last().taskID) {
                                 taskDataObjectsWeek[i].add(it)
-                        }else {
-                            if(it.taskID!=null&&it.taskID!="br"&&it.taskID != taskDataObjectsWeek[i].last().taskID) {
-                                    taskDataObjectsWeek[i].add(it)
-                               // println(taskDataObjectsWeek[i].last().taskID)
+                                // println(taskDataObjectsWeek[i].last().taskID)
                             }
                         }
                     }
                 }
             }
             return taskDataObjectsWeek
+        }
+
+        fun checkCollide(startDate: Date,deadlineDate: Date,startTime: String,endTime: String,category: String):Task{
+            val chunkedTaskEndTime = endTime.filter { it.isDigit() }.chunked(2).toMutableList()
+            val chunkedTaskStartTime = startTime.filter { it.isDigit() }.chunked(2).toMutableList()
+            var tStartTime = 0
+            var tEndTime = 0
+            if(startTime!="" && endTime!=""){
+                tStartTime =
+                    (chunkedTaskStartTime[0].toInt() - chunkedStartTime[0].toInt()) * 60 + (chunkedTaskStartTime[1].toInt() - chunkedStartTime[1].toInt())
+                tEndTime =
+                    (chunkedTaskEndTime[0].toInt() - chunkedTaskStartTime[0].toInt()) * 60 + (chunkedTaskEndTime[1].toInt() - chunkedTaskStartTime[1].toInt()) + tStartTime
+            }
+            when(category){
+                "Category-1"->{
+                    for (t in tStartTime until tEndTime) {
+                        if(tasks_id_list_week[startDate.day][t]!="n"){
+                            if(tasks_id_list_week[startDate.day][t]=="br"){
+                                println("Task collided on breakTime so adjust the timings")
+//                                return "Task collided on breakTime so adjust the timings"
+                            }else {
+                                println(tasks_objects_list_week[startDate.day][t].category)
+                                println(tasks_objects_list_week[startDate.day][t].priority)
+                                println(tasks_objects_list_week[startDate.day][t].title)
+                                println(tasks_objects_list_week[startDate.day][t].startTime)
+                                println(tasks_objects_list_week[startDate.day][t].endTime)
+                                println(tasks_objects_list_week[startDate.day][t].startDate)
+                                println(tasks_objects_list_week[startDate.day][t].deadlineDate)
+                                return tasks_objects_list_week[startDate.day][t]
+                            }
+                        }
+                    }
+                }
+                "Category-2"->{
+                    for(j in startDate.day until deadlineDate.day+1 ){
+                        for(t in tStartTime until tEndTime){
+                            if(tasks_id_list_week[j][t]!="n"){
+                                if(tasks_id_list_week[j][t]=="br"){
+                                    println("Task collided on breakTime so adjust the timings")
+                                }else {
+                                    println(tasks_objects_list_week[j][t].category)
+                                    println(tasks_objects_list_week[j][t].priority)
+                                    println(tasks_objects_list_week[j][t].title)
+                                    println(tasks_objects_list_week[j][t].startTime)
+                                    println(tasks_objects_list_week[j][t].endTime)
+                                    println(tasks_objects_list_week[j][t].startDate)
+                                    println(tasks_objects_list_week[j][t].deadlineDate)
+                                    println("It has been collided on ${j + 1}")
+                                    return tasks_objects_list_week[j][t]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return Task()
         }
     }
 }

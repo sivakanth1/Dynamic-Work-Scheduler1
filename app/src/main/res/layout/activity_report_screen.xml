@@ -114,7 +114,7 @@
         android:id="@+id/Activity_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Activity"
+        android:text="Your Activity:"
         android:padding="5dp"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -122,6 +122,18 @@
         android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/analyse_pane"/>
+
+    <TextView
+        android:id="@+id/Working_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Working Hours: 09:00 to 17:00"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Activity_TV"
+        app:layout_constraintTop_toBottomOf="@+id/analyse_pane" />
 
     <ListView
         android:id="@+id/TaskActivity_LV"
