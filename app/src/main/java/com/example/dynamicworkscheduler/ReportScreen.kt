@@ -48,6 +48,7 @@ class ReportScreen : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         initTaskActivityList()
+        initPieChart()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -79,8 +80,16 @@ class ReportScreen : AppCompatActivity() {
         for (i in 0..6){
                 weekListData[i].forEach {
                     titles[i].add(it.title.toString())
-                    startTimes[i].add(it.startTime.toString())
-                    endTimes[i].add(it.endTime.toString())
+                    when(it.category){
+                        "Category-3" -> {
+                            startTimes[i].add("         ")
+                            endTimes[i].add("     ")
+                        }
+                        else ->{
+                            startTimes[i].add(it.startTime.toString())
+                            endTimes[i].add(it.endTime.toString())
+                        }
+                    }
                     when (it.status) {
                         "pending" -> {
                             states[i].add(R.drawable.ic_pending)
@@ -98,25 +107,25 @@ class ReportScreen : AppCompatActivity() {
                 }
         }
         act_task_list = ArrayList()
-        for (i in titles[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].indices) {
+        for (i in titles[Calendar.getInstance().time.day].indices) {
             act_task_list.add(
                 TaskActivity(
-                    startTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
-                    titles[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
-                    startTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
-                    endTimes[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
-                    states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i],
-                    dynamicBg[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1][i]
+                    startTimes[Calendar.getInstance().time.day][i],
+                    titles[Calendar.getInstance().time.day][i],
+                    startTimes[Calendar.getInstance().time.day][i],
+                    endTimes[Calendar.getInstance().time.day][i],
+                    states[Calendar.getInstance().time.day][i],
+                    dynamicBg[Calendar.getInstance().time.day][i]
                 )
             )
         }
-        finishedTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
+        finishedTaskCount=states[Calendar.getInstance().time.day].count {
             it == R.drawable.ic_finished
         }
-        suspendedTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
+        suspendedTaskCount=states[Calendar.getInstance().time.day].count {
             it == R.drawable.ic_suspended
         }
-        pendingTaskCount=states[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].count {
+        pendingTaskCount=states[Calendar.getInstance().time.day].count {
             it == R.drawable.ic_pending
         }
         val taskActivityAdapter = TaskActivityAdapter(this, act_task_list)
@@ -162,7 +171,7 @@ class ReportScreen : AppCompatActivity() {
         pieChart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
         pieChart.transparentCircleRadius = 0f
         pieChart.isRotationEnabled = false
-        pieChart.centerText = "${weekListData[Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1].size}\nTasks"
+        pieChart.centerText = "${weekListData[Calendar.getInstance().time.day].size}\nTasks"
         pieChart.setCenterTextSize(16f)
         pieChart.setCenterTextColor(R.color.black)
         pieChart.setCenterTextTypeface(Typeface.DEFAULT_BOLD)
