@@ -198,6 +198,12 @@ class MainActivity : AppCompatActivity() {
         MyApplication.createTasksOfWeekList()
         MyApplication.createUserWorkingList("09:00","17:00")
 
+        if(mAssignTitleTv.text == "No In Progress Tasks"){
+            mInProgress_Layout.isEnabled=false
+            mIn_progress_Tv.isEnabled = false
+            mInProgress_Layout.isClickable = false
+            mIn_progress_Tv.isClickable = false
+        }else{
         mInProgress_Layout.setOnClickListener {
             task_activity_update_dialog = Dialog(this)
             task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
@@ -221,6 +227,10 @@ class MainActivity : AppCompatActivity() {
                     duration = durations[i], weekNumber = weekNumbers[i], status = "finished"
                 ))
                 getDataFromDataBase()
+                finishedTaskCount+=1
+                mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
+                println("titles size-------->${titles.size}")
+                pieChart.centerText = if(titles.size>0) {"${((finishedTaskCount.toDouble()/titles.size)*100).toInt()}%"} else {"0"}
                 task_activity_update_dialog.dismiss()
             }
             mUpdate_dialog_NO_BTN.setOnClickListener { task_activity_update_dialog.dismiss() }
@@ -247,8 +257,11 @@ class MainActivity : AppCompatActivity() {
                     duration = durations[i], weekNumber = weekNumbers[i], status = "suspended"
                 ))
                 getDataFromDataBase()
+                mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
+                pieChart.centerText = if(titles.size>0) {"${((finishedTaskCount.toDouble()/titles.size)*100).toInt()}%"} else {"0"}
                 task_activity_cancel_dialog.dismiss()
             }
+        }
         }
     }
 
@@ -337,6 +350,7 @@ class MainActivity : AppCompatActivity() {
 
     fun openScheduleScreen(view: View) {
         startActivity(Intent(this,Schedule::class.java))
+        finish()
        // Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
     }
 
@@ -349,13 +363,19 @@ class MainActivity : AppCompatActivity() {
         val timeFormatter = SimpleDateFormat("HH:mm")
         val currentTimeArray = timeFormatter.format(Calendar.getInstance().time).filter { it.isDigit() }.chunked(2)
         val currentTimeInt = (currentTimeArray[0].toInt()*60)+currentTimeArray[1].toInt()
-        mAssignTitleTv.text = "No Present In Progress Tasks"
+        mAssignTitleTv.text = "No In Progress Tasks"
         mAssignTitleTv.gravity = Gravity.CENTER
         mAssignDescriptionTv.text = ""
         mAssignDeadLineTv.visibility = View.GONE
         mAssignUpNextTitleTv.text = "No Upcoming Tasks"
         mAssignUpNextDescriptionTv.text = ""
         mAssignUpNextPriorityTv.text = "#0"
+        if(mAssignTitleTv.text == "No In Progress Tasks"){
+            mInProgress_Layout.isEnabled=false
+            mIn_progress_Tv.isEnabled = false
+            mInProgress_Layout.isClickable = false
+            mIn_progress_Tv.isClickable = false
+        }
         if(titles.size>0){
             val startTimeArrayOfI = startTimes[i].filter { it.isDigit() }.chunked(2)
             val endTimeArrayOfI = endTimes[i].filter { it.isDigit() }.chunked(2)
@@ -416,8 +436,8 @@ class MainActivity : AppCompatActivity() {
         weekNumbers.clear()
         deadLineDates.clear()
         taskIds.clear()
-        finishedTaskCount = 0
-        suspendedTaskCount = 0
+//        finishedTaskCount = 0
+//        suspendedTaskCount = 0
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         if(weekListData[Calendar.getInstance().time.day].isNotEmpty()) {
             weekListData[Calendar.getInstance().time.day].forEach {
@@ -433,16 +453,16 @@ class MainActivity : AppCompatActivity() {
                 startDates.add(dateFormatter.format(it.startDate))
                 deadLineDates.add(dateFormatter.format(it.deadlineDate))
                 taskIds.add(it.taskID.toString())
-                when (it.status) {
-                    "finished" -> finishedTaskCount += 1
-                    "suspended" -> suspendedTaskCount += 1
-                }
+//                when (it.status) {
+//                    "finished" -> finishedTaskCount += 1
+//                    "suspended" -> suspendedTaskCount += 1
+//                }
             }
         }
-        mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
         setInProgressWidget()
         setUpPieChart()
         initPieChart()
+        mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
       //  getTasks()
         if(titles.size==0){
             mIn_progress_Tv.visibility = View.GONE
