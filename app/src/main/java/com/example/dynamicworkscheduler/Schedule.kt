@@ -82,6 +82,7 @@ class Schedule : AppCompatActivity() {
                     CreateTask::class.java
                 )
             )
+            finish()
         }
         bgColor = intArrayOf(
             R.drawable.soft_blue_total_task_bg,
@@ -91,7 +92,7 @@ class Schedule : AppCompatActivity() {
 
 
         weekArrayList()
-        initUserTaskList()
+        //initUserTaskList()
     }
     //Create a week Array//
     @SuppressLint("UseCompatLoadingForDrawables")

@@ -501,38 +501,60 @@ class MyApplication: Application() {
                 tEndTime =
                     (chunkedTaskEndTime[0].toInt() - chunkedTaskStartTime[0].toInt()) * 60 + (chunkedTaskEndTime[1].toInt() - chunkedTaskStartTime[1].toInt()) + tStartTime
             }
-            when(task.category){
-                "Category-1"->{
-                    for(t in tStartTime until tEndTime){
-                        if(tasks_objects_list_week[task.startDate!!.day][t].category=="Category-2" || tasks_id_list_week[task.startDate!!.day][t]=="n"){
-                            whenCode(j=task.startDate!!.day,t=t,taskId=taskId,task=task)
-                        }
-                        else if(tasks_objects_list_week[task.startDate!!.day][t].category == "Category-3"){
-                            tasks_objects_list_week[task.startDate!!.day][t].duration = tasks_objects_list_week[task.startDate!!.day][t].duration?.plus(1)
-                           // tasks_objects_list_week_reschedule[j].add(tasks_objects_list_week[j][t])
-                            whenCode(j=task.startDate!!.day,t=t,taskId=taskId,task=task)
-                        }
-                    }
-//                  rearrangingRemaining()
-                }
-                "Category-2"->{
-                    for(j in task.startDate!!.day until task.deadlineDate!!.day+1) {
+            try {
+                when (task.category) {
+                    "Category-1" -> {
                         for (t in tStartTime until tEndTime) {
-                            if (tasks_objects_list_week[j][t].category == "Category-2") {
-                                tasks_objects_list_week[j][t].duration = tasks_objects_list_week[j][t].duration?.plus(1)
-                                tasks_objects_list_week_reschedule[j].add(tasks_objects_list_week[j][t])
-                                whenCode(j = j, t = t, taskId = taskId, task = task)
-                            }else if(tasks_id_list_week[j][t]=="n"){
-                                whenCode(j = j, t = t, taskId = taskId, task = task)
+                            if (tasks_objects_list_week[task.startDate!!.day][t].category == "Category-2" || tasks_id_list_week[task.startDate!!.day][t] == "n") {
+                                whenCode(
+                                    j = task.startDate!!.day,
+                                    t = t,
+                                    taskId = taskId,
+                                    task = task
+                                )
+                            } else if (tasks_objects_list_week[task.startDate!!.day][t].category == "Category-3") {
+                                tasks_objects_list_week[task.startDate!!.day][t].duration =
+                                    tasks_objects_list_week[task.startDate!!.day][t].duration?.plus(
+                                        1
+                                    )
+                                // tasks_objects_list_week_reschedule[j].add(tasks_objects_list_week[j][t])
+                                whenCode(
+                                    j = task.startDate!!.day,
+                                    t = t,
+                                    taskId = taskId,
+                                    task = task
+                                )
                             }
                         }
-                        tasks_objects_list_week_reschedule[j]=tasks_objects_list_week_reschedule[j].toSet().toMutableList()
+                        rearrangingRemaining()
                     }
-//                    rearrangingRemaining()
+                    "Category-2" -> {
+                        for (j in task.startDate!!.day until task.deadlineDate!!.day + 1) {
+                            for (t in tStartTime until tEndTime) {
+                                if (tasks_objects_list_week[j][t].category == "Category-3") {
+                                    tasks_objects_list_week[j][t].duration =
+                                        tasks_objects_list_week[j][t].duration?.plus(1)
+                                    tasks_objects_list_week_reschedule[j].add(
+                                        tasks_objects_list_week[j][t]
+                                    )
+                                    whenCode(j = j, t = t, taskId = taskId, task = task)
+                                } else if (tasks_id_list_week[j][t] == "n") {
+                                    whenCode(j = j, t = t, taskId = taskId, task = task)
+                                }
+                            }
+                            if(tasks_objects_list_week_reschedule.isNotEmpty()){
+                                tasks_objects_list_week_reschedule[j] =
+                                    tasks_objects_list_week_reschedule[j].toSet().toMutableList()
+                            }
+                        }
+                        rearrangingRemaining()
+                    }
+                    "Category-3" -> {
+                        category3DeadlineAddingToWeekList(taskId = taskId, task = task)
+                    }
                 }
-                "Category-3"->{
-                    category3DeadlineAddingToWeekList(taskId=taskId,task=task)
-                }
+            }catch (e:Exception){
+                println("Exception caught--------------->$e")
             }
         }
 
