@@ -92,7 +92,7 @@ class Schedule : AppCompatActivity() {
 
 
         weekArrayList()
-        //initUserTaskList()
+        initUserTaskList()
     }
     //Create a week Array//
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -114,6 +114,7 @@ class Schedule : AppCompatActivity() {
         Log.d("date1=", startDate)
         calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek + 1)
 
+//        keertana.mogiligidda
 
         var idx = 1
         weekListDates.add(startDate)
@@ -174,7 +175,8 @@ class Schedule : AppCompatActivity() {
         //Initial Dates//
 //        initWeekLayout();
 
-        /* Add Listeners and change the colors accordingly*/mDay1.setOnClickListener { v: View? ->
+        /* Add Listeners and change the colors accordingly*/
+        mDay1.setOnClickListener { v: View? ->
 
         // change background of selected layout to tinted background and change all other layouts to non-tinted background
         mDay1.background =

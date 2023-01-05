@@ -163,7 +163,7 @@
             android:fontFamily="@font/nunito_sans"
             android:hint="example@xyz.com"
             android:inputType="textEmailAddress"
-            android:maxLength="28"
+            android:maxLength="32"
             android:maxLines="1"
             android:padding="12dp"
             android:textColor="@color/black"
