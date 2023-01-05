@@ -1180,13 +1180,29 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         {
             Toast.makeText(this,"select task category",Toast.LENGTH_SHORT).show()
         }
-        if(starttimebtnval.text=="00:00")
-        {
-            Toast.makeText(this,"select start time",Toast.LENGTH_SHORT).show()
-        }
-        if(endtimebtnval.text=="00:00")
-        {
-            Toast.makeText(this,"select end time",Toast.LENGTH_SHORT).show()
+        if(category!="Category-3") {
+            Toast.makeText(this, "test3", Toast.LENGTH_SHORT).show()
+            if (starttimebtnval.text == "00:00") {
+                Toast.makeText(this, "select start time", Toast.LENGTH_SHORT).show()
+            }
+            if (endtimebtnval.text == "00:00") {
+                Toast.makeText(this, "select end time", Toast.LENGTH_SHORT).show()
+            } else {
+                mShowSameTaskError.show()
+                mShowSameTaskError.window?.findViewById<ImageView>(R.id.close_dialog)
+                    ?.setOnClickListener {
+                        mShowSameTaskError.dismiss()
+                    }
+                mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)
+                    ?.setOnClickListener {
+                        mShowSameTaskError.dismiss()
+                    }
+                Toast.makeText(this, "test1", Toast.LENGTH_SHORT).show()
+                if (priorityval.text != "+" && selctcategory.text != "Select Category of Task") {
+                    Toast.makeText(this, "test2", Toast.LENGTH_SHORT).show()
+                    insertDataToDatabase()
+                }
+            }
         }
 
         else {
@@ -1198,9 +1214,11 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)?.setOnClickListener{
                 mShowSameTaskError.dismiss()
             }
-//            startActivity(Intent(this,MainActivity::class.java))
-            insertDataToDatabase()
-//            finish()
+            Toast.makeText(this,"test1",Toast.LENGTH_SHORT).show()
+            if(priorityval.text!="+" && selctcategory.text!="Select Category of Task") {
+                Toast.makeText(this,"test2",Toast.LENGTH_SHORT).show()
+                insertDataToDatabase()
+            }
         }
 
     }
@@ -1303,19 +1321,20 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             else-> {
                 start_selected_time = "00:00"
                 end_selected_time = "00:00"
-                val collidedTask=MyApplication.checkCollide(startDate = date_time_formatter.parse(selectedDate),
-                    deadlineDate = date_time_formatter.parse(selectedDate),
-                    startTime = start_selected_time,end_selected_time,category=category
-                )
-                if(collidedTask.taskID!=null){
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_priority_TV)!!.text = "#${collidedTask.priority}"
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_title_TV)!!.text = collidedTask.title
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_deadline_TV)!!.text = date_time_formatter.format(collidedTask.deadlineDate)
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_start_time_TV)!!.text = collidedTask.startTime
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_end_time_TV)!!.text = collidedTask.endTime
-                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_category_TV)!!.text = collidedTask.category
+//                val collidedTask=MyApplication.checkCollide(startDate = date_time_formatter.parse(selectedDate),
+//                    deadlineDate = date_time_formatter.parse(selectedDate),
+//                    startTime = start_selected_time,end_selected_time,category=category
+//                )
+//                if(collidedTask.taskID!=null){
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_priority_TV)!!.text = "#${collidedTask.priority}"
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_title_TV)!!.text = collidedTask.title
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_deadline_TV)!!.text = date_time_formatter.format(collidedTask.deadlineDate)
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_start_time_TV)!!.text = collidedTask.startTime
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_end_time_TV)!!.text = collidedTask.endTime
+//                    mShowSameTaskError.window?.findViewById<TextView>(R.id.Assign_category_TV)!!.text = collidedTask.category
+//
+//                }
 
-                }else {
                     mShowSameTaskError.dismiss()
                     task = TaskData(
                         taskId = MyApplication.createTaskId(
@@ -1338,7 +1357,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     startActivity(Intent(this,MainActivity::class.java))
                     finish()
                     Toast.makeText(this,"Successfully added!",Toast.LENGTH_SHORT).show()
-                }
+
             }
         }
     }
