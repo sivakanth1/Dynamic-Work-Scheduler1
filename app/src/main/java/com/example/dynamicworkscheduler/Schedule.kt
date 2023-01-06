@@ -2,6 +2,7 @@ package com.example.dynamicworkscheduler;
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -44,14 +45,35 @@ class Schedule : AppCompatActivity() {
     private var selecteddateindex:Int=0
 
     lateinit var weekListData:MutableList<MutableList<Task>>
-    val titles = mutableListOf<String>()
-    val des = mutableListOf<String>()
-    val durations = mutableListOf<String>()
+    val titles0 = mutableListOf<String>()
+    val titles1 = mutableListOf<String>()
+    val titles2 = mutableListOf<String>()
+    val titles3 = mutableListOf<String>()
+    val titles4 = mutableListOf<String>()
+    val titles5 = mutableListOf<String>()
+    val titles6 = mutableListOf<String>()
+    val des0 = mutableListOf<String>()
+    val des1 = mutableListOf<String>()
+    val des2 = mutableListOf<String>()
+    val des3 = mutableListOf<String>()
+    val des4 = mutableListOf<String>()
+    val des5 = mutableListOf<String>()
+    val des6 = mutableListOf<String>()
+    val durations0 = mutableListOf<String>()
+    val durations1 = mutableListOf<String>()
+    val durations2 = mutableListOf<String>()
+    val durations3 = mutableListOf<String>()
+    val durations4 = mutableListOf<String>()
+    val durations5 = mutableListOf<String>()
+    val durations6 = mutableListOf<String>()
     lateinit var bgColor:IntArray
+    lateinit var preferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        preferences = getSharedPreferences("iValue", MODE_PRIVATE)
+        Active_Item = preferences.getString("i",null)?.toInt() ?:0
         mTaskActivity_LV = binding.TaskActivityLV
         monthDisplay=binding.CurrentMonth
         mDay1 = binding.day1
@@ -96,8 +118,7 @@ class Schedule : AppCompatActivity() {
     }
     //Create a week Array//
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun weekArrayList()
-    {
+    private fun weekArrayList() {
 
         /* TASK DEADLINE SELECTION */
 
@@ -134,13 +155,13 @@ class Schedule : AppCompatActivity() {
             Log.d("WeekDatesString1", weekListDates.get(idx))
             idx += 1
         }
-        mDay_date1.setText(weekListDates[0])
-        mDay_date2.setText(weekListDates[1])
-        mDay_date3.setText(weekListDates[2])
-        mDay_date4.setText(weekListDates[3])
-        mDay_date5.setText(weekListDates[4])
-        mDay_date6.setText(weekListDates[5])
-        mDay_date7.setText(weekListDates[6])
+        mDay_date1.text = weekListDates[0]
+        mDay_date2.text = weekListDates[1]
+        mDay_date3.text = weekListDates[2]
+        mDay_date4.text = weekListDates[3]
+        mDay_date5.text = weekListDates[4]
+        mDay_date6.text = weekListDates[5]
+        mDay_date7.text = weekListDates[6]
         //Initial Dates//
 
         monthDisplay.text=monthsdf.format(Date())
@@ -403,15 +424,15 @@ class Schedule : AppCompatActivity() {
         assignValuesToList()
         //titles.clear()
         task_item_list = ArrayList()
-        for (i in titles.indices) {
+        for (i in titles5.indices) {
             if (Active_Item == i + 1) task_item_list!!.add(
                 TaskFormat(
-                    titles[i],
-                    des[i], durations[i], active_state_bg, active_state_IV
+                    titles5[i],
+                    des5[i], durations5[i], active_state_bg, active_state_IV
                 )
             ) else task_item_list!!.add(
                 TaskFormat(
-                    titles[i], des[i], durations[i], bgColor[i], non_active_state
+                    titles5[i], des5[i], durations5[i], bgColor[i%3], non_active_state
                 )
             )
         }
@@ -421,54 +442,60 @@ class Schedule : AppCompatActivity() {
     }
 
     fun assignValuesToList(){
-        lateinit var duration:String
-        lateinit var array: Array<MutableList<String>>
+        var duration = 0
+        lateinit var startTime: MutableList<String>
+        lateinit var endTime: MutableList<String>
         for (i in 0..6){
             if(weekListData[i].isNotEmpty()) {
                 weekListData[i].forEach {
-                    titles.add(it.title.toString())
-                    des.add(it.description.toString())
-                    array = getChunkValues(it.startTime.toString(),it.endTime.toString())
-                    val hour = array[1][0].toInt()-array[0][0].toInt()
-                    val min = if(array[1][1].toInt()-array[0][1].toInt()<0){
-                        array[0][1].toInt()-array[1][1].toInt()
-                    }else{
-                        array[1][1].toInt()-array[0][1].toInt()
-                    }
-                    duration = if(min>0){
-                        if(min in 1..9){
-                            "$hour hr 0$min mins"
-                        }else{
-                            "$hour hr $min mins"
+                    startTime = getChunkValues(it.startTime.toString())
+                    endTime = getChunkValues(it.endTime.toString())
+                    duration = ((endTime[0].toInt()-startTime[0].toInt())*60+(endTime[1].toInt()-startTime[1].toInt()))
+                    when(i){
+                        0->{
+                            titles0.add(it.title.toString())
+                            des0.add(it.description.toString())
+                            durations0.add("$duration mins")
                         }
-                    }else{
-                        "$min mins"
+                        1->{
+                            titles1.add(it.title.toString())
+                            des1.add(it.description.toString())
+                            durations1.add("$duration mins")
+                        }
+                        2->{
+                            titles2.add(it.title.toString())
+                            des2.add(it.description.toString())
+                            durations2.add("$duration mins")
+                        }
+                        3->{
+                            titles3.add(it.title.toString())
+                            des3.add(it.description.toString())
+                            durations3.add("$duration mins")
+                        }
+                        4->{
+                            titles4.add(it.title.toString())
+                            des4.add(it.description.toString())
+                            durations4.add("$duration mins")
+                        }
+                        5->{
+                            titles5.add(it.title.toString())
+                            des5.add(it.description.toString())
+                            durations5.add("$duration mins")
+                        }
+                        6->{
+                            titles6.add(it.title.toString())
+                            des6.add(it.description.toString())
+                            durations6.add("$duration mins")
+                        }
                     }
-                    durations.add(duration)
-//                    when (it.status) {
-//                        "pending" -> {
-//                            states.add(R.drawable.ic_pending)
-//                            dynamicBg.add(R.drawable.pending_task_bg)
-//                        }
-//                        "finished" -> {
-//                            states.add(R.drawable.ic_finished)
-//                            dynamicBg.add(R.drawable.ic_finished)
-//                        }
-//                        "suspended" -> {
-//                            states.add(R.drawable.ic_suspended)
-//                            dynamicBg.add(R.drawable.ic_suspended)
-//                        }
-//                    }
                 }
             }
         }
     }
 
-    fun getChunkValues(startTime:String,endTime:String):Array<MutableList<String>>{
-        val chunkedTaskEndTime = endTime.filter { it.isDigit() }.chunked(2).toMutableList()
-        val chunkedTaskStartTime = startTime.filter { it.isDigit() }.chunked(2).toMutableList()
-
-        return arrayOf(chunkedTaskStartTime,chunkedTaskEndTime)
+    fun getChunkValues(time:String):MutableList<String>{
+        val chunkedTime = time.filter { it.isDigit() }.chunked(2).toMutableList()
+        return chunkedTime
     }
 
     fun backToDashboard(view: View?) {

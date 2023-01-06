@@ -77,7 +77,7 @@ class MyApplication: Application() {
         }
 
         fun splitAccordingToWeek(){
-            println("Hi")
+            println("In split according to week function")
             tasks_objects_list_week_c1.forEach {
                 it.clear()
             }

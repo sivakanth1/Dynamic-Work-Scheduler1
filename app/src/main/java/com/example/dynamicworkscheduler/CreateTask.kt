@@ -203,8 +203,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 cat1Title.setTextColor(resources.getColor(R.color.white))
                 cat1Des.setTextColor(resources.getColor(R.color.white))
 
-
-                //
                 cat2Ll.background = resources.getDrawable(R.drawable.all_rounded_corners)
                 cat2Title.setTextColor(resources.getColor(R.color.soft_black))
                 cat2Des.setTextColor(resources.getColor(R.color.soft_black))
@@ -226,8 +224,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 cat2Title.setTextColor(resources.getColor(R.color.white))
                 cat2Des.setTextColor(resources.getColor(R.color.white))
 
-
-                //
                 cat1Ll.background = resources.getDrawable(R.drawable.all_rounded_corners)
                 cat1Title.setTextColor(resources.getColor(R.color.soft_black))
                 cat1Des.setTextColor(resources.getColor(R.color.soft_black))
@@ -246,8 +242,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 cat3Title.setTextColor(resources.getColor(R.color.white))
                 cat3Des.setTextColor(resources.getColor(R.color.white))
 
-
-                //
                 cat1Ll.background = resources.getDrawable(R.drawable.all_rounded_corners)
                 cat1Title.setTextColor(resources.getColor(R.color.soft_black))
                 cat1Des.setTextColor(resources.getColor(R.color.soft_black))
@@ -267,86 +261,8 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         }
         mDurationSpinner.onItemSelectedListener =this
 
-        /* TASK DEADLINE SELECTION */
-
-        /* TASK INIT() DEADLINE DATES */
-//        initWeekLayout();
-
-
-        /* Add Listeners and change the colors accordingly*/
-//        mDay1.setOnClickListener {
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay1.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day1.setTextColor(resources.getColor(R.color.white))
-//            mDay_date1.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 0
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date1.text}"
-//        }
-//        mDay2.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay2.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day2.setTextColor(resources.getColor(R.color.white))
-//            mDay_date2.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 1
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date2.text}"
-//        }
-//        mDay3.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay3.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day3.setTextColor(resources.getColor(R.color.white))
-//            mDay_date3.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 2
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date3.text}"
-//        }
-//        mDay4.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay4.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day4.setTextColor(resources.getColor(R.color.white))
-//            mDay_date4.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 3
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date4.text}"
-//        }
-//        mDay5.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay5.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day5.setTextColor(resources.getColor(R.color.white))
-//            mDay_date5.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 4
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date5.text}"
-//        }
-//        mDay6.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay6.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day6.setTextColor(resources.getColor(R.color.white))
-//            mDay_date6.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 5
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date6.text}"
-//        }
-//        mDay7.setOnClickListener {
-//
-//            // change background of selected layout to tinted background and change all other layouts to non-tinted background
-//            mDay7.background =
-//                resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
-//            mDay_day7.setTextColor(resources.getColor(R.color.white))
-//            mDay_date7.setTextColor(resources.getColor(R.color.white))
-//            selectedDateIndex = 6
-//            selectedDate = "${LocalDate.now().year}-${sdf.format(calendar.time.month+1)}-${mDay_date7.text}"
-//        }
-
         /* TASK TIME SELECTION */
         /* TASK START TIME SELECTION */
-        lateinit var selectedStartTime:String
         mAssign_start_time_BTN.setOnClickListener {
             val onTimeSetListener =
                 OnTimeSetListener { _: TimePicker?, selected_start_hour: Int, selected_startMinute: Int ->
@@ -378,17 +294,10 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        startActivity(Intent(this,MainActivity::class.java))
-        finish()
-    }
-
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat", "UseCompatLoadingForDrawables")
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun initWeekLayout()
-    {
+    private fun initWeekLayout() {
         val color = Color.parseColor("#20264246")
         val sdf = SimpleDateFormat("dd", Locale.getDefault())
         val calender: Calendar = Calendar.getInstance()
@@ -427,7 +336,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 //        Toast.makeText(this, "$todayString", Toast.LENGTH_SHORT).show()
 
 
-        Log.d("WeekDatesToday", "$todayString")
+        Log.d("WeekDatesToday", todayString)
         for (i in weekListDates) {
             if (todayString == i) {
                 isPrevDay = false;
@@ -1150,18 +1059,18 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         finish()
     }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        startActivity(Intent(this,MainActivity::class.java))
-//        finish()
-//    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this,Schedule::class.java))
+        finish()
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addTaskAndSchedule(view: View) {
         val title=binding.TitleET
         val description=binding.DescriptionET
-        var priorityval=binding.AddPriorityTV
+        val priorityval=binding.AddPriorityTV
         val selctcategory=binding.SelectCategoryTV
         val starttimebtnval=binding.AssignStartTimeBTN
         val endtimebtnval=binding.AssignEndTimeBTN
@@ -1181,7 +1090,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             Toast.makeText(this,"select task category",Toast.LENGTH_SHORT).show()
         }
         if(category!="Category-3") {
-            Toast.makeText(this, "test3", Toast.LENGTH_SHORT).show()
             if (starttimebtnval.text == "00:00") {
                 Toast.makeText(this, "select start time", Toast.LENGTH_SHORT).show()
             }
@@ -1197,9 +1105,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     ?.setOnClickListener {
                         mShowSameTaskError.dismiss()
                     }
-                Toast.makeText(this, "test1", Toast.LENGTH_SHORT).show()
                 if (priorityval.text != "+" && selctcategory.text != "Select Category of Task") {
-                    Toast.makeText(this, "test2", Toast.LENGTH_SHORT).show()
                     insertDataToDatabase()
                 }
             }
@@ -1214,9 +1120,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)?.setOnClickListener{
                 mShowSameTaskError.dismiss()
             }
-            Toast.makeText(this,"test1",Toast.LENGTH_SHORT).show()
             if(priorityval.text!="+" && selctcategory.text!="Select Category of Task") {
-                Toast.makeText(this,"test2",Toast.LENGTH_SHORT).show()
                 insertDataToDatabase()
             }
         }
@@ -1225,8 +1129,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n", "UseCompatLoadingForDrawable")
     @RequiresApi(Build.VERSION_CODES.O)
-    fun insertDataToDatabase()
-    {
+    fun insertDataToDatabase() {
         val timeFormatter = SimpleDateFormat("HH:mm")
         val title=binding.TitleET.text.toString()
         val description=binding.DescriptionET.text.toString()

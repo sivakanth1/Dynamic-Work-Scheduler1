@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.mikephil.charting.charts.PieChart
@@ -54,15 +55,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mExpandable_pane: ConstraintLayout
     lateinit var mExpandable_pane_LL: LinearLayout
     lateinit var mLower_pane: ConstraintLayout
-    lateinit var mExpand_upNext_IV: ImageView
     lateinit var chart_colors: IntArray
     lateinit var pieChart: PieChart
-    lateinit var mCategoryRV: RecyclerView
-    lateinit var linearLayoutManager: LinearLayoutManager
-    lateinit var mTaskDate: TextView
-    lateinit var mWeek_day1: TextView
-    lateinit var mSeeFullReport: TextView
-    lateinit var mUp_next_external_TV: TextView
     lateinit var mIn_progress_Tv: TextView
     lateinit var mProgress_Tv: TextView
     lateinit var mAssignTitleTv: TextView
@@ -95,6 +89,7 @@ class MainActivity : AppCompatActivity() {
     var i=0
     private lateinit var mHandler: Handler
     private lateinit var mRunnable: Runnable
+    var statusString="No In Progress Tasks"
 
     private lateinit var binding:ActivityMainBinding
     @RequiresApi(Build.VERSION_CODES.O)
@@ -107,8 +102,8 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         if(auth.currentUser==null){
-            //Toast.makeText(this, auth.currentUser!!.uid,Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this,CreateProfile::class.java))
+            startActivity(Intent(this,SignIn::class.java))
+            finish()
         }
         else{
             val greetingsTv = binding.GreetingsUserTV
@@ -183,57 +178,51 @@ class MainActivity : AppCompatActivity() {
         //Database
 
         mIn_progress_Tv = binding.inProgressTv
-        //1.mIn_progress_Tv = findViewById(R.id.in_progress_Tv)
         mInProgress_Layout = binding.InProgressLayout
-       //2. mInProgress_Layout = findViewById(R.id.InProgress_Layout)
-        //        mUp_next_external_TV = findViewById(R.id.up_next_external_TV);
         mExpandable_pane = binding.lowerPane
-        //3.mExpandable_pane = findViewById(R.id.lower_pane)
         pieChart = binding.pieChart
-        //4.pieChart = findViewById(R.id.pie_chart)
         mExpandable_pane_LL = binding.ExpandableLayout
         mLower_pane = binding.lowerPane
-        //        mExpand_upNext_IV = findViewById(R.id.expand_upNext_IV);
 
         MyApplication.createTasksOfWeekList()
         MyApplication.createUserWorkingList("09:00","17:00")
 
-        if(mAssignTitleTv.text == "No In Progress Tasks"){
-            mInProgress_Layout.isEnabled=false
-            mIn_progress_Tv.isEnabled = false
-            mInProgress_Layout.isClickable = false
-            mIn_progress_Tv.isClickable = false
-        }else{
         mInProgress_Layout.setOnClickListener {
-            task_activity_update_dialog = Dialog(this)
-            task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
-            task_activity_update_dialog.window!!.setLayout(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            task_activity_update_dialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
-            task_activity_update_dialog.show()
-            mUpdate_dialog_YES_BTN =
-                task_activity_update_dialog.findViewById(R.id.Update_dialog_YES_BTN)
-            mUpdate_dialog_NO_BTN =
-                task_activity_update_dialog.findViewById(R.id.Update_dialog_NO_BTN)
-            mUpdate_dialog_YES_BTN.setOnClickListener {
-                // val updateData = TaskData()
-           //     Toast.makeText(this, "${taskIds.size}", Toast.LENGTH_SHORT).show()
-                mTaskViewModel.updateTask(TaskData(
-                    taskId = taskIds[i], title = titles[i], priority = priorities[i],
-                    category = category[i], description = descriptions[i],startTime=startTimes[i],
-                    endTime = endTimes[i], startDate = startDates[i], deadlineDate = deadLineDates[i],
-                    duration = durations[i], weekNumber = weekNumbers[i], status = "finished"
-                ))
-                getDataFromDataBase()
-                finishedTaskCount+=1
-                mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
-                println("titles size-------->${titles.size}")
-                pieChart.centerText = if(titles.size>0) {"${((finishedTaskCount.toDouble()/titles.size)*100).toInt()}%"} else {"0"}
-                task_activity_update_dialog.dismiss()
-            }
-            mUpdate_dialog_NO_BTN.setOnClickListener { task_activity_update_dialog.dismiss() }
+                task_activity_update_dialog = Dialog(this)
+                task_activity_update_dialog.setContentView(R.layout.task_activity_dialog)
+                task_activity_update_dialog.window!!.setLayout(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                task_activity_update_dialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.all_rounded_corners_big))
+                task_activity_update_dialog.show()
+                mUpdate_dialog_YES_BTN =
+                    task_activity_update_dialog.findViewById(R.id.Update_dialog_YES_BTN)
+                mUpdate_dialog_NO_BTN =
+                    task_activity_update_dialog.findViewById(R.id.Update_dialog_NO_BTN)
+                mUpdate_dialog_YES_BTN.setOnClickListener {
+                    // val updateData = TaskData()
+                    //     Toast.makeText(this, "${taskIds.size}", Toast.LENGTH_SHORT).show()
+                    mTaskViewModel.updateTask(
+                        TaskData(
+                            taskId = taskIds[i],
+                            title = titles[i],
+                            priority = priorities[i],
+                            category = category[i],
+                            description = descriptions[i],
+                            startTime = startTimes[i],
+                            endTime = endTimes[i],
+                            startDate = startDates[i],
+                            deadlineDate = deadLineDates[i],
+                            duration = durations[i],
+                            weekNumber = weekNumbers[i],
+                            status = "finished"
+                        )
+                    )
+                    getDataFromDataBase()
+                    task_activity_update_dialog.dismiss()
+                }
+                mUpdate_dialog_NO_BTN.setOnClickListener { task_activity_update_dialog.dismiss() }
         }
         mIn_progress_Tv.setOnClickListener {
             task_activity_cancel_dialog = Dialog(this)
@@ -257,19 +246,13 @@ class MainActivity : AppCompatActivity() {
                     duration = durations[i], weekNumber = weekNumbers[i], status = "suspended"
                 ))
                 getDataFromDataBase()
-                mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
-                pieChart.centerText = if(titles.size>0) {"${((finishedTaskCount.toDouble()/titles.size)*100).toInt()}%"} else {"0"}
                 task_activity_cancel_dialog.dismiss()
             }
         }
-        }
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData(task:MutableList<TaskData>){
-      //  this.weekListData.clear()
         this.weekListFromDB=task
         MyApplication.completeData = weekListFromDB
         MyApplication.splitAccordingToWeek()
@@ -294,7 +277,6 @@ class MainActivity : AppCompatActivity() {
             override fun onValueSelected(e: Entry, h: Highlight) {}
             override fun onNothingSelected() {}
         })
-//        startActivity(Intent(this,MainActivity::class.java))
         mRunnable = Runnable {
             kotlin.run {
                 this.mHandler.postDelayed(mRunnable,5000)
@@ -320,6 +302,147 @@ class MainActivity : AppCompatActivity() {
         pieChart.legend.isEnabled = false
         pieChart.invalidate()
     }
+
+    @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")
+    fun setInProgressWidget(){
+        i = preferences.getString("i",null)?.toInt() ?: 0
+        if(preferences.getInt("day",-1)== Calendar.getInstance().time.day - 1 ){
+            i=0
+        }
+       // i=0
+//        println("i value----------->$i")
+//        println("day value---------->${preferences.getInt("day",-1)}")
+//        println("today day value------->${Calendar.getInstance().time.day}")
+        val timeFormatter = SimpleDateFormat("HH:mm")
+        val currentTimeArray = timeFormatter.format(Calendar.getInstance().time).filter { it.isDigit() }.chunked(2)
+        val currentTimeInt = (currentTimeArray[0].toInt()*60)+currentTimeArray[1].toInt()
+        mAssignTitleTv.text = statusString
+        mAssignTitleTv.gravity = Gravity.CENTER
+        mAssignDescriptionTv.text = ""
+        mAssignDeadLineTv.visibility = View.GONE
+        mAssignUpNextTitleTv.text = "No Upcoming Tasks"
+        mAssignUpNextDescriptionTv.text = ""
+        mAssignUpNextPriorityTv.text = "#0"
+        if(titles.size>0){
+            val startTimeArrayOfI = startTimes[i].filter { it.isDigit() }.chunked(2)
+            val endTimeArrayOfI = endTimes[i].filter { it.isDigit() }.chunked(2)
+            val startTimeOfIValue = (startTimeArrayOfI[0].toInt()*60)+startTimeArrayOfI[1].toInt()
+            val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
+            mAssignDeadLineTv.visibility = View.VISIBLE
+            mInProgress_Layout.visibility = View.GONE
+            mIn_progress_Tv.visibility = View.GONE
+            if(currentTimeInt<startTimeOfIValue){
+//                if(i-1>=0){
+//                    mAssignTitleTv.text = titles[i-1]
+//                    mAssignDeadLineTv.text = endTimes[i-1]
+//                    mAssignDescriptionTv.text = descriptions[i-1]
+//                }
+                mInProgress_Layout.visibility = View.GONE
+                mIn_progress_Tv.visibility = View.GONE
+                mAssignUpNextTitleTv.text = titles[i]
+                mAssignUpNextDescriptionTv.text = descriptions[i]
+                mAssignUpNextPriorityTv.text = "#${priorities[i]}"
+            }else if(currentTimeInt >= startTimeOfIValue && currentTimeInt <= endTimeOfIValue){
+                mInProgress_Layout.visibility = View.VISIBLE
+                mIn_progress_Tv.visibility =View.VISIBLE
+                mAssignTitleTv.text = titles[i]
+                mAssignDeadLineTv.text = endTimes[i]
+                mAssignDescriptionTv.text = descriptions[i]
+                if(i+1>= titles.size){
+                    println("No upcoming Tasks")
+                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
+                    mAssignUpNextDescriptionTv.text = ""
+                    mAssignUpNextPriorityTv.text = "#0"
+                }else{
+                    println("upcoming task is ${titles[i+1]}")
+                    mAssignUpNextTitleTv.text = titles[i+1]
+                    mAssignUpNextDescriptionTv.text = descriptions[i+1]
+                    mAssignUpNextPriorityTv.text = "#${priorities[i+1]}"
+                }
+            }else if(currentTimeInt > endTimeOfIValue){
+                if(i+1 >= titles.size){
+                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
+                    mAssignUpNextDescriptionTv.text = ""
+                    mAssignUpNextPriorityTv.text = "#0"
+                }else{
+                    i+=1
+                    preferences.edit().putString("i","$i").apply()
+//                    preferences.edit().putString("day","${Calendar.getInstance().time.day}")
+                    preferences.edit().putInt("day",Calendar.getInstance().time.day)
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTodayTasks(){
+        weekListData = MyApplication.getDayTasksObject()
+        titles.clear()
+        descriptions.clear()
+        startTimes.clear()
+        startDates.clear()
+        endTimes.clear()
+        priorities.clear()
+        category.clear()
+        status.clear()
+        durations.clear()
+        weekNumbers.clear()
+        deadLineDates.clear()
+        taskIds.clear()
+        finishedTaskCount = 0
+        suspendedTaskCount = 0
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
+        if(weekListData[Calendar.getInstance().time.day].isNotEmpty()) {
+            weekListData[Calendar.getInstance().time.day].forEach {
+                titles.add(it.title.toString())
+                descriptions.add(it.description.toString())
+                startTimes.add(it.startTime.toString())
+                endTimes.add(it.endTime.toString())
+                priorities.add(it.priority.toString().toInt())
+                category.add(it.category.toString())
+                status.add(it.status.toString())
+                durations.add(it.duration.toString().toInt())
+                weekNumbers.add(it.weekNumber.toString().toInt())
+                startDates.add(dateFormatter.format(it.startDate))
+                deadLineDates.add(dateFormatter.format(it.deadlineDate))
+                taskIds.add(it.taskID.toString())
+                when (it.status) {
+                    "finished" -> finishedTaskCount += 1
+                    "suspended" -> suspendedTaskCount += 1
+                }
+            }
+        }
+        setInProgressWidget()
+        setUpPieChart()
+        initPieChart()
+        mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
+        pieChart.centerText = if(titles.size>0) {"${((finishedTaskCount.toDouble()/titles.size)*100).toInt()}%"} else {"0"}
+        if(titles.size==0){
+            mIn_progress_Tv.visibility = View.GONE
+            mInProgress_Layout.visibility = View.GONE
+        }
+        println("titles----->$titles")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onStart() {
+        super.onStart()
+        getDataFromDataBase()
+        setInProgressWidget()
+        initPieChart()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDataFromDataBase(){
+        this.weekListFromDB.clear()
+        MyApplication.completeData.clear()
+        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this
+        ) { task ->
+            setData(task)
+        }
+    }
+
     fun expand(view: View?) {
         val visibility =
             if (mExpandable_pane_LL.visibility == View.GONE) View.VISIBLE else View.GONE
@@ -344,154 +467,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCreateTaskScreen(view: View) {
-        startActivity(Intent(this,CreateTask::class.java))
+        startActivity(Intent(baseContext,CreateTask::class.java))
         finish()
     }
 
     fun openScheduleScreen(view: View) {
-//        startActivity(Intent(this,Schedule::class.java))
-        Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
-    }
-
-    @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")
-    fun setInProgressWidget(){
-        i = preferences.getString("i",null)?.toInt() ?: 0
-        if(preferences.getString("day",null)== { Calendar.getInstance().time.day - 1 }.toString()){
-            i=0
-        }
-        val timeFormatter = SimpleDateFormat("HH:mm")
-        val currentTimeArray = timeFormatter.format(Calendar.getInstance().time).filter { it.isDigit() }.chunked(2)
-        val currentTimeInt = (currentTimeArray[0].toInt()*60)+currentTimeArray[1].toInt()
-        mAssignTitleTv.text = "No In Progress Tasks"
-        mAssignTitleTv.gravity = Gravity.CENTER
-        mAssignDescriptionTv.text = ""
-        mAssignDeadLineTv.visibility = View.GONE
-        mAssignUpNextTitleTv.text = "No Upcoming Tasks"
-        mAssignUpNextDescriptionTv.text = ""
-        mAssignUpNextPriorityTv.text = "#0"
-        if(mAssignTitleTv.text == "No In Progress Tasks"){
-            mInProgress_Layout.isEnabled=false
-            mIn_progress_Tv.isEnabled = false
-            mInProgress_Layout.isClickable = false
-            mIn_progress_Tv.isClickable = false
-        }
-        if(titles.size>0){
-            val startTimeArrayOfI = startTimes[i].filter { it.isDigit() }.chunked(2)
-            val endTimeArrayOfI = endTimes[i].filter { it.isDigit() }.chunked(2)
-            val startTimeOfIValue = (startTimeArrayOfI[0].toInt()*60)+startTimeArrayOfI[1].toInt()
-            val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
-            mAssignDeadLineTv.visibility = View.VISIBLE
-            if(currentTimeInt<startTimeOfIValue){
-                if(i-1>=0){
-                    mAssignTitleTv.text = titles[i-1]
-                    mAssignDeadLineTv.text = endTimes[i-1]
-                    mAssignDescriptionTv.text = descriptions[i-1]
-                }
-                mAssignUpNextTitleTv.text = titles[i]
-                mAssignUpNextDescriptionTv.text = descriptions[i]
-                mAssignUpNextPriorityTv.text = "#${priorities[i]}"
-            }else if(currentTimeInt >= startTimeOfIValue && currentTimeInt <= endTimeOfIValue){
-                mAssignTitleTv.text = titles[i]
-                mAssignDeadLineTv.text = endTimes[i]
-                mAssignDescriptionTv.text = descriptions[i]
-                if(i+1>= titles.size){
-                    println("No upcoming Tasks")
-                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
-                    mAssignUpNextDescriptionTv.text = ""
-                    mAssignUpNextPriorityTv.text = "#0"
-                }else{
-                    println("upcoming task is ${titles[i+1]}")
-                    mAssignUpNextTitleTv.text = titles[i+1]
-                    mAssignUpNextDescriptionTv.text = descriptions[i+1]
-                    mAssignUpNextPriorityTv.text = "#${priorities[i+1]}"
-                }
-            }else if(currentTimeInt > endTimeOfIValue){
-                if(i+1 >= titles.size){
-                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
-                    mAssignUpNextDescriptionTv.text = ""
-                    mAssignUpNextPriorityTv.text = "#0"
-                }else{
-                    i+=1
-                    preferences.edit().putString("i","$i").apply()
-                    preferences.edit().putString("day","${Calendar.getInstance().time.day}")
-                }
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n", "SimpleDateFormat")
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getTodayTasks(){
-        weekListData = MyApplication.getDayTasksObject()
-        titles.clear()
-        descriptions.clear()
-        startTimes.clear()
-        startDates.clear()
-        endTimes.clear()
-        priorities.clear()
-        category.clear()
-        status.clear()
-        durations.clear()
-        weekNumbers.clear()
-        deadLineDates.clear()
-        taskIds.clear()
-//        finishedTaskCount = 0
-//        suspendedTaskCount = 0
-        val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
-        if(weekListData[Calendar.getInstance().time.day].isNotEmpty()) {
-            weekListData[Calendar.getInstance().time.day].forEach {
-                titles.add(it.title.toString())
-                descriptions.add(it.description.toString())
-                startTimes.add(it.startTime.toString())
-                endTimes.add(it.endTime.toString())
-                priorities.add(it.priority.toString().toInt())
-                category.add(it.category.toString())
-                status.add(it.status.toString())
-                durations.add(it.duration.toString().toInt())
-                weekNumbers.add(it.weekNumber.toString().toInt())
-                startDates.add(dateFormatter.format(it.startDate))
-                deadLineDates.add(dateFormatter.format(it.deadlineDate))
-                taskIds.add(it.taskID.toString())
-//                when (it.status) {
-//                    "finished" -> finishedTaskCount += 1
-//                    "suspended" -> suspendedTaskCount += 1
-//                }
-            }
-        }
-        setInProgressWidget()
-        setUpPieChart()
-        initPieChart()
-        mProgress_Tv.text = "$finishedTaskCount/${titles.size}"
-      //  getTasks()
-        if(titles.size==0){
-            mIn_progress_Tv.visibility = View.GONE
-            mInProgress_Layout.visibility = View.GONE
-        }
-    }
-
-    fun getTasks(){
-        weekListData = MyApplication.getDayTasksObject()
-        println("Week Tasks-------->$weekListData")
-        println("Todays tasks ------->${Calendar.getInstance().time.day}")
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onStart() {
-        super.onStart()
-        getDataFromDataBase()
-        setInProgressWidget()
-        initPieChart()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getDataFromDataBase(){
-        this.weekListFromDB.clear()
-        MyApplication.completeData.clear()
-        dataDao.getPresentWeekData(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)-1).observe(this
-        ) { task ->
-            setData(task)
-        }
+        startActivity(Intent(this,Schedule::class.java))
+        //  Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
     }
 
 }

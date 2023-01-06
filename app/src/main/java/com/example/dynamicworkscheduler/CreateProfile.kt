@@ -60,18 +60,10 @@ class CreateProfile : AppCompatActivity() {
             signUp()
         }
         mWork_starting_hour_Tv.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Start Time",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "Start Time", Toast.LENGTH_SHORT).show()
         }
         mWork_ending_hour_Tv.setOnClickListener {
-            Toast.makeText(
-                this,
-                "End Time",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "End Time", Toast.LENGTH_SHORT).show()
         }
         mAdd_Breaks_TV.setOnClickListener {
             Toast.makeText(this, "Break Time", Toast.LENGTH_SHORT).show()
@@ -96,27 +88,16 @@ class CreateProfile : AppCompatActivity() {
             val breakHeading = "Break #" + ++breaks_cnt + " "
             mBreakHeading.text = breakHeading
             mBreakStartingHour.setOnClickListener {
-                Toast.makeText(
-                    this,
-                    breakHeading + "Start Clicked",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, breakHeading + "Start Clicked", Toast.LENGTH_SHORT).show()
             }
             mBreakEndingHour.setOnClickListener {
-                Toast.makeText(
-                    this,
-                    breakHeading + "End Clicked",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, breakHeading + "End Clicked", Toast.LENGTH_SHORT).show()
             }
             mDeleteBreakTimeIv.setOnClickListener {
                 mRoot_LL.removeView(breakView)
                 --breaks_cnt
             }
 
-//            if(breakView.getParent() != null) {
-//                ((ViewGroup)breakView.getParent()).removeView(breakView); // <- fix
-//            }
             mRoot_LL.addView(breakView)
         }
         mGender_BTN.setOnClickListener {
@@ -133,14 +114,6 @@ class CreateProfile : AppCompatActivity() {
             }
         }
     }
-//    public override fun onStart() {
-//        super.onStart()
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        val currentUser = auth.currentUser
-//        if(currentUser != null){
-//
-//        }
-//    }
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -166,48 +139,26 @@ class CreateProfile : AppCompatActivity() {
             age.error= "Enter Your Age"
         }
         if(password.text.toString().length>=8 && isValidPassword(password.text.toString())){
-//            Toast.makeText(this, name.text.toString(),Toast.LENGTH_SHORT).show()
             auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
                         val profileUpdates = userProfileChangeRequest {
                             displayName = name.text.toString()
                             //     photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
                         }
-                        user!!.updateProfile(profileUpdates).addOnCompleteListener {
-                        //    Toast.makeText(this,"${it.result}",Toast.LENGTH_SHORT).show()
-                            if(it.isSuccessful){
-                                Toast.makeText(this,user.displayName,Toast.LENGTH_SHORT).show()
-                            }
-                        }
-//                        user.sendEmailVerification().addOnCompleteListener {
-//                            if (it.isSuccessful) {
-//                                Toast.makeText(
-//                                    this,
-//                                    "Email sent, Please verify.",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            }
-//                        }
-//                        if (user.isEmailVerified) {
-//                            startActivity(Intent(this, MainActivity::class.java))
-//                        }
+                        user!!.updateProfile(profileUpdates)
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        // Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext, "${task.result}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        // updateUI(null)
+                    }
+                }
+                .addOnFailureListener {
+                    if (it.message == "The email address is already in use by another account."){
+                        Toast.makeText(this,"User already exists",Toast.LENGTH_SHORT).show()
                     }
                 }
         } else {
-            Toast.makeText(this,"Password should contain",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Password length should contain minimum 8",Toast.LENGTH_SHORT).show()
         }
     }
     private fun isValidPassword(s: String?): Boolean {
