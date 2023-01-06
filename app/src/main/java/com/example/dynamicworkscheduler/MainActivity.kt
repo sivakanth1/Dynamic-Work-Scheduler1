@@ -333,7 +333,7 @@ class MainActivity : AppCompatActivity() {
             val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
 
             mAssignDeadLineTv.visibility = View.VISIBLE
-            mInProgress_Layout.visibility = View.GONE
+            mInProgress_Layout.visibility = View.VISIBLE
 
             mIn_progress_Tv.visibility = View.GONE
             if(currentTimeInt<startTimeOfIValue){
@@ -351,6 +351,8 @@ class MainActivity : AppCompatActivity() {
                 mAssignUpNextDescriptionTv.text = descriptions[i]
                 mAssignUpNextPriorityTv.text = "#${priorities[i]}"
             }else if(status[i] == "pending" && currentTimeInt >= startTimeOfIValue && currentTimeInt <= endTimeOfIValue){
+
+                println("when current time >= statTime $i")
                 mInProgress_Layout.visibility = View.VISIBLE
                 mIn_progress_Tv.visibility =View.VISIBLE
 

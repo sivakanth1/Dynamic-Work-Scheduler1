@@ -321,7 +321,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             weekListDates.add(startDate)
         }
 
-//        Toast.makeText(this, "$startDate", Toast.LENGTH_SHORT).show()
 
         idx = 0
         repeat(7)
@@ -1042,7 +1041,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     }
 
 
-
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Toast.makeText(this,parent?.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
         when(parent?.getItemAtPosition(position).toString()){
@@ -1358,5 +1356,3 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 }
-
-
