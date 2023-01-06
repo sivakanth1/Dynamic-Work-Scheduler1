@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var chart_colors: IntArray
     lateinit var pieChart: PieChart
     lateinit var mIn_progress_Tv: TextView
+    lateinit var mNoTasksScheduled_TV: TextView
     lateinit var mProgress_Tv: TextView
     lateinit var mAssignTitleTv: TextView
     lateinit var mAssignDescriptionTv: TextView
@@ -161,6 +162,8 @@ class MainActivity : AppCompatActivity() {
         mAssignUpNextTitleTv = binding.AssignUpNextTitleTv
         mAssignUpNextPriorityTv = binding.AssignUpNextPriorityTV
         mAssignUpNextDescriptionTv = binding.AssignUpNextDescriptionTv
+
+        mNoTasksScheduled_TV = binding.noTasksScheduledTV
         //Initialization
 
         //Database
@@ -328,8 +331,10 @@ class MainActivity : AppCompatActivity() {
             val endTimeArrayOfI = endTimes[i].filter { it.isDigit() }.chunked(2)
             val startTimeOfIValue = (startTimeArrayOfI[0].toInt()*60)+startTimeArrayOfI[1].toInt()
             val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
+
             mAssignDeadLineTv.visibility = View.VISIBLE
             mInProgress_Layout.visibility = View.GONE
+
             mIn_progress_Tv.visibility = View.GONE
             if(currentTimeInt<startTimeOfIValue){
 //                if(i-1>=0){
@@ -339,15 +344,25 @@ class MainActivity : AppCompatActivity() {
 //                }
                 mInProgress_Layout.visibility = View.GONE
                 mIn_progress_Tv.visibility = View.GONE
+
+                mNoTasksScheduled_TV.visibility = View.VISIBLE
+
                 mAssignUpNextTitleTv.text = titles[i]
                 mAssignUpNextDescriptionTv.text = descriptions[i]
                 mAssignUpNextPriorityTv.text = "#${priorities[i]}"
-            }else if(currentTimeInt >= startTimeOfIValue && currentTimeInt <= endTimeOfIValue){
+            }else if(status[i] == "pending" && currentTimeInt >= startTimeOfIValue && currentTimeInt <= endTimeOfIValue){
                 mInProgress_Layout.visibility = View.VISIBLE
                 mIn_progress_Tv.visibility =View.VISIBLE
+
+                mNoTasksScheduled_TV.visibility = View.GONE
+
                 mAssignTitleTv.text = titles[i]
                 mAssignDeadLineTv.text = endTimes[i]
                 mAssignDescriptionTv.text = descriptions[i]
+
+            }
+            else if(status[i] == "finished" || status[i] == "pending")
+            {
                 if(i+1>= titles.size){
                     println("No upcoming Tasks")
                     mAssignUpNextTitleTv.text = "No Upcoming Tasks"
@@ -359,8 +374,12 @@ class MainActivity : AppCompatActivity() {
                     mAssignUpNextDescriptionTv.text = descriptions[i+1]
                     mAssignUpNextPriorityTv.text = "#${priorities[i+1]}"
                 }
-            }else if(currentTimeInt > endTimeOfIValue){
+            }
+            else if(currentTimeInt > endTimeOfIValue){
                 if(i+1 >= titles.size){
+
+                    mNoTasksScheduled_TV.visibility = View.VISIBLE
+
                     mAssignUpNextTitleTv.text = "No Upcoming Tasks"
                     mAssignUpNextDescriptionTv.text = ""
                     mAssignUpNextPriorityTv.text = "#0"
@@ -372,6 +391,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        println("i value---------> $i")
     }
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
@@ -468,7 +488,7 @@ class MainActivity : AppCompatActivity() {
 
     fun openCreateTaskScreen(view: View) {
         startActivity(Intent(baseContext,CreateTask::class.java))
-        finish()
+//        finish()
     }
 
     fun openScheduleScreen(view: View) {

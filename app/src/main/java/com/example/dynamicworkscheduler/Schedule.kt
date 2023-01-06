@@ -17,7 +17,7 @@ class Schedule : AppCompatActivity() {
     private lateinit var binding: ActivityScheduleBinding
     var mAdd_task_BTN: Button? = null
     var Active_Item = 0
-    var task_item_list: ArrayList<TaskFormat>? = null
+    var task_item_list = arrayListOf<TaskFormat>()
     var mTaskActivity_LV: ListView? = null
     private lateinit var mDay1: LinearLayout
     private lateinit var mDay2: LinearLayout
@@ -42,7 +42,8 @@ class Schedule : AppCompatActivity() {
     private lateinit var mDay_date7: TextView
     private lateinit var monthDisplay:TextView
     var weekListDates = mutableListOf<String>()
-    private var selecteddateindex:Int=0
+    private var selecteddateindex = getCurDate();
+    private var dateSelected = false;
 
     lateinit var weekListData:MutableList<MutableList<Task>>
     val titles0 = mutableListOf<String>()
@@ -135,7 +136,6 @@ class Schedule : AppCompatActivity() {
         Log.d("date1=", startDate)
         calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek + 1)
 
-//        keertana.mogiligidda
 
         var idx = 1
         weekListDates.add(startDate)
@@ -224,7 +224,9 @@ class Schedule : AppCompatActivity() {
         mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
         mDay_day7.setTextColor(resources.getColor(R.color.black))
         mDay_date7.setTextColor(resources.getColor(R.color.black))
-        selecteddateindex = 1
+        selecteddateindex = 0
+        dateSelected = true
+        initUserTaskList()
     }
 
         mDay2.setOnClickListener { v: View? ->
@@ -254,7 +256,9 @@ class Schedule : AppCompatActivity() {
             mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.black))
             mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 2
+            selecteddateindex = 1
+            dateSelected = true
+            initUserTaskList()
         }
 
         mDay3.setOnClickListener { v: View? ->
@@ -284,7 +288,9 @@ class Schedule : AppCompatActivity() {
             mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.black))
             mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 3
+            selecteddateindex = 2
+            dateSelected = true
+            initUserTaskList()
         }
 
         mDay4.setOnClickListener { v: View? ->
@@ -314,7 +320,9 @@ class Schedule : AppCompatActivity() {
             mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.black))
             mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 4
+            selecteddateindex = 3
+            dateSelected = true
+            initUserTaskList()
         }
 
         mDay5.setOnClickListener { v: View? ->
@@ -344,7 +352,9 @@ class Schedule : AppCompatActivity() {
             mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.black))
             mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 5
+            selecteddateindex = 4
+            dateSelected = true
+            initUserTaskList()
         }
 
         mDay6.setOnClickListener { v: View? ->
@@ -374,9 +384,10 @@ class Schedule : AppCompatActivity() {
             mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day7.setTextColor(resources.getColor(R.color.black))
             mDay_date7.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 6
+            selecteddateindex = 5
+            dateSelected = true
+            initUserTaskList()
         }
-
 
         mDay7.setOnClickListener { v: View? ->
 
@@ -405,11 +416,12 @@ class Schedule : AppCompatActivity() {
             mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
             mDay_day1.setTextColor(resources.getColor(R.color.black))
             mDay_date1.setTextColor(resources.getColor(R.color.black))
-            selecteddateindex = 7
+            selecteddateindex = 6
+            dateSelected = true
+            initUserTaskList()
         }
 
        // Toast.makeText(this, selecteddateindex.toString(), Toast.LENGTH_SHORT).show()
-
 
     }
 
@@ -417,28 +429,44 @@ class Schedule : AppCompatActivity() {
     //Create a week Array//
 
     private fun initUserTaskList() {
+
+        task_item_list.clear()
+        // weekListData[0][i]
         weekListData=MyApplication.getDayTasksObject()
         val non_active_state: Int = R.drawable.ic_circle
         val active_state_IV: Int = R.drawable.ic_radio_checked
         val active_state_bg: Int = R.drawable.active_task_total_task_bg
         assignValuesToList()
         //titles.clear()
-        task_item_list = ArrayList()
-        for (i in titles5.indices) {
-            if (Active_Item == i + 1) task_item_list!!.add(
+
+
+        val tempList = weekListData[selecteddateindex]
+
+
+        for (i in 0 until tempList.size) {
+
+            val startTime = getChunkValues(tempList[i].startTime.toString())
+            val endTime = getChunkValues(tempList[i].endTime.toString())
+            val duration = ((endTime[0].toInt()-startTime[0].toInt())*60+(endTime[1].toInt()-startTime[1].toInt()))
+            if (Active_Item == i  && (selecteddateindex == getCurDate())) task_item_list.add(
                 TaskFormat(
-                    titles5[i],
-                    des5[i], durations5[i], active_state_bg, active_state_IV
+                    tempList[i].title.toString(),
+                    tempList[i].description.toString(), " $duration\nmins", active_state_bg, active_state_IV
                 )
-            ) else task_item_list!!.add(
+            ) else task_item_list.add(
                 TaskFormat(
-                    titles5[i], des5[i], durations5[i], bgColor[i%3], non_active_state
+                    tempList[i].title.toString(), tempList[i].description.toString(), " $duration\nmins", bgColor[i%3], non_active_state
                 )
             )
         }
+
         val totalTaskAdapter = TotalTaskAdapter(this@Schedule, task_item_list)
         mTaskActivity_LV!!.adapter = totalTaskAdapter
         mTaskActivity_LV!!.isClickable = true
+    }
+
+    private fun getCurDate(): Int {
+        return Calendar.getInstance().time.day;
     }
 
     fun assignValuesToList(){

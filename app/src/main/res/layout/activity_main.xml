@@ -256,6 +256,21 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/noTasksScheduled_TV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/today_task_Pane"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="No tasks are scheduled"
+        android:textColor="@color/compli_royal_blue"
+        android:textSize="21sp"
+        android:gravity="center"/>
+
+    <TextView
         android:id="@+id/in_progress_Tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
