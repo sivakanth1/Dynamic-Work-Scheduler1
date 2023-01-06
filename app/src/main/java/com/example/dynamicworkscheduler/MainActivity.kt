@@ -143,14 +143,18 @@ class MainActivity : AppCompatActivity() {
         //Database
 
         //Handler
-
-        this.mHandler = Handler()
-        mRunnable = Runnable {
+        mHandler = Handler()
+        mRunnable= Runnable {
             kotlin.run {
-                this.mHandler.postDelayed(mRunnable,5000)
+//           finish();
+//           overridePendingTransition(0, 0);
+//           startActivity(intent);
+//           overridePendingTransition(0, 0);
+                setInProgressWidget()
+              //  getDataFromDataBase()
+                mHandler.postDelayed(mRunnable,60000)
             }
         }
-        this.mHandler.postDelayed(mRunnable,5000)
 
         //Handler
 
@@ -188,7 +192,8 @@ class MainActivity : AppCompatActivity() {
         mLower_pane = binding.lowerPane
 
         MyApplication.createTasksOfWeekList()
-        MyApplication.createUserWorkingList("09:00","17:00")
+     //   MyApplication.createUserWorkingList("09:00","17:00")
+        MyApplication.createUserWorkingList("09:00","23:00")
 
         mInProgress_Layout.setOnClickListener {
                 task_activity_update_dialog = Dialog(this)
@@ -224,6 +229,10 @@ class MainActivity : AppCompatActivity() {
                     )
                     getDataFromDataBase()
                     task_activity_update_dialog.dismiss()
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 }
                 mUpdate_dialog_NO_BTN.setOnClickListener { task_activity_update_dialog.dismiss() }
         }
@@ -250,6 +259,10 @@ class MainActivity : AppCompatActivity() {
                 ))
                 getDataFromDataBase()
                 task_activity_cancel_dialog.dismiss()
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
             }
         }
     }
@@ -280,11 +293,6 @@ class MainActivity : AppCompatActivity() {
             override fun onValueSelected(e: Entry, h: Highlight) {}
             override fun onNothingSelected() {}
         })
-        mRunnable = Runnable {
-            kotlin.run {
-                this.mHandler.postDelayed(mRunnable,5000)
-            }
-        }
     }
 
     private fun setUpPieChart() {
@@ -308,11 +316,12 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")
     fun setInProgressWidget(){
+        mHandler.postDelayed(mRunnable,5000)
         i = preferences.getString("i",null)?.toInt() ?: 0
-        if(preferences.getInt("day",-1)== Calendar.getInstance().time.day - 1 ){
+        if(preferences.getInt("day",-1)== Calendar.getInstance().time.day - 1){
             i=0
         }
-       // i=0
+//      i=0
 //        println("i value----------->$i")
 //        println("day value---------->${preferences.getInt("day",-1)}")
 //        println("today day value------->${Calendar.getInstance().time.day}")
@@ -332,9 +341,8 @@ class MainActivity : AppCompatActivity() {
             val startTimeOfIValue = (startTimeArrayOfI[0].toInt()*60)+startTimeArrayOfI[1].toInt()
             val endTimeOfIValue = (endTimeArrayOfI[0].toInt()*60)+endTimeArrayOfI[1].toInt()
 
-            mAssignDeadLineTv.visibility = View.VISIBLE
-            mInProgress_Layout.visibility = View.VISIBLE
-
+//            mAssignDeadLineTv.visibility = View.GONE
+            mInProgress_Layout.visibility = View.GONE
             mIn_progress_Tv.visibility = View.GONE
             if(currentTimeInt<startTimeOfIValue){
 //                if(i-1>=0){
@@ -355,6 +363,7 @@ class MainActivity : AppCompatActivity() {
                 println("when current time >= statTime $i")
                 mInProgress_Layout.visibility = View.VISIBLE
                 mIn_progress_Tv.visibility =View.VISIBLE
+                mAssignDeadLineTv.visibility =View.VISIBLE
 
                 mNoTasksScheduled_TV.visibility = View.GONE
 
@@ -362,20 +371,6 @@ class MainActivity : AppCompatActivity() {
                 mAssignDeadLineTv.text = endTimes[i]
                 mAssignDescriptionTv.text = descriptions[i]
 
-            }
-            else if(status[i] == "finished" || status[i] == "pending")
-            {
-                if(i+1>= titles.size){
-                    println("No upcoming Tasks")
-                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
-                    mAssignUpNextDescriptionTv.text = ""
-                    mAssignUpNextPriorityTv.text = "#0"
-                }else{
-                    println("upcoming task is ${titles[i+1]}")
-                    mAssignUpNextTitleTv.text = titles[i+1]
-                    mAssignUpNextDescriptionTv.text = descriptions[i+1]
-                    mAssignUpNextPriorityTv.text = "#${priorities[i+1]}"
-                }
             }
             else if(currentTimeInt > endTimeOfIValue){
                 if(i+1 >= titles.size){
@@ -392,8 +387,22 @@ class MainActivity : AppCompatActivity() {
                     preferences.edit().putInt("day",Calendar.getInstance().time.day)
                 }
             }
+            else if(status[i] == "finished" || status[i] == "pending")
+            {
+                if(i+1>= titles.size){
+                    println("No upcoming Tasks")
+                    mAssignUpNextTitleTv.text = "No Upcoming Tasks"
+                    mAssignUpNextDescriptionTv.text = ""
+                    mAssignUpNextPriorityTv.text = "#0"
+                }else{
+                    println("upcoming task is ${titles[i+1]}")
+                    mAssignUpNextTitleTv.text = titles[i+1]
+                    mAssignUpNextDescriptionTv.text = descriptions[i+1]
+                    mAssignUpNextPriorityTv.text = "#${priorities[i+1]}"
+                }
+            }
         }
-        println("i value---------> $i")
+        //println("i value---------> $i")
     }
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
@@ -444,7 +453,7 @@ class MainActivity : AppCompatActivity() {
             mIn_progress_Tv.visibility = View.GONE
             mInProgress_Layout.visibility = View.GONE
         }
-        println("titles----->$titles")
+        println("titles----->$status")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -490,6 +499,7 @@ class MainActivity : AppCompatActivity() {
 
     fun openCreateTaskScreen(view: View) {
         startActivity(Intent(baseContext,CreateTask::class.java))
+      //  recreate()
 //        finish()
     }
 
@@ -497,5 +507,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this,Schedule::class.java))
         //  Toast.makeText(this,"Schedule screen building is in progress",Toast.LENGTH_SHORT).show()
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        recreate()
+//    }
 
 }

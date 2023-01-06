@@ -1265,8 +1265,10 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
     private fun timeValidation(startHours:Int, startMinute:Int, endHours:Int, endMinute:Int) {
         val duration:Int=startMinute-endMinute
-        if((endHours<=17&& endHours!=0) && (startHours<=16 && startHours!=0)){
-            if(endHours == 17 && endMinute>0){
+        //if((endHours<=17&& endHours!=0) && (startHours<=16 && startHours!=0)){
+        if((endHours<=23&& endHours!=0) && (startHours<=23 && startHours!=0)){
+            //if(endHours == 17 && endMinute>0){
+            if(endHours == 23 && endMinute>0){
                 Toast.makeText(this, "Your working hours have been ended", Toast.LENGTH_SHORT).show()
                 mAssign_end_time_BTN.text =
                     String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
@@ -1314,7 +1316,8 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         val currentTimeHour=calendar.time.hours
         val currentTimeMinute=calendar.time.minutes
         if(calendar.time.date==endDate.date) {
-            if(startHours in 9..16) {
+           // if(startHours in 9..16) {
+            if(startHours in 9..23) {
 
                 if(startHours==currentTimeHour&&startMinute >= (currentTimeMinute+5))
                 {
@@ -1341,7 +1344,8 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             }
 
         }else{
-            if(startHours in 9..16){
+            //if(startHours in 9..16){
+            if(startHours in 9..23){
                 val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                 mAssign_start_time_BTN.text = startSelectedTime
                 start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
