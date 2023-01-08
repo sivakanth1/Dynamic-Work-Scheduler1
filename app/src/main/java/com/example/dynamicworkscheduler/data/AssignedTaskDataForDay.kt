@@ -3,10 +3,9 @@ package com.example.dynamicworkscheduler.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
-@Entity(tableName = "taskdb")
-data class TaskData(
+@Entity(tableName = "taskDBForADay")
+data class AssignedTaskDataForDay(
     @ColumnInfo(name="taskId") @PrimaryKey val taskId:String,
     @ColumnInfo(name="title") val title:String,
     @ColumnInfo(name="priority") val priority:Int,

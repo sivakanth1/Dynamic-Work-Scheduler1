@@ -27,7 +27,7 @@ import java.util.*
 class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     private lateinit var mDurationSpinner: Spinner
     private var selectedDateIndex = -1
-    private var selectedDate = "00"
+    private var selectedDate = ""
     private var category = "Select Category of Task"
     private var priority = "+"
     private lateinit var cat1Ll: LinearLayout
@@ -466,9 +466,11 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     mDay_day7.setTextColor(resources.getColor(R.color.black))
                     mDay_date7.setTextColor(resources.getColor(R.color.black))
                 }
+
 //                Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show()
             }
             if(!weekListBoolean[0]) {
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date1.text}"
             }else{
@@ -559,9 +561,10 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                     mDay_day7.setTextColor(resources.getColor(R.color.black))
                     mDay_date7.setTextColor(resources.getColor(R.color.black))
                 }
-
             }
             if(!weekListBoolean[1]) {
+
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date2.text}"
             }else{
@@ -656,6 +659,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
             }
             if(!weekListBoolean[2]) {
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date3.text}"
             }else{
@@ -750,6 +754,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
             }
             if(!weekListBoolean[3]) {
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date4.text}"
             }else{
@@ -843,6 +848,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 }
             }
             if(!weekListBoolean[4]) {
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date5.text}"
             }else{
@@ -938,6 +944,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 //
         //               Toast.makeText(this, "Day1", Toast.LENGTH_SHORT).show()
             if(!weekListBoolean[5]) {
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date6.text}"
             }else{
@@ -1030,6 +1037,12 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 }
             }
             if(!weekListBoolean[6]) {
+                mDay7.background =
+                    resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+                mDay_day7.setTextColor(resources.getColor(R.color.white))
+                mDay_date7.setTextColor(resources.getColor(R.color.white))
+
+                binding.selectTimeRl.visibility = View.VISIBLE
                 selectedDate =
                     "${LocalDate.now().year}-${sdf.format(calendar.time.month + 1)}-${mDay_date7.text}"
             }else{
@@ -1042,7 +1055,6 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Toast.makeText(this,parent?.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show()
         when(parent?.getItemAtPosition(position).toString()){
             "< 30 mins" -> duration = 30
             "< 1hr" -> duration = 60
@@ -1094,15 +1106,15 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
             if (endtimebtnval.text == "00:00") {
                 Toast.makeText(this, "select end time", Toast.LENGTH_SHORT).show()
             } else {
-                mShowSameTaskError.show()
-                mShowSameTaskError.window?.findViewById<ImageView>(R.id.close_dialog)
-                    ?.setOnClickListener {
-                        mShowSameTaskError.dismiss()
-                    }
-                mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)
-                    ?.setOnClickListener {
-                        mShowSameTaskError.dismiss()
-                    }
+//                mShowSameTaskError.show()
+//                mShowSameTaskError.window?.findViewById<ImageView>(R.id.close_dialog)
+//                    ?.setOnClickListener {
+//                        mShowSameTaskError.dismiss()
+//                    }
+//                mShowSameTaskError.window?.findViewById<Button>(R.id.sameTaskErrorOkBtn)
+//                    ?.setOnClickListener {
+//                        mShowSameTaskError.dismiss()
+//                    }
                 if (priorityval.text != "+" && selctcategory.text != "Select Category of Task") {
                     insertDataToDatabase()
                 }

@@ -132,17 +132,18 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <TextView
+            <EditText
                 android:id="@+id/Add_tags_TV"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
+                android:maxLength="12"
                 android:layout_weight="1"
                 android:background="@drawable/all_rounded_corners_small_btn"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Add Tags"
-                android:textColor="@color/royal_blue"
+                android:hint="Miscellaneous"
+                android:textColorHint="@color/hint"
                 android:textSize="16sp"
                 app:drawableStartCompat="@drawable/ic_add_label" />
         </LinearLayout>
@@ -501,13 +502,14 @@
         </LinearLayout>
 
         <RelativeLayout
+
             android:id="@+id/select_time_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Day_Selection_LL">

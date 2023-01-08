@@ -182,6 +182,12 @@ class MainActivity : AppCompatActivity() {
 //        }else{
 //            Toast.makeText(this,"$list",Toast.LENGTH_SHORT).show()
 //        }
+//        mTaskViewModel.delete(
+//            TaskData(
+//                taskId = "143320230106", title = "Meeting", priority = 1,category="Category-1", description = "ddsd", startTime = "16:55",
+//                endTime = "16:15", status = "pending",startDate="2023-01-07", deadlineDate = "2023-01-07", duration = 0, weekNumber = 0
+//            )
+//        )
         //Database
 
         mIn_progress_Tv = binding.inProgressTv
@@ -316,12 +322,12 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat", "CommitPrefEdits", "SetTextI18n")
     fun setInProgressWidget(){
-        mHandler.postDelayed(mRunnable,5000)
+        mHandler.postDelayed(mRunnable,600000)
         i = preferences.getString("i",null)?.toInt() ?: 0
         if(preferences.getInt("day",-1)== Calendar.getInstance().time.day - 1){
             i=0
         }
-//      i=0
+//        i=0
 //        println("i value----------->$i")
 //        println("day value---------->${preferences.getInt("day",-1)}")
 //        println("today day value------->${Calendar.getInstance().time.day}")
@@ -426,6 +432,15 @@ class MainActivity : AppCompatActivity() {
         val dateFormatter = SimpleDateFormat("yyyy-MM-dd")
         if(weekListData[Calendar.getInstance().time.day].isNotEmpty()) {
             weekListData[Calendar.getInstance().time.day].forEach {
+                if(it.category=="Category-3"){
+                    mTaskViewModel.updateTask(
+                        TaskData(
+                            taskId = it.taskID!!, title = it.title!!,priority=it.priority!!, category = it.category!!, description = it.description!!,
+                            startTime = it.startTime!!, endTime = it.endTime!!, status = it.status!!, startDate = dateFormatter.format(it.startDate), deadlineDate = dateFormatter.format(it.deadlineDate),
+                            duration = it.duration!!, weekNumber = it.weekNumber!!
+                        )
+                    )
+                }
                 titles.add(it.title.toString())
                 descriptions.add(it.description.toString())
                 startTimes.add(it.startTime.toString())
@@ -453,15 +468,26 @@ class MainActivity : AppCompatActivity() {
             mIn_progress_Tv.visibility = View.GONE
             mInProgress_Layout.visibility = View.GONE
         }
-        println("titles----->$status")
+        println("titles----->$titles")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart()
+        mHandler.postDelayed(mRunnable,600000)
+//        mTaskViewModel.updateTask(
+//            TaskData(
+//                taskId =
+//            )
+//        )
         getDataFromDataBase()
         setInProgressWidget()
         initPieChart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mHandler.removeCallbacks(mRunnable)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

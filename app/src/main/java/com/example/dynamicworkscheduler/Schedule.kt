@@ -42,6 +42,7 @@ class Schedule : AppCompatActivity() {
     private lateinit var mDay_date7: TextView
     private lateinit var monthDisplay:TextView
     var weekListDates = mutableListOf<String>()
+    var weekListBoolean = mutableListOf<Boolean>()
     private var selecteddateindex = getCurDate();
     private var dateSelected = false;
 
@@ -155,6 +156,22 @@ class Schedule : AppCompatActivity() {
             Log.d("WeekDatesString1", weekListDates.get(idx))
             idx += 1
         }
+
+
+        var isCurDay = false
+        var today = Calendar.getInstance()
+        var todayString: String = sdf.format(today.time)
+//        Toast.makeText(this, "$todayString", Toast.LENGTH_SHORT).show()
+
+
+        Log.d("WeekDatesToday", todayString)
+        for (i in 0 until weekListDates.size) {
+            if (todayString == weekListDates[i]) {
+                weekListBoolean[i] = true
+            }
+        }
+
+
         mDay_date1.text = weekListDates[0]
         mDay_date2.text = weekListDates[1]
         mDay_date3.text = weekListDates[2]
@@ -166,33 +183,123 @@ class Schedule : AppCompatActivity() {
 
         monthDisplay.text=monthsdf.format(Date())
         // change background of selected layout to tinted background and change all other layouts to non-tinted background
-        mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day1.setTextColor(resources.getColor(R.color.black))
-        mDay_date1.setTextColor(resources.getColor(R.color.black))
 
-        mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day2.setTextColor(resources.getColor(R.color.black))
-        mDay_date2.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[0])
+        {
+            mDay1.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day1.setTextColor(resources.getColor(R.color.white))
+            mDay_date1.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay1.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day1.setTextColor(resources.getColor(R.color.black))
+            mDay_date1.setTextColor(resources.getColor(R.color.black))
+        }
 
-        mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day3.setTextColor(resources.getColor(R.color.black))
-        mDay_date3.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[1])
+        {
+            mDay2.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day2.setTextColor(resources.getColor(R.color.white))
+            mDay_date2.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day2.setTextColor(resources.getColor(R.color.black))
+            mDay_date2.setTextColor(resources.getColor(R.color.black))
+        }
 
-        mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day4.setTextColor(resources.getColor(R.color.black))
-        mDay_date4.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[2])
+        {
+            mDay3.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day3.setTextColor(resources.getColor(R.color.white))
+            mDay_date3.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day3.setTextColor(resources.getColor(R.color.black))
+            mDay_date3.setTextColor(resources.getColor(R.color.black))
+        }
 
-        mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day5.setTextColor(resources.getColor(R.color.black))
-        mDay_date5.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[3])
+        {
+            mDay4.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day4.setTextColor(resources.getColor(R.color.white))
+            mDay_date4.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day4.setTextColor(resources.getColor(R.color.black))
+            mDay_date4.setTextColor(resources.getColor(R.color.black))
+        }
 
-        mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day6.setTextColor(resources.getColor(R.color.black))
-        mDay_date6.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[4])
+        {
+            mDay5.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day5.setTextColor(resources.getColor(R.color.white))
+            mDay_date5.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day5.setTextColor(resources.getColor(R.color.black))
+            mDay_date5.setTextColor(resources.getColor(R.color.black))
+        }
 
-        mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
-        mDay_day7.setTextColor(resources.getColor(R.color.black))
-        mDay_date7.setTextColor(resources.getColor(R.color.black))
+        if(weekListBoolean[5])
+        {
+            mDay6.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day6.setTextColor(resources.getColor(R.color.white))
+            mDay_date6.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day6.setTextColor(resources.getColor(R.color.black))
+            mDay_date6.setTextColor(resources.getColor(R.color.black))
+        }
+
+        if(weekListBoolean[6])
+        {
+            mDay7.background = resources.getDrawable(R.drawable.tinted_all_rounded_corners_small_btn)
+            mDay_day7.setTextColor(resources.getColor(R.color.white))
+            mDay_date7.setTextColor(resources.getColor(R.color.white))
+        }
+        else
+        {
+            mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+            mDay_day7.setTextColor(resources.getColor(R.color.black))
+            mDay_date7.setTextColor(resources.getColor(R.color.black))
+        }
+
+//        mDay2.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day2.setTextColor(resources.getColor(R.color.black))
+//        mDay_date2.setTextColor(resources.getColor(R.color.black))
+//
+//        mDay3.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day3.setTextColor(resources.getColor(R.color.black))
+//        mDay_date3.setTextColor(resources.getColor(R.color.black))
+//
+//        mDay4.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day4.setTextColor(resources.getColor(R.color.black))
+//        mDay_date4.setTextColor(resources.getColor(R.color.black))
+//
+//        mDay5.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day5.setTextColor(resources.getColor(R.color.black))
+//        mDay_date5.setTextColor(resources.getColor(R.color.black))
+//
+//        mDay6.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day6.setTextColor(resources.getColor(R.color.black))
+//        mDay_date6.setTextColor(resources.getColor(R.color.black))
+//
+//        mDay7.background = resources.getDrawable(R.drawable.all_rounded_corners_small_btn)
+//        mDay_day7.setTextColor(resources.getColor(R.color.black))
+//        mDay_date7.setTextColor(resources.getColor(R.color.black))
+
+
         //Initial Dates//
 //        initWeekLayout();
 
