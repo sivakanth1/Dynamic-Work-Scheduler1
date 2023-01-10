@@ -85,6 +85,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
     private lateinit var binding:ActivityCreateTaskBinding
     private lateinit var mTaskViewModel: TaskViewModel
     private lateinit var calendar: Calendar
+    private lateinit var deadlineDate:String
     var duration = 0
     var weekListDates = mutableListOf<String>()
     var weekListBoolean = mutableListOf<Boolean>()
@@ -108,6 +109,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         mPriorityListLl = binding.PriorityListLL
         pri1=binding.Priority1TV
         pri2 = binding.Priority2TV
+
         pri3 = binding.Priority3TV
         pri4 = binding.Priority4TV
         pri5 = binding.Priority5TV
@@ -268,7 +270,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 OnTimeSetListener { _: TimePicker?, selected_start_hour: Int, selected_startMinute: Int ->
                     startHours = selected_start_hour
                     startMinute = selected_startMinute
-                    startTaskTimeValidation(startHours,startMinute,selectedDate)
+                    startTaskTimeValidation(startHours,startMinute,selectedDate,endHours,endMinute)
                 }
             val timePickerDialog =
                 TimePickerDialog(this, onTimeSetListener, startHours, startMinute, true)
@@ -304,7 +306,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         //calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
         val fistDayOfWeek: Int = calender.firstDayOfWeek
         calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek)
-        var startDate: String = sdf.format(calender.time.date)
+        var startDate: String = sdf.format(calender.time)
         Log.d("date=", calender.time.date.toString())
         Log.d("week=", calender.firstDayOfWeek.toString())
         Log.d("date=", startDate)
@@ -347,7 +349,9 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         for (i in weekListBoolean) Log.d("WeekDatesBoolean", i.toString())
 
         mDay_date1.setText(weekListDates[0])
+        Log.d("weekListDates[0]",weekListDates[0])
         mDay_date2.setText(weekListDates[1])
+        Log.d("weekListDates[1]",weekListDates[1])
         mDay_date3.setText(weekListDates[2])
         mDay_date4.setText(weekListDates[3])
         mDay_date5.setText(weekListDates[4])
@@ -1134,6 +1138,8 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 insertDataToDatabase()
             }
         }
+        timeValidation(startHours,startMinute,endHours,endMinute)
+        startTaskTimeValidation(startHours,startMinute,deadlineDate,endHours,endMinute)
 
     }
 
@@ -1290,13 +1296,13 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 mAssign_end_time_BTN.text =
                     String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
                 end_selected_time =
-                    String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
+                    String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
             } else if (startHours == endHours && (endMinute >=(15 + startMinute))) {
                 mAssign_start_time_BTN.text = start_selected_time
                 mAssign_end_time_BTN.text =
                     String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
                 end_selected_time =
-                    String.format(Locale.getDefault(), "%02d:%02d", endHours, endMinute)
+                    String.format(Locale.getDefault(), "%02d : %02d", endHours, endMinute)
             } else {
                 if (startHours > endHours) {
                     Toast.makeText(this, "Invalid End-time", Toast.LENGTH_SHORT).show()
@@ -1306,7 +1312,7 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
                 if (endMinute < (startMinute + 15)) {
                     Toast.makeText(
                         this,
-                        "Duration must be more than 15 minutes",
+                        "Duration must be more than 15 minutes or end minute is less than start minute",
                         Toast.LENGTH_SHORT
                     ).show()
                     mAssign_end_time_BTN.text =
@@ -1322,25 +1328,62 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         }
     }
 
-    private fun startTaskTimeValidation(startHours: Int,startMinute: Int,deadlineDate:String) {	  val formatter=SimpleDateFormat("yyyy-MM-dd")
+    private fun startTaskTimeValidation(startHours: Int,startMinute: Int,deadlineDate:String,endHours: Int,endMinute: Int) {
+        val formatter=SimpleDateFormat("yyyy-MM-dd")
         val endDate=formatter.parse(deadlineDate)
         val calendar=Calendar.getInstance()
         val currentTimeHour=calendar.time.hours
         val currentTimeMinute=calendar.time.minutes
         if(calendar.time.date==endDate.date) {
            // if(startHours in 9..16) {
+            Log.d("today date1",calendar.time.date.toString())
             if(startHours in 9..23) {
+                if(startHours >= endHours)
+                {
+                    if(startHours==endHours)
+                    {
+                        if(startMinute<(endMinute-15))
+                        {
+                            Log.d("endmin",(endMinute-15).toString())
+                            val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                            mAssign_start_time_BTN.text = startSelectedTime
+                            start_selected_time = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                        }
+                        else
+                        {   Log.d("endmin",(endMinute-15).toString())
+                            Toast.makeText(this,"start minute should be 15 min less than end minute",Toast.LENGTH_SHORT).show()
+
+                            mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                            this.endMinute =0
+                            this.endHours=0
+                            this.startHours=0
+                            this.startMinute=0
+                            mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                        }
+                    }
+                    else if(endHours != 0)
+                    {
+                        Toast.makeText(this,"start hour shouldn't be greater than end hour",Toast.LENGTH_SHORT).show()
+                        this.endMinute =0
+                        this.endHours=0
+                        Log.d("endmin",(endMinute-15).toString())
+
+                        mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                    }
+
+                }
+
 
                 if(startHours==currentTimeHour&&startMinute >= (currentTimeMinute+5))
                 {
                     val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                     mAssign_start_time_BTN.text = startSelectedTime
-                    start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                    start_selected_time = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                 }
                 else if(startHours>currentTimeHour && (currentTimeMinute-startMinute)<=55){
                     val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                     mAssign_start_time_BTN.text = startSelectedTime
-                    start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                    start_selected_time = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                 }
               //  else if(if )
                 else{
@@ -1357,10 +1400,45 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
 
         }else{
             //if(startHours in 9..16){
+
             if(startHours in 9..23){
+                if(startHours >= endHours)
+                {
+                    if(startHours==endHours)
+                    {
+                        if(startMinute<(endMinute-15))
+                        {
+                            Log.d("endmin",(endMinute-15).toString())
+                            val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                            mAssign_start_time_BTN.text = startSelectedTime
+                            start_selected_time = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                        }
+                        else
+                        {   Log.d("endmin",(endMinute-15).toString())
+                            Toast.makeText(this,"start minute should be 15 min less than end minute",Toast.LENGTH_SHORT).show()
+
+                            mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                             this.endMinute =0
+                             this.endHours=0
+                            this.startHours=0
+                            this.startMinute=0
+                            mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
+                        }
+                    }
+                    else if(endHours != 0)
+                    {
+                        Toast.makeText(this,"start hour shouldn't be greater than end hour",Toast.LENGTH_SHORT).show()
+                        this.endMinute =0
+                        this.endHours=0
+                        Log.d("endmin",(endMinute-15).toString())
+
+                        mAssign_end_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
+                    }
+
+                }
                 val startSelectedTime=String.format(Locale.getDefault(), "%02d : %02d", startHours, startMinute)
                 mAssign_start_time_BTN.text = startSelectedTime
-                start_selected_time = String.format(Locale.getDefault(), "%02d:%02d", startHours, startMinute)
+                start_selected_time = String.format(Locale.getDefault(), "%02d: %02d", startHours, startMinute)
             }else {
                 Toast.makeText(this,"start time should be Greater than working start time/ start time should be lesser than your working end time",Toast.LENGTH_LONG).show()
                 mAssign_start_time_BTN.text = String.format(Locale.getDefault(), "%02d : %02d", 0, 0)
@@ -1369,6 +1447,14 @@ class CreateTask : AppCompatActivity(),AdapterView.OnItemSelectedListener{
         }
 
     }
+//    private fun taskEndTimeValidation(endHours: Int,endMinute: Int)
+//    {
+//        val formatter=SimpleDateFormat("yyyy-MM-dd")
+//        val endDate=formatter.parse(deadlineDate)
+//        val calendar=Calendar.getInstance()
+//        val currentTimeHour=calendar.time.hours
+//        val currentTimeMinute=calendar.time.minutes
+//    }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
 }
