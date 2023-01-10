@@ -77,7 +77,7 @@ class MyApplication: Application() {
         }
 
         fun splitAccordingToWeek(){
-            println("Hi")
+            println("In split according to week function")
             tasks_objects_list_week_c1.forEach {
                 it.clear()
             }
@@ -215,9 +215,12 @@ class MyApplication: Application() {
 //            println("C2 list----->${tasks_objects_list_week_c2[5]}")
 //            println("C3 list----->${tasks_objects_list_week_c3[5]}")
             completeData.forEach {
-                println("week Data ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime}")
+                println("week Data ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime} ${it.duration}")
             }
             addingTasksToList()
+//            tasks_objects_list_week_c3[6].forEach {
+//                println("C3 ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime} ${it.duration}")
+//            }
         }
 
         //assigning breaks to the user pattern list by the taking user break timings
@@ -274,23 +277,30 @@ class MyApplication: Application() {
         private fun category3DeadlineAddingToWeekList(taskId: String, task: Task){
             //   println("called category3 deadline adding")
             //   println(task.duration)
+            println( "tasks duration on function called----------->${task.duration}" )
             if(task.duration!! >0){
-                for (j in task.startDate!!.day until task.deadlineDate!!.day) {
+                for (j in task.startDate!!.day .. task.deadlineDate!!.day) {
                     if(task.duration!!>0){
+//                        println( "tasks duration in 1st if condition----------->${task.duration}" )
                         val indexes = indexCalculatorForCategory3(tasks_id_list_week[j])
+                       // println("Indexes------------->$indexes")
                         var i = 0
                         //   println(i)
                         while (i < indexes.size && task.duration!! >0) {
-                            if (indexes[i] == 0) {
-                                if ((indexes[i + 1] - indexes[i]) >= 15) {
-                                    for (t in indexes[i] until indexes[i + 1]) {
+//                            println( "tasks duration in while condition----------->${task.duration}" )
+                            if (indexes[i] == 0 && task.duration!!>0) {
+                                if ((indexes[i + 1] - indexes[i]) >= 15 && task.duration!!>0) {
+                                    for (t in indexes[i] until indexes[i + 1]+1) {
+                                      //  println( "tasks duration in for loop of of condition----------->${task.duration}")
+                                        println("In for loop of if condition --->${task.duration}")
                                         if(task.duration!!>0) {
                                             whenCode(j = j, t = t, taskId = taskId, task = task)
-                                            task.duration = task.duration?.minus(1)
+                                            task.duration =task.duration!!-1
                                         }
                                     }
                                 }
                             } else {
+//                                println({ "tasks duration in else condition----------->${task.duration}" })
                                 when (task.priority) {
                                     1 -> {
                                         if ((indexes[i + 1] - indexes[i]) >= 20)
@@ -339,6 +349,7 @@ class MyApplication: Application() {
                     }
                 }
             }
+//            println("After assigning c3 duration --------> ${task.duration}")
         }
 
         private fun whenCode(j:Int,t:Int,taskId:String, task: Task){
@@ -461,19 +472,27 @@ class MyApplication: Application() {
 //        }
 
          private fun addingTasksToList(){
+//             tasks_objects_list_week.forEach {
+//                 it.clear()
+//             }
+//             createUserWorkingList("09:00","23:00")
             for(i in 0..6){
+//                println("C3 array size in $i---------->${tasks_objects_list_week_c3[i].size}")
                 if(tasks_objects_list_week_c1[i].isNotEmpty()) {
                     tasks_objects_list_week_c1[i].forEach {
+                       // println("In adding tasks to week c1 ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime} ${it.duration}")
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
-                else if(tasks_objects_list_week_c2[i].isNotEmpty()){
+                if(tasks_objects_list_week_c2[i].isNotEmpty()){
                     tasks_objects_list_week_c2[i].forEach {
+                   //     println("In adding tasks to week c2 ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime} ${it.duration}")
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
-                else if(tasks_objects_list_week_c3[i].isNotEmpty()){
+                if(tasks_objects_list_week_c3[i].isNotEmpty()){
                     tasks_objects_list_week_c3[i].forEach {
+                    //    println("In adding tasks to week c3 ${it.deadlineDate} ${it.category} ${it.startTime} ${it.endTime} ${it.duration}")
                         rearrangingAndAssigningTasks(it.taskID.toString(), task = it)
                     }
                 }
@@ -501,7 +520,7 @@ class MyApplication: Application() {
                 tEndTime =
                     (chunkedTaskEndTime[0].toInt() - chunkedTaskStartTime[0].toInt()) * 60 + (chunkedTaskEndTime[1].toInt() - chunkedTaskStartTime[1].toInt()) + tStartTime
             }
-            try {
+//            try {
                 when (task.category) {
                     "Category-1" -> {
                         for (t in tStartTime until tEndTime) {
@@ -550,12 +569,13 @@ class MyApplication: Application() {
                         rearrangingRemaining()
                     }
                     "Category-3" -> {
+                       // println("In category3 assign calling")
                         category3DeadlineAddingToWeekList(taskId = taskId, task = task)
                     }
                 }
-            }catch (e:Exception){
-                println("Exception caught--------------->$e")
-            }
+//            }catch (e:Exception){
+//                println("Exception caught--------------->$e")
+//            }
         }
 
         fun getDayTasksString(): MutableList<MutableList<String>> {
@@ -580,6 +600,12 @@ class MyApplication: Application() {
         }
 
         fun getDayTasksObject():MutableList<MutableList<Task>> {
+//            tasks_objects_list_week[i].forEach {
+//                if(it.category=="Category-3"){ println("in get day tasks objects------->${it.title}") }
+//            }
+            for(i in 0 until tasks_objects_list_week[6].size){
+                if(tasks_objects_list_week[6][i].category=="Category-3"){ println("in get day tasks objects------->$i  ${tasks_objects_list_week[6][i].title}") }
+            }
             //   fun getDayTasksObject(){
             for (i in 0..6) {
                 taskDataObjectsWeek[i].clear()
@@ -596,6 +622,12 @@ class MyApplication: Application() {
                     }
                 }
             }
+//            tasks_objects_list_week[6].forEach {
+//                println("titles after assigning------------>${it.title}")
+//            }
+//            for(i in 0 until tasks_objects_list_week[6].size){
+//                if(tasks_objects_list_week[6][i].title!=null){ println("titles after assigning------------>$i ${tasks_objects_list_week[6][i].title}") }
+//            }
             return taskDataObjectsWeek
         }
 
