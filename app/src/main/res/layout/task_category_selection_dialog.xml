@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="This type of tasks have deadline date, start time and end time. These task are supposed to be done on the mentioned date and time"
+                android:text="This type of tasks have deadline date, start time and end time. These task are supposed to be done on or before the deadline date and time"
                 android:textSize="12sp"
                 android:textColor="@color/soft_black"
                 android:fontFamily="@font/nunito_sans"/>
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="This type of tasks have deadline date, start time and end time. These task are supposed to be done on the mentioned date and time"
+                android:text="This type of tasks have deadline date and estimated task duration. These task are supposed to be done on or before mentioned deadline date"
                 android:textSize="12sp"
                 android:textColor="@color/soft_black"
                 android:fontFamily="@font/nunito_sans"/>

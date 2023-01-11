@@ -131,7 +131,7 @@ class Schedule : AppCompatActivity() {
         //calender.set(Calendar.WEEK_OF_YEAR,Calendar.getInstance().get(Calendar.WEEK_OF_YEAR))
         val fistDayOfWeek: Int = calender.firstDayOfWeek
         calender.set(Calendar.DAY_OF_WEEK, fistDayOfWeek)
-        var startDate: String = sdf.format(calender.time.date)
+        var startDate: String = sdf.format(calender.time)
         Log.d("date1=", calender.time.date.toString())
         Log.d("week1=", calender.firstDayOfWeek.toString())
         Log.d("date1=", startDate)
@@ -154,6 +154,7 @@ class Schedule : AppCompatActivity() {
         repeat(7)
         {
             Log.d("WeekDatesString1", weekListDates.get(idx))
+            weekListBoolean.add(false)
             idx += 1
         }
 
@@ -165,6 +166,7 @@ class Schedule : AppCompatActivity() {
 
 
         Log.d("WeekDatesToday", todayString)
+        Log.d("WeekListDatesSize " ,weekListDates.size.toString())
         for (i in 0 until weekListDates.size) {
             if (todayString == weekListDates[i]) {
                 weekListBoolean[i] = true
@@ -181,7 +183,7 @@ class Schedule : AppCompatActivity() {
         mDay_date7.text = weekListDates[6]
         //Initial Dates//
 
-        monthDisplay.text=monthsdf.format(Date())
+        monthDisplay.text=monthsdf.format(Date()) + " "+todayString
         // change background of selected layout to tinted background and change all other layouts to non-tinted background
 
         if(weekListBoolean[0])

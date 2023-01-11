@@ -327,7 +327,7 @@ class MainActivity : AppCompatActivity() {
         if(preferences.getInt("day",-1)== Calendar.getInstance().time.day - 1){
             i=0
         }
-//        i=0
+        i=0
 //        println("i value----------->$i")
 //        println("day value---------->${preferences.getInt("day",-1)}")
 //        println("today day value------->${Calendar.getInstance().time.day}")

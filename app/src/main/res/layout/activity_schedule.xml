@@ -64,7 +64,7 @@
             android:layout_toEndOf="@+id/Current_Month"
             android:fontFamily="@font/poppins_light"
             android:includeFontPadding="false"
-            android:text="6 tasks"
+            android:text="2023"
             android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
