@@ -1,18 +1,18 @@
 # Dynamic Work Scheduler
 **Dynamic Work Scheduler** is a robust Android application developed in Kotlin, designed to streamline personal task management. It offers a sophisticated scheduling system that allows users to plan their work week, visualize time allocation, and track productivity through intuitive analytics.
 ## Key Features
--   ** Smart Multi-Day Scheduling**
+- ** Smart Multi-Day Scheduling**
     -   Plan tasks up to **6 days in advance**.
     -   Visual timeline view to see your day at a glance.
     -   Automatic time "chunking" for better organization.
--   ** Advanced Task Management**
+- ** Advanced Task Management**
     -   Create detailed tasks with start times and durations.
     -   **Duplicate Prevention**: Intelligent logic prevents scheduling conflicting or duplicate tasks.
     -   Persistent storage of all task data.
--   ** Analytics & Reporting**
+- ** Analytics & Reporting**
     -   **Weekly Reports**: Get insights into your productivity trends.
     -   **Visualizations**: Interactive pie charts powered by MPAndroidChart show exactly where your time goes.
--   ** User Personalization**
+- ** User Personalization**
     -   Customizable user profiles.
     -   Data persistence across sessions.
 ##  Architecture
